@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-server-hapi": "^2.0.0-rc.10",
+    "graphql": "^14.0.2",
     "hapi": "^17.6.0",
     "mongoose": "^5.3.8",
     "nodemon": "^1.18.5"
