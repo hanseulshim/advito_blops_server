@@ -21,6 +21,7 @@ type Mutation {
     city: String,
     state: String,
     latitude: Float,
-    longitude: Float): Hotel
+    longitude: Float): Hotel,
+  removeHotel(hotelId: Int): Int,
 }
 `;

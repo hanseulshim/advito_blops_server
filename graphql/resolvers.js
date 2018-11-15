@@ -14,6 +14,11 @@ module.exports = {
       state: args.state,
       latitude: args.latitude,
       longitude: args.longitude
-    }).save()
+    }).save(),
+    removeHotel: (obj, args) => {
+      Hotel.deleteOne({ hotelId: args.hotelId });
+      //TODO: do an error check to see if it actually found something.
+      return args.hotelId;
+    }
   }
 };
