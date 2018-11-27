@@ -1,40 +1,32 @@
-'use strict';
-
 const { ApolloServer, gql } = require('apollo-server-lambda');
 
-// Construct a schema, using GraphQL schema language
 const typeDefs = gql`
   type Query {
-    hello: String
+    scott: String
+    john: String
+    shayan: String
+    hanseul: String
   }
 `;
 
-// Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
+    scott: () => 'Boss man!',
+    john: () => 'lil johnny!',
+    shayan: () => 'call linda asap!',
+    hanseul: () => 'han solo!',
   },
 };
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ event, context }) => ({
-    headers: event.headers,
-    functionName: context.functionName,
-    event,
-    context,
-  }),
+  introspection: true,
+  playground: {
+    settings: {
+      'editor.cursorShape': 'line',
+    },
+  },
 });
 
-module.exports.graphqlHandler = server.createHandler();
-
-// module.exports.graphqlHandler = async (event, context) => {
-//   return {
-//     statusCode: 200,
-//     body: JSON.stringify({
-//       message: 'Go Serverless v1.0! Your function executed successfully!',
-//       resolvers,
-//     }),
-//   };
-// };
+exports.graphqlHandler = server.createHandler();
