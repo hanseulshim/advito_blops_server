@@ -1,23 +1,6 @@
-const { ApolloServer, gql } = require('apollo-server-lambda');
-const { activeAlerts, upcomingActions } = require('./data/sidebarData');
-
-const typeDefs = gql`
-  type Action {
-    header: String
-    secondaryHeader: String
-    icon: String
-    alert: Boolean
-  }
-
-  type Query {
-    scott: String
-    john: String
-    shayan: String
-    hanseul: String
-    activeAlerts: [Action]
-    upcomingActions: [Action]
-  }
-`;
+const { ApolloServer } = require('apollo-server-lambda');
+const { typeDefs } = require('./graphql/typeDefs');
+const { resolvers } = require('./graphql/resolvers');
 
 const resolvers = {
   Query: {
