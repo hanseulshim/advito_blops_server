@@ -1,28 +1,40 @@
-const Hapi = require('hapi');
-const { ApolloServer, gql } = require('apollo-server-hapi');
-const mongoose = require('mongoose');
+const { ApolloServer, gql } = require('apollo-server');
+const { activeAlerts, upcomingActions } = require('./data/sidebarData');
 
-const resolvers = require('./graphql/resolvers');
-const typeDefs = require('./graphql/typeDefs');
-
-mongoose.connect('mongodb://hshim:B00stlabs!@ds249233.mlab.com:49233/advito_blops_server', { useNewUrlParser: true });
-mongoose.connection.once('open', () => console.log('connected to database'));
-
-const startServer = async () => {
-  const server = new ApolloServer({ typeDefs, resolvers });
-  const app = new Hapi.server({ port: 4000 });
-
-  await server.applyMiddleware({ app });
-  await server.installSubscriptionHandlers(app.listener);
-
-  try {
-    await app.start();
+const typeDefs = gql`
+  type Action {
+    header: String
+    secondaryHeader: String
+    icon: String
+    alert: Boolean
   }
-  catch (err) {
-      console.log(err);
-      process.exit(1);
+
+  type Query {
+    scott: String
+    john: String
+    shayan: String
+    hanseul: String
+    activeAlerts: [Action]
+    upcomingActions: [Action]
   }
-  console.log('Server running at:', app.info.uri);
+`;
+
+const resolvers = {
+  Query: {
+    scott: () => 'boss',
+    john: () => 'lil johnny!',
+    shayan: () => 'call linda asap!',
+    hanseul: () => 'han solo!',
+    activeAlerts: () => activeAlerts,
+    upcomingActions: () => upcomingActions,
+  },
 };
 
-startServer();
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+server.listen().then(({ url }) => {
+  console.log(`🚀 Server ready at ${url}`);
+});
