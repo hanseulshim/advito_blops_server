@@ -21,6 +21,11 @@ exports.typeDefs = gql`
     link: String
   }
 
+  type Performance {
+    title: String
+    value: String
+  }
+
   type View {
     title: String
     icon: String
@@ -28,13 +33,11 @@ exports.typeDefs = gql`
   }
 
   type Query {
-    scott: String
-    john: String
-    shayan: String
-    hanseul: String
     activeAlerts: [Action]
     upcomingActions: [Action]
     infoList: [Info]
     viewList: [View]
+    performanceList: [Performance]
+    noChangeSince: String
   }
 `;
