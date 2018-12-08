@@ -26,6 +26,13 @@ exports.typeDefs = gql`
     value: String
   }
 
+  type Persona {
+    title: String
+    value: String
+    programShare: Int
+    color: String
+  }
+
   type View {
     title: String
     icon: String
@@ -39,5 +46,6 @@ exports.typeDefs = gql`
     viewList: [View]
     performanceList: [Performance]
     noChangeSince: String
+    personaList: [Persona]
   }
 `;

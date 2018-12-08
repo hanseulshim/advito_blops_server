@@ -1,6 +1,10 @@
 const { activeAlerts, upcomingActions } = require('../data/sidebarData');
 const { viewData, infoData } = require('../data/viewData');
-const { programPerformance, noChangeSince } = require('../data/dashboardData');
+const {
+  programPerformance,
+  noChangeSince,
+  personaList,
+} = require('../data/dashboardData');
 
 exports.resolvers = {
   Query: {
@@ -10,5 +14,6 @@ exports.resolvers = {
     viewList: () => viewData,
     performanceList: () => programPerformance,
     noChangeSince: () => noChangeSince,
+    personaList: () => personaList,
   },
 };
