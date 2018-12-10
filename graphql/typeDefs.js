@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server-lambda');
+const { gql } = require('apollo-server-lambda');
 
 exports.typeDefs = gql`
   type Action {
