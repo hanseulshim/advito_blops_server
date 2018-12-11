@@ -41,3 +41,21 @@ exports.personaList = [
     color: '#71B5B1',
   },
 ];
+
+exports.opportunities = [
+  {
+    title: 'Expenses approved above rate caps / per diems',
+    value: '27% / $375K impact',
+  },
+  { title: 'ABR higher than ANR', value: '30% / $500K impact' },
+  { title: 'NRT Utilization/Loss', value: '83% / $23K expired' },
+];
+
+exports.riskAreas = [
+  { title: 'Number of markets with ATP change more than 15%', value: '10' },
+  {
+    title: 'Number of markets with rate availability lower than 80%',
+    value: '14',
+  },
+  { title: 'Travelers in HRC/Markets', value: '512' },
+];

@@ -4,6 +4,8 @@ const {
   programPerformance,
   noChangeSince,
   personaList,
+  opportunities,
+  riskAreas,
 } = require('../data/dashboardData');
 
 exports.resolvers = {
@@ -15,5 +17,7 @@ exports.resolvers = {
     performanceList: () => programPerformance,
     noChangeSince: () => noChangeSince,
     personaList: () => personaList,
+    opportunities: () => opportunities,
+    riskAreas: () => riskAreas,
   },
 };

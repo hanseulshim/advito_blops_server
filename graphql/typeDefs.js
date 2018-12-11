@@ -21,6 +21,11 @@ exports.typeDefs = gql`
     link: String
   }
 
+  type Opportunity {
+    title: String
+    value: String
+  }
+
   type Performance {
     title: String
     value: String
@@ -31,6 +36,11 @@ exports.typeDefs = gql`
     value: String
     programShare: Int
     color: String
+  }
+
+  type RiskArea {
+    title: String
+    value: String
   }
 
   type View {
@@ -47,5 +57,7 @@ exports.typeDefs = gql`
     performanceList: [Performance]
     noChangeSince: String
     personaList: [Persona]
+    opportunities: [Opportunity]
+    riskAreas: [RiskArea]
   }
 `;
