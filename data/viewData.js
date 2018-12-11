@@ -6,12 +6,12 @@ exports.viewData = [
       {
         title: 'Travel Manager 360 View',
         icon: 'fas fa-chart-bar',
-        link: '/dashboard',
+        link: '/travel',
       },
       {
         title: 'Executive 360 View',
         icon: 'fas fa-chart-bar',
-        link: '/dashboard',
+        link: '/executive',
       },
       {
         title: 'Card Deck',
