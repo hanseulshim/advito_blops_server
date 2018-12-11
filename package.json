@@ -1,0 +1,21 @@
+{
+  "name": "advito_blops_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.2.6",
+    "apollo-server-hapi": "^2.0.0-rc.10",
+    "apollo-server-lambda": "^2.0.0-xrc.11",
+    "graphql": "^14.0.2",
+    "hapi": "^17.6.0",
+    "mongoose": "^5.3.8",
+    "nodemon": "^1.18.5"
+  }
+}
