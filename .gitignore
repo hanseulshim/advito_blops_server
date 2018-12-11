@@ -9,4 +9,5 @@ jspm_packages
 python3
 
 # Lambda directory files
-lambdas/__pycache__
+*__pycache__
+lambdas/env.yml
