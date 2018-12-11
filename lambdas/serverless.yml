@@ -3,19 +3,20 @@ service: python-lambdas
 provider:
   name: aws
   runtime: python3.7
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):dev}
 
 functions:
-  
   hello:
-    handler: handler.hello
+    handler: src.handler.hello
     events:
       - http:
           path: /
           method: get
 
   create_user:
-    handler: handler.create_user
+    handler: src.handler.create_user
     events:
       - http:
-          path: /
+          path: /create_user
           method: get

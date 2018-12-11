@@ -1,14 +1,17 @@
+from sqlalchemy import create_engine
+from .service.user import Users
 import json
 import hashlib
 import secrets
 import base64
+import os
 
 
 def create_user(event, context):
 
     """
-    Creates a user given a username, email and password.
-    A random salt of 16 bytes is concatenated at the end of the password before storing.
+    Adds a user into the database
+    When inserting the user, both base64(utf8(password + salt)) and base64(salt) are stored.
     """
 
     # Unpacks parameters
@@ -26,7 +29,9 @@ def create_user(event, context):
     salt = base64.b64encode(salt_bytes)
 
     # Stores user in db
-    
+    connection_str = os.environ['DB_CONNECTION']
+    print(connection_str)
+
 
 def hello(event, context):
     body = {
