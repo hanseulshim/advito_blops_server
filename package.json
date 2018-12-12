@@ -16,6 +16,7 @@
     "graphql": "^14.0.2",
     "hapi": "^17.6.0",
     "mongoose": "^5.3.8",
-    "nodemon": "^1.18.5"
+    "nodemon": "^1.18.5",
+    "serverless-python-requirements": "^4.2.5"
   }
 }
