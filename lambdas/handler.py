@@ -15,13 +15,19 @@ user_service = Users(None)
 
 
 def create_user(event, context):
-    user_in = event
+    body = event['body']
+    user_in = json.loads(body)
     user_out = user_service.create(user_in)
     return {
         "statusCode": 200,
-        "body": user_out
+        "body": json.dumps(user_out)
     }
 
+def test_event(event, context):
+    return {
+        "statusCode": 200,
+        "body": json.dumps(event)
+    }
 
 
 def hello(event, context):
