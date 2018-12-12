@@ -13,7 +13,7 @@ Invoking pip is done via:
 ```bash
 python3 -m pip install <some_lib>
 ```
-You can also invoke venv via:
+You can also create a virtual environment via:
 ```bash
 python3 -m venv <path/to/local_python>
 ```
