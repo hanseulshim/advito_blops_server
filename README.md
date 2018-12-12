@@ -79,5 +79,5 @@ it will be called as <service_name>-dev-hello_world.
 If *prod* is set, it will be deployed as <service_name>-prod-hello_world.
 
 2. Determines environment variables that are set in each lambda.
-For instance, if *dev* is set, environment variables will be set to the values in *dev* from env.yml.
+For instance, if *dev* is set, environment variables will be set to the values in *dev* from env.yml for each lambda.
 This is useful when since lambdas from different stages often reach out to different databases.
