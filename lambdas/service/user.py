@@ -14,6 +14,7 @@ class Users:
 
         self.db = db
 
+
     """
     Represents the class that performs logic around a User.
     """
