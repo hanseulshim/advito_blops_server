@@ -51,7 +51,7 @@ class Users:
         # Returns mocked user
         return {
             "username": username,
+            "email": email,
             "password": hashed_password,
-            "salt": salt,
-            "email": email
+            "salt": salt
         }
