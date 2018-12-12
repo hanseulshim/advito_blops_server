@@ -4,3 +4,10 @@ jspm_packages
 
 # Serverless directories
 .serverless
+
+# Venv Python directory
+python3
+
+# Lambda directory files
+*__pycache__
+lambdas/env.yml

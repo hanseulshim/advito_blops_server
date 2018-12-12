@@ -1,0 +1,29 @@
+service: python-lambdas
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):${opt:stage} }
+
+plugins:
+  - serverless-python-requirements
+
+#custom:
+#  pythonRequirements:
+#    dockerizePip: true
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /
+          method: get
+
+  create_user:
+    handler: handler.create_user
+    events:
+      - http:
+          path: /create_user
+          method: post
