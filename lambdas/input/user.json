@@ -1,5 +1,3 @@
 {
-  "username":"joe",
-  "email":"e@mail.com",
-  "password":"lolpassword123"
+  "body": "{\"username\":\"joe\",\"email\":\"e@mail.com\",\"password\":\"lolpassword123\"}"
 }
