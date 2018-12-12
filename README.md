@@ -46,9 +46,12 @@ and configured for your local machine.
 aws configure
 ```
 This will prompt you for credentials.
-Copy the values from credentials.csv
+Copy the values from credentials.csv.
+
 When prompted for *region*, enter *us-east-2* which is based in Ohio.
+
 When prompted for *output*, enter *text*.
+
 These credentials will be stored in ~/.aws/credentials under the *default* profile.
 Other configurations will be stored in ~/.aws/config
 After that is done, you'll be able to access aws lambda from the command-line.
