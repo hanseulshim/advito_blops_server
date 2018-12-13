@@ -1,5 +1,4 @@
 import json
-#import sqlalchemy
 import urllib.parse
 import base64
 import secrets
@@ -43,7 +42,6 @@ def saltHash(password, salt):
 
 
 def hello(event, context):
-    #print(event['key1'])
     print(os.environ['DB_CONNECTION'])
 
     #saltHashTuple = saltHash('Password1', '')
@@ -52,9 +50,9 @@ def hello(event, context):
     #print('Hashed Password = ' + saltHashPwd)
     #print('salt = ' + salt)
 
-    #usr = advito_user(id=1, client_id=1, username='Chuck Norris', pwd=saltHashPwd, name_last='Norris', name_first='Chuck',
-    #  is_enabled=True, must_change_pwd=False, pwd_expiration='01/01/2024', email='chucknorris@gmail.com',
-    #  phone='123', profile_picture_path='/', timezone_default='EST', language_default='murican', user_salt=salt,
+    #usr = advito_user(id=2, client_id=1, username='joeuser', pwd=saltHashPwd, name_last='User', name_first='Joe',
+    #  is_enabled=True, must_change_pwd=False, pwd_expiration='01/01/2024', email='joeuser@gmail.com',
+    #  phone='123-4567', profile_picture_path='/', timezone_default='EST', language_default='English', user_salt=salt,
     #  created='01/01/1900', modified='12/12/2018')
     #session.add(usr)
     #session.commit()
@@ -63,27 +61,34 @@ def hello(event, context):
     username = event['username']
     password = event['password']
 
+    user_is_enabled = False
+    user_id = 0
+    user_email = ''
+    user_displayname = ''
+    user_token = 'abc'
+    salt = ''
+
     for row in session.query(advito_user).filter(advito_user.username==username):
       salt = row.user_salt
+      user_is_enabled = row.is_enabled
+      user_id = row.id
+      user_email = row.email
+      user_displayname = row.name_first + " " + row.name_last
+      user_pwd = row.pwd
 
     print('salt = ' + salt)
     saltHashTuple = saltHash(password, salt)
     saltHashPwd = saltHashTuple[0]
     salt = saltHashTuple[1]
     print('Hashed Password = ' + saltHashPwd)
+    print('user_pwd = ' + user_pwd)
 
-    user_is_enabled = False
-    user_id = 0
-    user_email = ''
-    user_displayname = ''
-    user_token = 'abc'
-
-    for row in session.query(advito_user).filter(advito_user.username==username, advito_user.pwd==saltHashPwd):
-      print(row.id, row.name_first, row.name_last, row.email,  row.is_enabled)
-      user_is_enabled = row.is_enabled
-      user_id = row.id
-      user_email = row.email
-      user_displayname = row.name_first + " " + row.name_last
+    #for row in session.query(advito_user).filter(advito_user.username==username, advito_user.pwd==saltHashPwd):
+    #  print(row.id, row.name_first, row.name_last, row.email,  row.is_enabled)
+    #  user_is_enabled = row.is_enabled
+    #  user_id = row.id
+    #  user_email = row.email
+    #  user_displayname = row.name_first + " " + row.name_last
 
     # Print the column names of each table.
     #for table in Base.metadata.sorted_tables:
