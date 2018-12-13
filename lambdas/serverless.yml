@@ -37,6 +37,16 @@ functions:
             template:
               application/json: '{ "httpMethod" : "$context.httpMethod" }'
 
+  login_user:
+    handler: handler.login
+    events:
+      - http:
+          path: /login
+          method: post
+          request:
+            template:
+              application/json: '{ "httpMethod" : "$context.httpMethod" }'
+
   test_event:
     handler: handler.test_event
     events:
