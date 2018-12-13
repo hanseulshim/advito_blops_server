@@ -1,7 +1,7 @@
 exports.viewData = [
   {
-    title: '360 view',
-    icon: 'fas fa-atom view-icon',
+    title: '360 analytics',
+    icon: 'analytics',
     list: [
       {
         title: 'Travel Manager 360 View',
@@ -23,7 +23,7 @@ exports.viewData = [
   },
   {
     title: 'air',
-    icon: 'fas fa-plane view-icon',
+    icon: 'air',
     list: [
       {
         title: 'Air program analytics',
@@ -34,7 +34,7 @@ exports.viewData = [
   },
   {
     title: 'hotel',
-    icon: 'fas fa-bed view-icon',
+    icon: 'hotel',
     list: [
       {
         title: 'Hotel program analytics',
