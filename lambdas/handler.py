@@ -22,7 +22,9 @@ def saltHash(password, salt=None):
 
     """
     Both hashes and salts a password.
-    If salt is not supplied, salt will be created randomlyself.
+    If salt is not supplied, salt will be created randomly.
+    Salt is a 'bytes'-like object.
+    Password is a string.
     Returns a tuple of the password and the salt that was used.
     """
 
@@ -31,7 +33,7 @@ def saltHash(password, salt=None):
     if (salt is None):
         salt_bytes = secrets.token_bytes(16)
     else:
-        salt_bytes = base64.b64decode(salt.encode(encoding='UTF-8'))
+        salt_bytes = salt
 
     # Hashes and salts password
     algo = hashlib.sha256()
@@ -77,7 +79,52 @@ def create_user(event, context):
     usr = advito_user(**user_json)
     session.add(usr)
     session.commit()
-    print('Done!')
+
+
+def login(event, context):
+
+    """
+    Reads user credentials, generates a token and stores it in the database.
+    Returns token to user.
+    """
+
+    # Reads login payload from body
+    login_body = event['body']
+    login_json = json.loads(login_body)
+
+    # Reads in user where username matches
+    user = session \
+        .query(advito_user) \
+        .filter_by(username=login_json['username']) \
+        .first()
+
+    # Gets password and salt of existing user
+    db_password = user.pwd
+    db_salt = user.user_salt
+    db_salt = base64.b64decode(db_salt)
+
+    # Massages password given
+    login_password = login_json['pwd']
+    login_password = saltHash(login_password, db_salt)[0]
+
+    # Compares passwords and sends payload
+    if(login_password == db_password):
+        response =  {
+            "statusCode": 200,
+            "body": {
+                "message": "Success!"
+            }
+        }
+    else:
+        response = {
+            "statusCode": 400,
+            "body": {
+                "message": "Invalid username or password"
+            }
+        }
+
+    return response
+
 
 
 
