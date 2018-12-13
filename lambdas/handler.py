@@ -17,32 +17,72 @@ client = Base.classes.client
 advito_user_session = Base.classes.advito_user_session
 session = Session(engine)
 
-def saltHash(password, salt):
-  password_bytes = password.encode(encoding='UTF-8')
-  if (salt == ''):
-    salt_bytes = secrets.token_bytes(16)
-  else:
-    salt_bytes = base64.b64decode(salt.encode(encoding='UTF-8'))
 
-  # Hashes salted password
-  algo = hashlib.sha256()
-  algo.update(password_bytes)
-  algo.update(salt_bytes)
-  hashed_password_bytes = algo.digest()
+def saltHash(password, salt=None):
 
-  # Converts both combined password and salt to base64-encoded strings
-  hashed_password = base64 \
-    .b64encode(hashed_password_bytes) \
-    .decode('UTF-8')
-  salt = base64 \
-    .b64encode(salt_bytes) \
-    .decode('UTF-8')
+    """
+    Both hashes and salts a password.
+    If salt is not supplied, salt will be created randomlyself.
+    Returns a tuple of the password and the salt that was used.
+    """
 
-  return (hashed_password, salt)
+    # Creates password bytes and either uses or calculates salt bytes.
+    password_bytes = password.encode(encoding='UTF-8')
+    if (salt is None):
+        salt_bytes = secrets.token_bytes(16)
+    else:
+        salt_bytes = base64.b64decode(salt.encode(encoding='UTF-8'))
+
+    # Hashes and salts password
+    algo = hashlib.sha256()
+    algo.update(password_bytes)
+    algo.update(salt_bytes)
+    hashed_password_bytes = algo.digest()
+
+    # Converts both combined password and salt to base64-encoded strings
+    hashed_password = base64 \
+        .b64encode(hashed_password_bytes) \
+        .decode('UTF-8')
+    salt = base64 \
+        .b64encode(salt_bytes) \
+        .decode('UTF-8')
+
+    # Returns as tuple
+    return (hashed_password, salt)
+
+
+def create_user(event, context):
+
+    """
+    Reads a user from the event body and inserts it into the database.
+    """
+
+    # Reads user payload from body
+    user_body = event['body']
+    user_json = json.loads(user_body)
+
+    # Salts and hashes password. Writes result back to json.
+    salt_and_hash = saltHash(user_json['pwd'])
+    user_json['pwd'] = salt_and_hash[0]
+    user_json['user_salt'] = salt_and_hash[1]
+
+    # Sets default values
+    user_json['is_enabled'] = True
+    user_json['must_change_pwd'] = False
+    user_json['pwd_expiration'] = '01/01/2024'
+    user_json['created'] = '01/01/1900'
+    user_json['modified'] = '12/12/2018'
+
+    # Converts to advito_user and saves it
+    usr = advito_user(**user_json)
+    session.add(usr)
+    session.commit()
+    print('Done!')
+
+
 
 
 def hello(event, context):
-    print(os.environ['DB_CONNECTION'])
 
     #saltHashTuple = saltHash('Password1', '')
     #saltHashPwd = saltHashTuple[0]

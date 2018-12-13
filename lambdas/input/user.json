@@ -1,3 +1,13 @@
 {
-  "body": "{\"username\":\"joe\",\"email\":\"e@mail.com\",\"password\":\"lolpassword123\"}"
+  "client_id": 1,
+  "username": "joeuser",
+  "pwd": "theGreatestPassword",
+  "name_last": "User",
+  "name_first": "Joe",
+  "is_enabled": true,
+  "email": "joeuser@gmail.com",
+  "phone": "123-4567",
+  "profile_picture_path": "/",
+  "timezone_default": "EST",
+  "language_default": "English"
 }
