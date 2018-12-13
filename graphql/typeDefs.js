@@ -47,6 +47,7 @@ exports.typeDefs = gql`
     title: String
     icon: String
     list: [List]
+    disabled: Boolean
   }
 
   type Query {
