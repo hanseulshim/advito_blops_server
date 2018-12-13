@@ -6,7 +6,11 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${opt:stage} }
   region: us-east-2
-
+  vpc:
+    securityGroupIds:
+      - sg-04c1f7c6dc6b2be33
+    subnetIds:
+      - subnet-12305468
 plugins:
   - serverless-python-requirements
 
