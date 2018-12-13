@@ -2,6 +2,7 @@ exports.viewData = [
   {
     title: '360 analytics',
     icon: 'analytics',
+    disabled: false,
     list: [
       {
         title: 'Travel Manager 360 View',
@@ -24,6 +25,7 @@ exports.viewData = [
   {
     title: 'air',
     icon: 'air',
+    disabled: false,
     list: [
       {
         title: 'Air program analytics',
@@ -35,6 +37,7 @@ exports.viewData = [
   {
     title: 'hotel',
     icon: 'hotel',
+    disabled: false,
     list: [
       {
         title: 'Hotel program analytics',
