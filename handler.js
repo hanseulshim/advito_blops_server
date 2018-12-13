@@ -5,12 +5,6 @@ const { resolvers } = require('./graphql/resolvers');
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  introspection: true,
-  playground: {
-    settings: {
-      'editor.cursorShape': 'line',
-    },
-  },
 });
 
 exports.graphqlHandler = server.createHandler({

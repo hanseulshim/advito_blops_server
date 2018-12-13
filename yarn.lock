@@ -314,7 +314,7 @@ apollo-server-express@2.3.0:
     graphql-tools "^4.0.0"
     type-is "^1.6.16"
 
-apollo-server-lambda@^2.0.0-xrc.11:
+apollo-server-lambda@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.3.0.tgz#e0e25fac2f7583fa01c3ab2ca964b44ce79069db"
   integrity sha512-qmXl1EAG1LoSP5mjFRliSkHRymJna9NnEeAX2gXL7LfUsP5eQ+b6d1WtQHVib3ZmKhAcfyFTGBt2sG3KICXSUA==
