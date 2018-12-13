@@ -43,11 +43,7 @@ def saltHash(password, salt):
 
 
 def hello(event, context):
-    body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "input": event
-    }
-
+    #print(event['key1'])
     print(os.environ['DB_CONNECTION'])
 
     #saltHashTuple = saltHash('Password1', '')
@@ -64,12 +60,14 @@ def hello(event, context):
     #session.commit()
 
     #salt = 'rB/YTF0DENZhZiPV9cpaeg=='
+    username = event['username']
+    password = event['password']
 
-    for row in session.query(advito_user).filter(advito_user.username=='Chuck Norris'):
+    for row in session.query(advito_user).filter(advito_user.username==username):
       salt = row.user_salt
 
     print('salt = ' + salt)
-    saltHashTuple = saltHash('Password1', salt)
+    saltHashTuple = saltHash(password, salt)
     saltHashPwd = saltHashTuple[0]
     salt = saltHashTuple[1]
     print('Hashed Password = ' + saltHashPwd)
@@ -80,7 +78,7 @@ def hello(event, context):
     user_displayname = ''
     user_token = 'abc'
 
-    for row in session.query(advito_user).filter(advito_user.username=='Chuck Norris', advito_user.pwd==saltHashPwd):
+    for row in session.query(advito_user).filter(advito_user.username==username, advito_user.pwd==saltHashPwd):
       print(row.id, row.name_first, row.name_last, row.email,  row.is_enabled)
       user_is_enabled = row.is_enabled
       user_id = row.id
@@ -93,7 +91,7 @@ def hello(event, context):
     #  for column in table.columns:
     #    print(column)
 
-    for row in session.query(advito_user_session).filter(advito_user_session.advito_user_id==1):
+    for row in session.query(advito_user_session).filter(advito_user_session.advito_user_id==user_id):
       print('session_token = ' + row.session_token)
       user_token = row.session_token
 
