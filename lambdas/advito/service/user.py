@@ -4,6 +4,7 @@ import hashlib
 import json
 from advito.model.table import AdvitoUser, AdvitoUserSession
 from advito.util.string_util import saltHash
+from advito.error import AdvitoError
 
 
 def deserialize_user_create(user_json):
@@ -52,3 +53,37 @@ class UserService:
         # Converts to AdvitoUser and saves it
         session.add(user)
         session.commit()
+
+
+    def login(self, username, password, session):
+
+        """
+        Logs in an AdvitoUser..
+        :param username: Username of the user
+        :param password: Password of the user
+        :param session: SQLAlchemy session used for db operations.
+        :return: Login token as a str.
+        """
+
+        # Reads in user where username matches
+        user = session \
+            .query(AdvitoUser) \
+            .filter_by(username=username) \
+            .first()
+
+        # Gets password and salt of existing user
+        db_password = user.pwd
+        db_salt = user.user_salt
+
+        # Massages password
+        hashed_password = saltHash(password, db_salt)[0]
+
+        # Checks passwords match
+        if hashed_password != db_password:
+            raise AdvitoError("Passwords did not match")
+
+        # Creates random base64-encoded token
+        session_token = secrets.token_bytes(32)
+        session_token = base64.b64encode(session_token)
+
+        return "Temp token"

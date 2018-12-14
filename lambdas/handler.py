@@ -5,7 +5,6 @@ import secrets
 import hashlib
 import boto3
 import os
-
 from datetime import datetime
 
 # SQLAlchemy
@@ -17,13 +16,11 @@ from sqlalchemy.ext.automap import automap_base
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
 
-# Creates DB client and session for
-engine = create_engine(os.environ['DB_CONNECTION'])
-
-# Creates services that will be used foir all handler functions
-user_service = UserService()
 
 
+# Creates dependencies
+engine = create_engine(os.environ['DB_CONNECTION']) # DB Client
+user_service = UserService()                        # User Service
 
 
 ###################### Handlers go here ###########################
@@ -32,9 +29,11 @@ def user_create(event, context):
 
     """
     Reads a user from the event body and inserts it into the database.
+    :param event: User JSON as a dict.
+    :param context: AWS context.
     """
 
-    # Starts session
+    # With session...
     session = Session(engine)
     try:
 
@@ -46,122 +45,49 @@ def user_create(event, context):
 
         # Server response
         return {
-            "statusCude": 200,
+            "statusCode": 200,
             "body": {
                 "message": "User successfully created!"
             }
         }
 
+    # Handle failure
     except:
-
-        # Rollback if failure
         session.rollback()
         raise
 
 
-def _create_user_session(user):
+def user_login(event, context):
 
     """
-    Creates, inserts and returns a session for the user specified.
+    Logs in a user.
+    :param event: Login JSON as a dict.
+    :context: AWS context
     """
 
-    # Generates random boken
-    session_token = secrets.token_bytes(32)
-    session_token = base64.b64encode(session_token)
+    # Creates session. No try-catch logic because nothing is inserted.
+    session = Session(engine)
 
-    # Creates user session object
-    user_session = advito_user_session (
-        advito_user_id = user.id,
-        session_token = session_token,
-        session_start = datetime.utcnow()
-    )
+    # Acquires username and password
+    login_json = event
+    username = login_json['username']
+    password = login_json['pwd']
 
-    # Inserts session into the database
-    session.add(user_session)
-    session.commit()
+    # Tries to login
+    login_token = user_service.login(username, password, session)
 
-    # Done
-    return user_session
-
-
-
-def login(event, context):
-
-    """
-    Reads user credentials, generates a token and stores it in the database.
-    Returns token to user.
-    """
-
-    # Reads login payload from body
-    login_body = event
-    login_json = json.loads(login_body)
-
-    # Reads in user where username matches
-    user = session \
-        .query(advito_user) \
-        .filter_by(username=login_json['username']) \
-        .first()
-
-    # Gets password and salt of existing user
-    db_password = user.pwd
-    db_salt = user.user_salt
-    db_salt = base64.b64decode(db_salt)
-
-    # Massages password given
-    login_password = login_json['pwd']
-    login_password = util.saltHash(login_password, db_salt)[0]
-
-
-    # If passwords match, create session
-    if login_password == db_password:
-
-        # Creates random base64-encoded token
-        session_token = secrets.token_bytes(32)
-        session_token = base64.b64encode(session_token)
-
-        # Gets existing user session
-        user_session = session \
-            .query(advito_user_session) \
-            .filter_by(advito_user_id=user.id) \
-            .first()
-
-        # If session was not found, create it
-        if user_session is None:
-            user_session = _create_user_session(user)
-
-        print('Session is...')
-        print(user_session)
-
-        # Creates session object
-        user_session = advito_user_session (
-            advito_user_id = user.id,
-            session_token = session_token,
-            session_start = datetime.utcnow()
-        )
-
-        # Stores in db
-        session.add(user_session)
-        session.commit()
-
-
-        response =  {
-            "statusCode": 200,
-            "body": {
-                "message": "Success!"
-            }
+    # Server response
+    return {
+        "statusCode": 200,
+        "body": {
+            "message": "Successfully logged in!",
+            "token": login_token
         }
+    }
 
-    # Otherwise, let user know passwords did not match
-    else:
-        response = {
-            "statusCode": 400,
-            "body": {
-                "message": "Invalid username or password"
-            }
-        }
 
-    # Sends response
-    return response
+
+
 
 
 

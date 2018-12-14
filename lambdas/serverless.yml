@@ -28,7 +28,7 @@ functions:
           method: post
 
   user_login:
-    handler: handler.login
+    handler: handler.user_login
     events:
       - http:
           path: /login
