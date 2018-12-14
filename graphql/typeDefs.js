@@ -49,6 +49,13 @@ exports.typeDefs = gql`
     list: [List]
   }
 
+  type Login {
+    user_id: Int
+    displayname: String
+    email: String
+    session_token: String
+  }
+
   type Query {
     activeAlerts: [Action]
     upcomingActions: [Action]
@@ -59,5 +66,6 @@ exports.typeDefs = gql`
     personaList: [Persona]
     opportunities: [Opportunity]
     riskAreas: [RiskArea]
+    logins(username: String, password: String): Login
   }
 `;

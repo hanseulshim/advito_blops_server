@@ -59,3 +59,7 @@ exports.riskAreas = [
   },
   { title: 'Travelers in HRC/Markets', value: '512' },
 ];
+
+exports.logins =
+  { user_id: 2, displayname: 'Joe User', session_token: 'fhawefbkalwef' };
+
