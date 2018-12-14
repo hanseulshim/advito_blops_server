@@ -5,9 +5,11 @@ import secrets
 import hashlib
 import boto3
 import os
+from datetime import datetime
 from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
+
 
 Base = automap_base()
 engine = create_engine(os.environ['DB_CONNECTION'] % urllib.parse.quote_plus(os.environ['DB_PASSWORD']))
@@ -81,6 +83,32 @@ def create_user(event, context):
     session.commit()
 
 
+def _create_user_session(user):
+
+    """
+    Creates, inserts and returns a session for the user specified.
+    """
+
+    # Generates random boken
+    session_token = secrets.token_bytes(32)
+    session_token = base64.b64encode(session_token)
+
+    # Creates user session object
+    user_session = advito_user_session (
+        advito_user_id = user.id,
+        session_token = session_token,
+        session_start = datetime.utcnow()
+    )
+
+    # Inserts session into the database
+    session.add(user_session)
+    session.commit()
+
+    # Done
+    return user_session
+
+
+
 def login(event, context):
 
     """
@@ -107,14 +135,47 @@ def login(event, context):
     login_password = login_json['pwd']
     login_password = saltHash(login_password, db_salt)[0]
 
-    # Compares passwords and sends payload
-    if(login_password == db_password):
+
+    # If passwords match, create session
+    if login_password == db_password:
+
+        # Creates random base64-encoded token
+        session_token = secrets.token_bytes(32)
+        session_token = base64.b64encode(session_token)
+
+        # Gets existing user session
+        user_session = session \
+            .query(advito_user_session) \
+            .filter_by(advito_user_id=user.id) \
+            .first()
+
+        # If session was not found, create it
+        if user_session is None:
+            user_session = _create_user_session(user)
+
+        print('Session is...')
+        print(user_session)
+
+        # Creates session object
+        user_session = advito_user_session (
+            advito_user_id = user.id,
+            session_token = session_token,
+            session_start = datetime.utcnow()
+        )
+
+        # Stores in db
+        session.add(user_session)
+        session.commit()
+        print("Committed?")
+
         response =  {
             "statusCode": 200,
             "body": {
                 "message": "Success!"
             }
         }
+
+    # Otherwise, let user know passwords did not match
     else:
         response = {
             "statusCode": 400,
@@ -123,6 +184,7 @@ def login(event, context):
             }
         }
 
+    # Sends response
     return response
 
 
