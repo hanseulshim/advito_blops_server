@@ -22,7 +22,7 @@ def saltHash(password, salt=None):
     """
     Both hashes and salts a password.
     If salt is not supplied, salt will be created randomly.
-    Salt is a 'bytes'-like object.
+    Salt is a base64 encoded string of bytes.
     Password is a string.
     Returns a tuple of the password and the salt that was used.
     """
@@ -32,7 +32,7 @@ def saltHash(password, salt=None):
     if (salt is None):
         salt_bytes = secrets.token_bytes(16)
     else:
-        salt_bytes = salt
+        salt_bytes = base64.b64decode(salt.encode(encoding='UTF-8'))
 
     # Hashes and salts password
     algo = hashlib.sha256()
