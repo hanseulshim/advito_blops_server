@@ -6,31 +6,18 @@ import hashlib
 import boto3
 import os
 import util
-
-import service.user
-from service.user import UserService
-
 from datetime import datetime
+
+# SQLAlchemy
 from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
-from service import Users, massage_user
 
+# Service
+from service.user import UserService, parse_new_user
 
-# Creates DB engine and generates classes
-Base = automap_base()
-engine = create_engine(os.environ['DB_CONNECTION'] % urllib.parse.quote_plus(os.environ['DB_PASSWORD']))
-Base.prepare(engine, reflect=True)
-
-
-# Acquires generated db model classes
-advito_user = Base.classes.advito_user
-client = Base.classes.client
-advito_user_session = Base.classes.advito_user_session
-
-
-# Makes DB session for all subsequent DB operations
-session = Session(engine)
+# Creates DB client and session for
+engine = create_engine(os.environ['DB_CONNECTION'])
 
 # Creates services that will be used foir all handler functions
 user_service = UserService()
@@ -46,22 +33,35 @@ def create_user(event, context):
     Reads a user from the event body and inserts it into the database.
     """
 
-    # Reads user payload from body
-    user_json = event
+    # Starts session
+    session = Session(engine)
 
-    # Deserializes user
-    user = parse_new_user(user_json)
+    try:
 
-    # Inserts user to service
-    user_service.create(user)
+        # Reads user payload from body
+        user_json = event
 
-    # Dummy response
-    return {
-        "statusCude": 200,
-        "body": {
-            "message": "User successfully created!"
+        # Deserializes user as an AdvitoUser
+        user = parse_new_user(user_json)
+
+        # Inserts user to service
+        user_service.create(user, session)
+
+        # Commits results
+        session.commit()
+
+        # Dummy response
+        return {
+            "statusCude": 200,
+            "body": {
+                "message": "User successfully created!"
+            }
         }
-    }
+
+    except:
+
+        session.rollback()
+        raise
 
 
 def _create_user_session(user):

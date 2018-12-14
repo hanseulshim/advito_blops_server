@@ -1,5 +1,7 @@
 import base64
 import hashlib
+import secrets
+
 
 def saltHash(password, salt=None):
 

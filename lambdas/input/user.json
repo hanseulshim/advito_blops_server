@@ -1,11 +1,11 @@
 {
   "client_id": 1,
-  "username": "joeuser",
+  "username": "willuser",
   "pwd": "theGreatestPassword",
   "name_last": "User",
   "name_first": "Joe",
   "is_enabled": true,
-  "email": "joeuser@gmail.com",
+  "email": "willuser@gmail.com",
   "phone": "123-4567",
   "profile_picture_path": "/",
   "timezone_default": "EST",
