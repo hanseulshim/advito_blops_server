@@ -20,36 +20,16 @@ custom:
 
 functions:
 
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: /
-          method: get
-
-  create_user:
-    handler: handler.create_user
+  user_create:
+    handler: handler.user_create
     events:
       - http:
           path: /create_user
           method: post
-          request:
-            template:
-              application/json: '{ "httpMethod" : "$context.httpMethod" }'
 
-  login_user:
+  user_login:
     handler: handler.login
     events:
       - http:
           path: /login
-          method: post
-          request:
-            template:
-              application/json: '{ "httpMethod" : "$context.httpMethod" }'
-
-  test_event:
-    handler: handler.test_event
-    events:
-      - http:
-          path: /test_event
           method: post

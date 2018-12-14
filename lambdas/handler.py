@@ -5,7 +5,7 @@ import secrets
 import hashlib
 import boto3
 import os
-import util
+
 from datetime import datetime
 
 # SQLAlchemy
@@ -13,8 +13,9 @@ from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
 
-# Service
-from service.user import UserService, parse_new_user
+# Advito
+import advito.util
+from advito.service.user import UserService, deserialize_user_create
 
 # Creates DB client and session for
 engine = create_engine(os.environ['DB_CONNECTION'])
@@ -27,7 +28,7 @@ user_service = UserService()
 
 ###################### Handlers go here ###########################
 
-def create_user(event, context):
+def user_create(event, context):
 
     """
     Reads a user from the event body and inserts it into the database.
@@ -35,22 +36,15 @@ def create_user(event, context):
 
     # Starts session
     session = Session(engine)
-
     try:
 
-        # Reads user payload from body
-        user_json = event
-
-        # Deserializes user as an AdvitoUser
-        user = parse_new_user(user_json)
-
-        # Inserts user to service
+        # Deserializes user from json, inserts and commits
+        user_create_json = event
+        user = deserialize_user_create(user_create_json)
         user_service.create(user, session)
-
-        # Commits results
         session.commit()
 
-        # Dummy response
+        # Server response
         return {
             "statusCude": 200,
             "body": {
@@ -60,6 +54,7 @@ def create_user(event, context):
 
     except:
 
+        # Rollback if failure
         session.rollback()
         raise
 

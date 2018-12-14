@@ -1,0 +1,2 @@
+class AdvitoError(Exception):
+    pass
