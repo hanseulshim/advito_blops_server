@@ -19,6 +19,7 @@ from advito.service.user import UserService, deserialize_user_create
 
 
 # Creates dependencies
+print(os.environ['DB_CONNECTION'])
 engine = create_engine(os.environ['DB_CONNECTION']) # DB Client
 user_service = UserService()                        # User Service
 
