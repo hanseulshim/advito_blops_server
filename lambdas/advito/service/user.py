@@ -70,6 +70,10 @@ class UserService:
             .filter_by(username=username) \
             .first()
 
+        # Checks that user exists
+        if user is None:
+            raise AdvitoError("User did not exist")
+
         # Gets password and salt of existing user
         db_password = user.pwd
         db_salt = user.user_salt
