@@ -44,11 +44,12 @@ def user_create(event, context):
         session.commit()
 
         # Server response
+        body = {
+            "message": "User successfully created!"
+        }
         return {
             "statusCode": 200,
-            "body": {
-                "message": "User successfully created!"
-            }
+            "body": json.dumps(body)
         }
 
     # Handle failure
@@ -74,20 +75,19 @@ def user_login(event, context):
     password = login_json['pwd']
 
     # Tries to login
-    login_token = user_service.login(username, password, session)
+    (user, session_token) = user_service.login(username, password, session)
 
     # Server response
+    body = {
+        "user_id": user.id,
+        "displayname": user.name_first + " " + user.name_last,
+        "email": user.email,
+        "session_token": session_token
+    }
     return {
         "statusCode": 200,
-        "body": {
-            "message": "Successfully logged in!",
-            "token": login_token
-        }
+        "body": json.dumps(body)
     }
-
-
-
-
 
 
 

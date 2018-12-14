@@ -10,8 +10,8 @@ from advito.error import AdvitoError
 def deserialize_user_create(user_json):
 
     """
-    Utility function that parses a user json string and returns an AdvitoUser object
-    :param user_json: User as dictionary.
+    Utility function that parses a user_create json object and returns an AdvitoUser object
+    :param user_json: Serialized user as a python dict.
     """
 
     # Salts and hashes password. Writes result back to json.
@@ -34,10 +34,9 @@ def deserialize_user_create(user_json):
 class UserService:
 
     """
-    UserService is a service that performs operations on instances of `AdvitoUser`.
-    Can create users into database and extract them.
-    When consuming users, expects them to come in as instances of `AdvitoUser`.
-    Operations take a sessions as an argument and never commit themself.
+    Represents a service that performs operations on instances of `AdvitoUser`.
+    Can insert users into database and select them.
+    Operations utilize an SQLAlchemy session object, but never commit.
     That is the responsibility of the caller.
     """
 
@@ -58,11 +57,11 @@ class UserService:
     def login(self, username, password, session):
 
         """
-        Logs in an AdvitoUser..
+        Logs in an AdvitoUser.
         :param username: Username of the user
         :param password: Password of the user
         :param session: SQLAlchemy session used for db operations.
-        :return: Login token as a str.
+        :return: A tuple of the AdvitoUser and session string.
         """
 
         # Reads in user where username matches
@@ -83,7 +82,22 @@ class UserService:
             raise AdvitoError("Passwords did not match")
 
         # Creates random base64-encoded token
-        session_token = secrets.token_bytes(32)
-        session_token = base64.b64encode(session_token)
+        session_token = self._get_token_for(user.id, session)
+        return (user, session_token)
 
-        return "Temp token"
+
+    def _get_token_for(self, user_id, session):
+
+        """
+        Gets token for specified user.
+        Creates it in the database if it does not exist or the latest one is expired.
+        :param user_id: Id of user to get session for.
+        :param session: SQLAlchemy session used for db operations.
+        """
+
+        #user_session = session \
+        #    .query(AdvitoUserSession) \
+        #    .filter_by(id=id) \
+        #    .first()
+
+        return "Temp Token"
