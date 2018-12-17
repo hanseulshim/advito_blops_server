@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import BigInteger, Boolean, Column, Date, ForeignKey, Integer, String, Table, Text, UniqueConstraint, text
+from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime, ForeignKey, Integer, Numeric, String, Table, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -61,6 +61,21 @@ class Client(Base):
     logo_path = Column(String(128))
     description = Column(Text)
     industry = Column(String(64))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+
+class GeoCountry(Base):
+    __tablename__ = 'geo_country'
+
+    id = Column(BigInteger, primary_key=True)
+    country_name = Column(String(32), nullable=False)
+    country_name_full = Column(String(64), nullable=False)
+    country_code = Column(String(8), nullable=False, unique=True)
+    note = Column(Text)
+    subdivision_label = Column(String(32))
+    latitude = Column(Numeric(10, 7))
+    longitude = Column(Numeric(10, 7))
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
@@ -243,6 +258,21 @@ class ClientUnit(Base):
     client = relationship('Client')
 
 
+class GeoState(Base):
+    __tablename__ = 'geo_state'
+
+    id = Column(BigInteger, primary_key=True)
+    geo_country_id = Column(ForeignKey('geo_country.id'), nullable=False)
+    state = Column(String(64), nullable=False)
+    state_code = Column(String(8), nullable=False)
+    latitude = Column(Numeric(10, 7))
+    longitude = Column(Numeric(10, 7))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+    geo_country = relationship('GeoCountry')
+
+
 class AdvitoApplicationRoleGroupLink(Base):
     __tablename__ = 'advito_application_role_group_link'
 
@@ -318,6 +348,8 @@ class AdvitoUserSession(Base):
     session_end = Column(TIMESTAMP(precision=6))
     session_duration_sec = Column(Integer)
     session_type = Column(String(32))
+    session_expiration = Column(TIMESTAMP(precision=6), nullable=False)
+    session_note = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
@@ -335,3 +367,19 @@ class ClientFeatureLink(Base):
 
     advito_application_feature = relationship('AdvitoApplicationFeature')
     client = relationship('Client')
+
+
+class AdvitoUserSessionLog(Base):
+    __tablename__ = 'advito_user_session_log'
+
+    id = Column(BigInteger, primary_key=True)
+    session_token = Column(ForeignKey('advito_user_session.session_token'), nullable=False)
+    log_timestamp = Column(DateTime, nullable=False)
+    log_action = Column(String(64), nullable=False)
+    log_detail = Column(String(64))
+    log_result_code = Column(String(16))
+    log_summary_json = Column(Text)
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+    advito_user_session = relationship('AdvitoUserSession')

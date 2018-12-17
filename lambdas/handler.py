@@ -6,22 +6,21 @@ import hashlib
 import boto3
 import os
 from datetime import datetime
-
-# SQLAlchemy
-from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.automap import automap_base
-
-# Advito
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
 
+# Unpacks environment variables to build DB client and services
+session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
+db_connection = os.environ['DB_CONNECTION']
 
+# Creates SQLAlchemy DB client
+engine = create_engine(db_connection)
 
-# Creates dependencies
-print(os.environ['DB_CONNECTION'])
-engine = create_engine(os.environ['DB_CONNECTION']) # DB Client
-user_service = UserService()                        # User Service
+# Creates services that control business logic
+user_service = UserService(session_duration_sec)
 
 
 ###################### Handlers go here ###########################
@@ -42,7 +41,14 @@ def user_create(event, context):
         user_create_json = event
         user = deserialize_user_create(user_create_json)
         user_service.create(user, session)
-        session.commit()
+
+        # Commits results
+        try:
+            session.commit()
+        except:
+            session.rollback()
+        finally:
+            session.close()
 
         # Server response
         body = {
@@ -57,6 +63,8 @@ def user_create(event, context):
     except:
         session.rollback()
         raise
+    finally:
+        session.close()
 
 
 def user_login(event, context):
@@ -69,23 +77,30 @@ def user_login(event, context):
 
     # Creates session. No try-catch logic because nothing is inserted.
     session = Session(engine)
+    try:
 
-    # Acquires username and password
-    login_json = event
-    username = login_json['username']
-    password = login_json['pwd']
+        # Acquires username and password
+        login_json = event
+        username = login_json['username']
+        password = login_json['pwd']
 
-    # Tries to login
-    (user, session_token) = user_service.login(username, password, session)
+        # Tries to login
+        (user, user_session) = user_service.login(username, password, session)
+        session.commit()
 
-    # Server response
-    body = {
-        "user_id": user.id,
-        "displayname": user.name_first + " " + user.name_last,
-        "email": user.email,
-        "session_token": session_token
-    }
-    return {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
+        # Server response
+        body = {
+            "user_id": user.id,
+            "displayname": user.name_first + " " + user.name_last,
+            "email": user.email,
+            "session_token": user_session.session_token
+        }
+        return {
+            "statusCode": 200,
+            "body": json.dumps(body)
+        }
+    except:
+        session.rollback()
+        raise
+    finally:
+        session.close()

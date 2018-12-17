@@ -3,7 +3,7 @@ import hashlib
 import secrets
 
 
-def saltHash(password, salt=None):
+def salt_hash(password, salt=None):
 
     """
     Both hashes and salts a password.

@@ -2,8 +2,10 @@ import secrets
 import base64
 import hashlib
 import json
+from datetime import datetime
+from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession
-from advito.util.string_util import saltHash
+from advito.util.string_util import salt_hash
 from advito.error import AdvitoError
 
 
@@ -15,7 +17,7 @@ def deserialize_user_create(user_json):
     """
 
     # Salts and hashes password. Writes result back to json.
-    salt_and_hash = saltHash(user_json['pwd'])
+    salt_and_hash = salt_hash(user_json['pwd'])
     user_json['pwd'] = salt_and_hash[0]
     user_json['user_salt'] = salt_and_hash[1]
 
@@ -40,6 +42,15 @@ class UserService:
     That is the responsibility of the caller.
     """
 
+    def __init__(self, session_duration_sec):
+
+        """
+        Constructs a UserService instance.
+        :param expiration_minutes: Real number representing the number of minutes a session lasts for.
+        """
+        self.session_duration_sec = session_duration_sec
+
+
     def create(self, user, session):
 
         """
@@ -51,7 +62,6 @@ class UserService:
 
         # Converts to AdvitoUser and saves it
         session.add(user)
-        session.commit()
 
 
     def login(self, username, password, session):
@@ -79,29 +89,92 @@ class UserService:
         db_salt = user.user_salt
 
         # Massages password
-        hashed_password = saltHash(password, db_salt)[0]
+        hashed_password = salt_hash(password, db_salt)[0]
 
         # Checks passwords match
         if hashed_password != db_password:
             raise AdvitoError("Passwords did not match")
 
-        # Creates random base64-encoded token
-        session_token = self._get_token_for(user.id, session)
-        return (user, session_token)
+        # Creates user session in db and returns it.
+        # Discards existing user session if there was one.
+        user_session = self._create_session(user, session)
+        return (user, user_session)
 
 
-    def _get_token_for(self, user_id, session):
+    def _create_session_expiration(self):
 
         """
-        Gets token for specified user.
+        Generates session expiration which is relative to the current time.
+        """
+
+        return datetime.now() + timedelta(self.session_duration_sec)
+
+
+    def _create_session(self, user, session):
+
+        """
+        Generates a session for the specified user
         Creates it in the database if it does not exist or the latest one is expired.
-        :param user_id: Id of user to get session for.
+        :param user: User to generate session for.
         :param session: SQLAlchemy session used for db operations.
         """
 
-        #user_session = session \
-        #    .query(AdvitoUserSession) \
-        #    .filter_by(id=id) \
-        #    .first()
+        # Expires existing session for this user if it exists.
+        # Otherwise, does nothing.
+        session \
+            .query(AdvitoUserSession) \
+            .filter(AdvitoUserSession.advito_user_id == user.id) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .update({"session_end" : datetime.now()}, synchronize_session=False)
 
-        return "Temp Token"
+        # Makes session that will be used in other calls
+        user_session = AdvitoUserSession()
+        user_session.advito_user_id = user.id
+        user_session.session_token = base64 \
+            .b64encode(secrets.token_bytes(16)) \
+            .decode(encoding='UTF-8')
+        user_session.session_start = datetime.now()
+        user_session.session_end = None
+        user_session.session_duration_sec = self.session_duration_sec
+        user_session.session_type = None
+        user_session.session_expiration = self._create_session_expiration()
+        user_session.session_note = None
+
+        #  Inserts session
+        session.add(user_session)
+
+        # Returns session
+        return user_session
+
+
+    def _get_session(self, user, session):
+
+        """
+        Gets an existing session for a user from the database.
+        :param user: User to get session for.
+        :param session: SQLAlchemy session used for db operations.
+        :return: An AdvitoSession if session exists, or None if not.
+        """
+
+        # Fetches current user session if there is one
+        user_session = session \
+            .query(AdvitoUserSession) \
+            .filter(advito_user_id=user.id) \
+            .filter(session_end is not None)
+
+        # If user session record is found and is not expired, update the expiration.
+        # If session record is expired, return None.
+        if user_session is not None:
+            timediff = datetime.now() - user_session.session_start
+            duration =  timedelta(seconds=user_session.session_duration_sec)
+            if timediff >= duration:
+                return None
+            else:
+                session \
+                    .query(AdvitoUserSession) \
+                    .filter(advito_user_id = user.id) \
+                    .filter(session_end is not None) \
+                    .update(session_expiration = self._create_session_expiration())
+
+        # Return session found. Might be None.
+        return user_session
