@@ -82,7 +82,7 @@ class UserService:
 
         # Checks that user exists
         if user is None:
-            raise AdvitoError("User did not exist")
+            raise LoginError("User did not exist")
 
         # Gets password and salt of existing user
         db_password = user.pwd
