@@ -22,14 +22,9 @@ functions:
 
   user_create:
     handler: handler.user_create
-    events:
-      - http:
-          path: /create_user
-          method: post
 
   user_login:
     handler: handler.user_login
-    events:
-      - http:
-          path: /login
-          method: post
+
+  dummy_authenticated_endpoint:
+    handler: handler.dummy_authenticated_endpoint

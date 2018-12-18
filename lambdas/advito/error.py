@@ -3,3 +3,12 @@ class AdvitoError(Exception):
 
 class LoginError(AdvitoError):
     pass
+
+class BadRequestError(AdvitoError):
+    pass
+
+class InvalidSessionError(AdvitoError):
+    pass
+
+class ExpiredSessionError(AdvitoError):
+    pass

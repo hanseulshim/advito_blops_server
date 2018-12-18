@@ -12,7 +12,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
-from advito.error import AdvitoError, LoginError
+from advito.error import AdvitoError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
+
 
 # Unpacks environment variables to build DB client and services
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
@@ -25,30 +26,59 @@ engine = create_engine(db_connection)
 user_service = UserService(session_duration_sec)
 
 
-################# Util function ###################
-def error_handle(lambda_func):
+################ Decorators ##################
+def handler_decorator(func):
+
+    """
+    Decorates a handler function by supplying it with a SQLAlchemy session object.
+    Includes error-handling code in the event that an Exception is thrown.
+    :param func: Handler function to be decorated.
+    :return: Decorated version of handler function supplied.
+    """
 
     def wrapper(event, context):
 
         # Creates session
         session = Session(engine)
+
+        # Runs underlying funtion.
+        # Performs error handling in the event of an Exception being raised.
         try:
-            body = lambda_func(event, context, session)
+            body = func(event, context, session)
             session.commit()
             status_code = 200
 
-        except (LoginError, IntegrityError) as e:
+        except LoginError as e:
             session.rollback()
             body = {
                 "success": False,
                 "apicode": "NOT FOUND",
-                "apimessage": "Could not log in user. Ensure that username and email are unique.",
+                "apimessage": str(e),
                 "apidataset": None
             }
             status_code = 400
-            traceback.print_exc()
 
-        except AdvitoError as e:
+        except (IntegrityError, InvalidSessionError) as e:
+            session.rollback()
+            body = {
+                "success": False,
+                "apicode": "INVALID",
+                "apimessage": str(e),
+                "apidataset": None
+            }
+            status_code = 400
+
+        except ExpiredSessionError as e:
+            session.rollback()
+            body = {
+                "success": False,
+                "apicode": "EXPIRED",
+                "apimessage": str(e),
+                "apidataset": None
+            }
+            status_code = 400
+
+        except BadRequestError as e:
             session.rollback()
             body = {
                 "success": False,
@@ -57,10 +87,8 @@ def error_handle(lambda_func):
                 "apidataset": None
             }
             status_code = 400
-            traceback.print_exc()
 
         except Exception as e:
-            print(type(e))
             session.rollback()
             body = {
                 "success": False,
@@ -74,7 +102,7 @@ def error_handle(lambda_func):
         finally:
             session.close()
 
-        # Jsonifies response and sends response
+        # Jsonifies response and sends it
         return {
             "statusCode": status_code,
             "body": json.dumps(body)
@@ -85,15 +113,16 @@ def error_handle(lambda_func):
 
 
 
-###################### Handlers go here ###########################
+###################### Handlers ###########################
 
-@error_handle
+@handler_decorator
 def user_create(event, context, session):
 
     """
     Reads a user from the event body and inserts it into the database.
     :param event: User JSON as a dict.
     :param context: AWS context.
+    :param session: Session used for database connectivity.
     """
 
     # Deserializes user from json, inserts and commits
@@ -101,23 +130,25 @@ def user_create(event, context, session):
     user = deserialize_user_create(user_create_json)
     user_service.create(user, session)
 
-    # Server response
-    body = {
-        "message": "User successfully created!"
-    }
+    # Creates response and returns it
     return {
-        "statusCode": 200,
-        "body": json.dumps(body)
+        "success": False,
+        "apicode": "INVALID",
+        "apimessage": "Input was not unique.",
+        "apidataset": {
+            "message": "User successfully created!"
+        }
     }
 
 
-@error_handle
+@handler_decorator
 def user_login(event, context, session):
 
     """
     Logs in a user.
     :param event: Login JSON as a dict.
-    :context: AWS context
+    :param context: AWS context.
+    :param session: Session used for database connectivity.
     """
 
     # Acquires username and password
@@ -129,14 +160,24 @@ def user_login(event, context, session):
     (user, user_session) = user_service.login(username, password, session)
     session.commit()
 
-    # Server response
-    body = {
-        "user_id": user.id,
-        "displayname": user.name_first + " " + user.name_last,
-        "email": user.email,
-        "session_token": user_session.session_token
-    }
+    # Creates response and returns it
     return {
-        "statusCode": 200,
-        "body": json.dumps(body)
+        "success": False,
+        "apicode": "OK",
+        "apimessage": "User successfully logged in.",
+        "apidataset": {
+            "displayName": user.name_first + " " + user.name_last,
+            "sessionToken": user_session.session_token
+        }
     }
+
+@handler_decorator
+def dummy_authenticated_endpoint(event, context, session):
+
+    # Unpacks request and validates that user is logged in
+    session_token = event["sessionToken"]
+    payload = event["payload"]
+    user_service.validate_logged_in(session_token, session)
+
+    # Main code
+    return payload
