@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession
 from advito.util.string_util import salt_hash
-from advito.error import AdvitoError
+from advito.error import LoginError, InvalidSessionError, ExpiredSessionError
 
 
 def deserialize_user_create(user_json):
@@ -82,7 +82,7 @@ class UserService:
 
         # Checks that user exists
         if user is None:
-            raise AdvitoError("User did not exist")
+            raise LoginError("User did not exist")
 
         # Gets password and salt of existing user
         db_password = user.pwd
@@ -93,7 +93,7 @@ class UserService:
 
         # Checks passwords match
         if hashed_password != db_password:
-            raise AdvitoError("Passwords did not match")
+            raise LoginError("Passwords did not match")
 
         # Creates user session in db and returns it.
         # Discards existing user session if there was one.
@@ -101,13 +101,39 @@ class UserService:
         return (user, user_session)
 
 
-    def _create_session_expiration(self):
+    def validate_logged_in(self, session_token, session):
 
         """
-        Generates session expiration which is relative to the current time.
+        Validates that an AdvitoUser is logged in.
+        If logged in, expiration_time in database will be updated and method will exit normally.
+        If they are not, this method will raise an error.
+        :param session_token: Session token to validate logged-in status.
+        :param session: SQLAlchemy session used for db operations.
+        :return: True if user is logged in. False otherwise.
         """
 
-        return datetime.now() + timedelta(self.session_duration_sec)
+        # Gets latest session for user in the database
+        user_session = session \
+            .query(AdvitoUserSession) \
+            .filter_by(session_token = session_token) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .first()
+
+        # Checks that there was a session and that it matches supplied token.
+        if user_session is None:
+            raise InvalidSessionError("No session found")
+
+        # Check that session is not expired.
+        if datetime.now() >= user_session.session_expiration:
+            raise ExpiredSessionError("Session expired")
+
+        # Update session in DB
+        duration = timedelta(seconds = user_session.session_duration_sec)
+        session \
+            .query(AdvitoUserSession) \
+            .filter_by(session_token = session_token) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .update({"session_expiration": datetime.now() + duration})
 
 
     def _create_session(self, user, session):
@@ -137,44 +163,11 @@ class UserService:
         user_session.session_end = None
         user_session.session_duration_sec = self.session_duration_sec
         user_session.session_type = None
-        user_session.session_expiration = self._create_session_expiration()
+        user_session.session_expiration = datetime.now() + timedelta(seconds=self.session_duration_sec)
         user_session.session_note = None
 
         #  Inserts session
         session.add(user_session)
 
         # Returns session
-        return user_session
-
-
-    def _get_session(self, user, session):
-
-        """
-        Gets an existing session for a user from the database.
-        :param user: User to get session for.
-        :param session: SQLAlchemy session used for db operations.
-        :return: An AdvitoSession if session exists, or None if not.
-        """
-
-        # Fetches current user session if there is one
-        user_session = session \
-            .query(AdvitoUserSession) \
-            .filter(advito_user_id=user.id) \
-            .filter(session_end is not None)
-
-        # If user session record is found and is not expired, update the expiration.
-        # If session record is expired, return None.
-        if user_session is not None:
-            timediff = datetime.now() - user_session.session_start
-            duration =  timedelta(seconds=user_session.session_duration_sec)
-            if timediff >= duration:
-                return None
-            else:
-                session \
-                    .query(AdvitoUserSession) \
-                    .filter(advito_user_id = user.id) \
-                    .filter(session_end is not None) \
-                    .update(session_expiration = self._create_session_expiration())
-
-        # Return session found. Might be None.
         return user_session

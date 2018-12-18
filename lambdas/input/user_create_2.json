@@ -1,0 +1,13 @@
+{
+  "client_id": 1,
+  "username": "willuser2",
+  "pwd": "theGreatestPassword2",
+  "name_last": "User",
+  "name_first": "Joe",
+  "is_enabled": true,
+  "email": "willuser@gmail.com",
+  "phone": "123-4567",
+  "profile_picture_path": "/",
+  "timezone_default": "EST",
+  "language_default": "English"
+}
