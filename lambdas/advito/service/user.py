@@ -136,15 +136,6 @@ class UserService:
             .update({"session_expiration": datetime.now() + duration})
 
 
-    def _create_session_expiration(self):
-
-        """
-        Generates session expiration which is relative to the current time.
-        """
-
-        return datetime.now() + timedelta(seconds=self.session_duration_sec)
-
-
     def _create_session(self, user, session):
 
         """
@@ -172,7 +163,7 @@ class UserService:
         user_session.session_end = None
         user_session.session_duration_sec = self.session_duration_sec
         user_session.session_type = None
-        user_session.session_expiration = self._create_session_expiration()
+        user_session.session_expiration = datetime.now() + timedelta(seconds=self.session_duration_sec)
         user_session.session_note = None
 
         #  Inserts session
