@@ -5,11 +5,11 @@ exports.programPerformance = [
   },
   {
     title: 'Booking Outside of Agency',
-    value: '12% / $360K Impact',
+    value: '12% / $360K',
   },
   {
     title: 'Expenses Out of Policy',
-    value: '23% / $690K Impact',
+    value: '23% / $690K',
   },
 ];
 
@@ -49,6 +49,10 @@ exports.opportunities = [
   },
   { title: 'ABR higher than ANR', value: '30% / $500K impact' },
   { title: 'NRT Utilization/Loss', value: '83% / $23K expired' },
+  { title: 'ANR higher than ABR', value: '25% / $100K expired' },
+  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'New item', value: 'XX% / $XX expired' },
 ];
 
 exports.riskAreas = [
@@ -58,4 +62,8 @@ exports.riskAreas = [
     value: '14',
   },
   { title: 'Travelers in HRC/Markets', value: '512' },
+  { title: 'Hosts in TBS/Markets', value: '125' },
+  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'New item', value: 'XX% / $XX expired' },
 ];

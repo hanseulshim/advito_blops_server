@@ -17,7 +17,7 @@ exports.resolvers = {
     performanceList: () => programPerformance,
     noChangeSince: () => noChangeSince,
     personaList: () => personaList,
-    opportunities: () => opportunities,
-    riskAreas: () => riskAreas,
+    opportunities: (parent, args) => opportunities.slice(0, args.limit),
+    riskAreas: (parent, args) => riskAreas.slice(0, args.limit),
   },
 };

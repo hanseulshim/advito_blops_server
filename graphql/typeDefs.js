@@ -58,7 +58,7 @@ exports.typeDefs = gql`
     performanceList: [Performance]
     noChangeSince: String
     personaList: [Persona]
-    opportunities: [Opportunity]
-    riskAreas: [RiskArea]
+    opportunities(limit: Int): [Opportunity]
+    riskAreas(limit: Int): [RiskArea]
   }
 `;
