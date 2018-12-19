@@ -2,14 +2,17 @@ exports.programPerformance = [
   {
     title: 'Average Total Trip Cost',
     value: '$2,754',
+    unit: 'impact',
   },
   {
     title: 'Booking Outside of Agency',
     value: '12% / $360K',
+    unit: 'impact',
   },
   {
     title: 'Expenses Out of Policy',
     value: '23% / $690K',
+    unit: 'impact',
   },
 ];
 
@@ -45,14 +48,23 @@ exports.personaList = [
 exports.opportunities = [
   {
     title: 'Expenses approved above rate caps / per diems',
-    value: '27% / $375K impact',
+    value: '27% / $375K',
+    unit: 'impact',
   },
-  { title: 'ABR higher than ANR', value: '30% / $500K impact' },
-  { title: 'NRT Utilization/Loss', value: '83% / $23K expired' },
-  { title: 'ANR higher than ABR', value: '25% / $100K expired' },
-  { title: 'New item', value: 'XX% / $XX expired' },
-  { title: 'New item', value: 'XX% / $XX expired' },
-  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'ABR higher than ANR', value: '30% / $500K', unit: 'impact' },
+  {
+    title: 'NRT Utilization/Loss',
+    value: '83% / $23K',
+    unit: 'expired',
+  },
+  {
+    title: 'ANR higher than ABR',
+    value: '25% / $100K',
+    unit: 'expired',
+  },
+  { title: 'New item', value: 'XX% / $XX', unit: 'impact' },
+  { title: 'New item', value: 'XX% / $XX', unit: 'expired' },
+  { title: 'New item', value: 'XX% / $XX', unit: '' },
 ];
 
 exports.riskAreas = [
