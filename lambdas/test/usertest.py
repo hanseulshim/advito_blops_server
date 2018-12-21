@@ -9,6 +9,9 @@ from test.util import randstr
 
 class UserTests(unittest.TestCase):
 
+    """
+    Tests all scenarios for users
+    """
 
     def setUp(self):
 
@@ -17,16 +20,16 @@ class UserTests(unittest.TestCase):
 
         # Template for creating users
         user_template = {
-          "client_id": 2,
+          "clientId": 2,
           "username": "user",
           "pwd": "password",
-          "name_last": "Last",
-          "name_first": "First",
+          "nameLast": "Last",
+          "nameFirst": "First",
           "email": "user@gmail.com",
           "phone": "123-4567",
           "profile_picture_path": "/",
-          "timezone_default": "EST",
-          "language_default": "English"
+          "timezoneDefault": "EST",
+          "languageDefault": "English"
         }
 
         # Creates 'n' users and stores users
@@ -44,16 +47,16 @@ class UserTests(unittest.TestCase):
 
         # Creates event
         event = {
-          "client_id": 2,
-          "username": "willuser" + randstr(),
-          "pwd": "theGreatestPassword",
-          "name_last": "User",
-          "name_first": "Joe",
-          "email": "willuser@gmail.com" + randstr(),
+          "clientId": 2,
+          "username": "user" + randstr(),
+          "pwd": "password",
+          "nameLast": "User",
+          "nameFirst": "Joe",
+          "email": "user@gmail.com" + randstr(),
           "phone": "123-4567",
-          "profile_picture_path": "/",
-          "timezone_default": "EST",
-          "language_default": "English"
+          "profilePicturePath": "/",
+          "timezoneDefault": "EST",
+          "languageDefault": "English"
         }
 
         # Generates expected value
@@ -85,9 +88,9 @@ class UserTests(unittest.TestCase):
             # Validates response
             body_dict = json.loads(actual['body'])
             apidataset_dict = body_dict['apidataset']
-            self.assertEquals(actual['statusCode'], 200)
-            self.assertEquals (
+            self.assertEqual(actual['statusCode'], 200)
+            self.assertEqual (
                 apidataset_dict['displayName'],
-                user['name_first'] + ' ' + user['name_last']
+                user['nameFirst'] + ' ' + user['nameLast']
             )
             self.assertIn('sessionToken', apidataset_dict)
