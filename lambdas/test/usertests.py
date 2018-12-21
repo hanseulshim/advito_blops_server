@@ -15,8 +15,14 @@ class UserTests(unittest.TestCase):
 
     def setUp(self):
 
+        """
+        Runs before tests.
+        Creates users.
+        """
+
         # Allocates users
         self.users = []
+        self.user_session_tokens = []
 
         # Template for creating users
         user_template = {
@@ -32,18 +38,23 @@ class UserTests(unittest.TestCase):
           "languageDefault": "English"
         }
 
-        # Creates 'n' users and stores users
+        # Creates 'n' users and stores them
         n = 3
         for i in range(0, n):
             user = deepcopy(user_template)
             user['username'] += randstr()
             user['email'] += randstr()
-            handler.user_create(event=deepcopy(user), context=None)
+            handler.user_create(event=user, context=None)
             self.users.append(user)
+            self.user_session_tokens.append(None)
 
 
 
-    def test_create_1(self):
+    def test_user_create(self):
+
+        """
+        Tests functionality of 'user_create' in handler.
+        """
 
         # Creates event
         event = {
@@ -72,9 +83,16 @@ class UserTests(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
-    def test_login_1(self):
+    def test_user_login(self):
 
-        for user in self.users:
+        """
+        Tests functionality of 'user_login' in handler.
+        """
+
+        for i in range(0, len(self.users)):
+
+            # Gets user
+            user = self.users[i]
 
             # Creates payload
             event = {
@@ -83,14 +101,46 @@ class UserTests(unittest.TestCase):
             }
 
             # Invokes
-            actual = handler.user_login(event=event, context=None)
+            response = handler.user_login(event=event, context=None)
 
             # Validates response
-            body_dict = json.loads(actual['body'])
+            body_dict = json.loads(response['body'])
             apidataset_dict = body_dict['apidataset']
-            self.assertEqual(actual['statusCode'], 200)
+            self.assertEqual(response['statusCode'], 200)
             self.assertEqual (
                 apidataset_dict['displayName'],
                 user['nameFirst'] + ' ' + user['nameLast']
             )
             self.assertIn('sessionToken', apidataset_dict)
+
+
+    def test_dummy_authenticated_endpoint(self):
+
+        """
+        Tests functionality of 'dummy_authenticated_endpoint' in handler.
+        """
+
+        # For all users created in setUp...
+        for user in self.users:
+
+            # Invokes login
+            event = {
+                "username": user['username'],
+                "pwd": user['pwd']
+            }
+            response = handler.user_login(event=event, context=None)
+
+            # Exctracts value from response
+            body_dict = json.loads(response['body'])
+            apidataset_dict = body_dict['apidataset']
+
+            # Invokes authenticated endpoint
+            event = {
+                "sessionToken": apidataset_dict['sessionToken'],
+                "payload": "Look at this payload!"
+            }
+            actual = handler.dummy_authenticated_endpoint(event=event, context=None)
+
+            # Compares expected and actual values
+            expected = {'statusCode': 200, 'body': '"Look at this payload!"'}
+            self.assertEqual(expected, actual)

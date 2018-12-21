@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-########### Must simulate environment variables before any imports ################
+########### Must simulate environment variables before importing handler module ################
 def simulate_environment_variables():
 
     """
@@ -27,7 +27,7 @@ simulate_environment_variables()
 # Imports
 import unittest
 import os
-from test.usertest import UserTests
+from test.usertests import UserTests
 
 
 # Starts all tests imported

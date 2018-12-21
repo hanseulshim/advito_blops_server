@@ -156,8 +156,7 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from json, inserts and commits
-    user_create_json = event
-    user = deserialize_user_create(user_create_json)
+    user = deserialize_user_create(event)
     user_service.create(user, session)
 
     # Creates response and returns it
