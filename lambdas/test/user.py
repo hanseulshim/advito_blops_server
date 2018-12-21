@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 import unittest
-from advito.service.user import User, deserialize_user_create
-from advito.model import AdvitoUser
-from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
+import json
+import handler
+from test.util import randstr
+
 
 
 class UserTests(unittest.TestCase):
 
-    def setUp():
-        self.user_service = UserService()
-        print('I am live!')
 
     def test_create_1(self):
 
-        # Makes session
-
-        # Creates user from json
+        # Creates user dictionary from json
         user_str = '''
         {
-          "client_id": 1,
+          "client_id": 2,
           "username": "willuser",
           "pwd": "theGreatestPassword",
           "name_last": "User",
@@ -31,11 +27,14 @@ class UserTests(unittest.TestCase):
           "language_default": "English"
         }
         '''
-        user_dict = json.loads(usr_str)
-        user = deserialize_user_create(user_dict)
 
-        # Inserts user into db
-        print(user)
+        # Deserializes and makes info unique
+        user_dict = json.loads(user_str)
+        user_dict['username'] += '_' + randstr()
+        user_dict['email'] += '_' + randstr()
 
-    def tearDown():
-        print('I am ded...')
+        # Invokes handler with payload
+        response = handler.user_create(event=user_dict, context=None)
+
+        # Validates response
+        print(response)

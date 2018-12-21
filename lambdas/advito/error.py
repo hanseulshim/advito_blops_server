@@ -12,3 +12,6 @@ class InvalidSessionError(AdvitoError):
 
 class ExpiredSessionError(AdvitoError):
     pass
+
+class NotFoundError(AdvitoError):
+    pass

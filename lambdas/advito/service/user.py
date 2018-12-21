@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, InvalidSessionError, ExpiredSessionError
+from advito.error import LoginError, InvalidSessionError, ExpiredSessionError, NotFoundError
 
 
 def deserialize_user_create(user_json):
@@ -62,6 +62,24 @@ class UserService:
 
         # Converts to AdvitoUser and saves it
         session.add(user)
+
+
+    def get_by_username(self, username, session):
+
+        """
+        Gets an AdvitoUser by username
+        :param username: Username of the user to get
+        :param session: SQLAlchemy session used for db operations.
+        :return: AdvitoUser instance.
+        """
+
+        user = session \
+            .query(AdvitoUser) \
+            .filter_by(username=username) \
+            .first()
+
+        if user is None:
+            raise NotFoundError("Could not find user '{}'".format(username))
 
 
     def login(self, username, password, session):

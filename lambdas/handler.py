@@ -3,7 +3,6 @@ import urllib.parse
 import base64
 import secrets
 import hashlib
-import boto3
 import os
 import traceback
 from datetime import datetime
@@ -25,9 +24,9 @@ engine = create_engine(db_connection)
 # Creates services that control business logic
 user_service = UserService(session_duration_sec)
 
-
 ################ Decorators ##################
 def handler_decorator(func):
+
 
     """
     Decorates a handler function by supplying it with a SQLAlchemy session object.
