@@ -9,4 +9,4 @@ def randstr():
 
     bytes = secrets.token_bytes(16)
     string = base64.b64encode(bytes).decode(encoding='UTF-8')
-    return string
+    return '-test-' + string
