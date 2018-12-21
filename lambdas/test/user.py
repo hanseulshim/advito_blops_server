@@ -4,15 +4,16 @@ from advito.service.user import User, deserialize_user_create
 from advito.model import AdvitoUser
 from sqlalchemy import create_engine, Column, DateTime, func, Integer, String
 
+
 class UserTests(unittest.TestCase):
 
     def setUp():
         self.user_service = UserService()
+        print('I am live!')
 
     def test_create_1(self):
 
         # Makes session
-
 
         # Creates user from json
         user_str = '''
@@ -34,9 +35,7 @@ class UserTests(unittest.TestCase):
         user = deserialize_user_create(user_dict)
 
         # Inserts user into db
+        print(user)
 
-
-
-
-if __name__ == '__main__':
-    unittest.main()
+    def tearDown():
+        print('I am ded...')
