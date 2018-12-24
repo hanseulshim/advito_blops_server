@@ -10,7 +10,9 @@ exports.typeDefs = gql`
 
   type Info {
     title: String
+    description: String
     icon: String
+    disabled: Boolean
     button: String
   }
 

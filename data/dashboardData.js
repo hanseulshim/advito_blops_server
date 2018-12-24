@@ -2,7 +2,7 @@ exports.programPerformance = [
   {
     title: 'Average Total Trip Cost',
     value: '$2,754',
-    unit: 'impact',
+    unit: '',
   },
   {
     title: 'Booking Outside of Agency',
@@ -75,7 +75,7 @@ exports.riskAreas = [
   },
   { title: 'Travelers in HRC/Markets', value: '512' },
   { title: 'Hosts in TBS/Markets', value: '125' },
-  { title: 'New item', value: 'XX% / $XX expired' },
-  { title: 'New item', value: 'XX% / $XX expired' },
-  { title: 'New item', value: 'XX% / $XX expired' },
+  { title: 'New item', value: 'XXX' },
+  { title: 'New item', value: 'XXX' },
+  { title: 'New item', value: 'XXX' },
 ];
