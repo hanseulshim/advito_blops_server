@@ -13,11 +13,11 @@ class ResponseBody(graphene.ObjectType):
     success = graphene.Boolean()
     apicode = graphene.String()
     apimessage = graphene.String()
-    apidataset = ApiDataSet()
+    apidataset = graphene.Field(ApiDataSet)
 
 class LoginResponse(graphene.ObjectType):
     statusCode = graphene.Int()
-    body = ResponseBody()
+    body = graphene.Field(ResponseBody)
 
 def user_login(username, password):
     payload_str = '{"username": "' + username + '", "pwd": "' + password + '"}'
@@ -33,15 +33,18 @@ def user_login(username, password):
     response = invoke_response['Payload'].read().decode('utf-8')
     response_dict = json.loads(response)
     
-    if (response_dict["statusCode"] == 200):
+    if (response_dict['statusCode'] == 200):
         response_payload = json.loads(response_dict["body"])
         dataset = response_payload['apidataset']
-        #apidataset = ApiDataSet(dataset['displayName'], dataset['sessionToken'])
-        #responsebody = ResponseBody(True, dataset['apicode'], dataset['apimessage'])
-        #responsebody.apidataset = apidataset
-        #loginresponse = LoginResponse(200)
-        #loginresponse.body = responsebody
-        return response
+        apidataset = ApiDataSet(dataset['displayName'], dataset['sessionToken'])
+        responsebody = ResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+        responsebody.apidataset = apidataset
+        loginresponse = LoginResponse(response_dict['statusCode'])
+        loginresponse.body = responsebody
+        #return response
+        #return apidataset
+        #return responsebody
+        return loginresponse
         #return dataset['sessionToken']
         #return loginresponse
     else:
@@ -49,8 +52,10 @@ def user_login(username, password):
 
 class Query(graphene.ObjectType):
     #login = graphene.String(username=graphene.String(), password=graphene.String())
-    login = graphene.types.json.JSONString(username=graphene.String(), password=graphene.String())
-    #login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
+    #login = graphene.types.json.JSONString(username=graphene.String(), password=graphene.String())
+    #login = graphene.Field(ApiDataSet, username=graphene.String(), password=graphene.String())
+    login = graphene.Field(ResponseBody, username=graphene.String(), password=graphene.String())
+    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
 
     def resolve_login(self, info, username, password):
         return user_login(username, password)
@@ -62,6 +67,7 @@ schema = graphene.Schema(query=Query)
 #rb = ResponseBody(True, 'a', 'b')
 #rb.apidataset = ads
 #print(rb.success)
+
 
 
 
