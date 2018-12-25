@@ -22,14 +22,12 @@ exports.resolvers = {
     opportunities: (parent, { limit, cursor }) => {
       const totalOpportunities = opportunities.length;
       const newCursor = cursor + limit;
-      let newOpportunities = [];
       if (!cursor) {
         cursor = 0;
       }
-      if (!limit) {
-        newOpportunities = opportunities.slice();
-      }
-      newOpportunities = opportunities.slice(cursor, newCursor);
+      const newOpportunities = limit
+        ? opportunities.slice(cursor, newCursor)
+        : opportunities.slice();
       return {
         cursor: newCursor,
         totalOpportunities,
@@ -39,15 +37,13 @@ exports.resolvers = {
     },
     riskAreas: (parent, { limit, cursor }) => {
       const totalRiskAreas = riskAreas.length;
-      const newCursor = cursor + limit;
-      let newRiskAreas = [];
       if (!cursor) {
         cursor = 0;
       }
-      if (!limit) {
-        newRiskAreas = riskAreas.slice();
-      }
-      newRiskAreas = riskAreas.slice(cursor, newCursor);
+      const newCursor = cursor + limit;
+      const newRiskAreas = limit
+        ? riskAreas.slice(cursor, newCursor)
+        : riskAreas.slice();
       return {
         cursor: newCursor,
         totalRiskAreas,
