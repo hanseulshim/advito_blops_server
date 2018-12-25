@@ -29,6 +29,13 @@ exports.typeDefs = gql`
     unit: String
   }
 
+  type OpportunityFeed {
+    cursor: Int
+    totalOpportunities: Int
+    hasNext: Boolean
+    opportunities: [Opportunity]
+  }
+
   type Performance {
     title: String
     value: String
@@ -47,6 +54,13 @@ exports.typeDefs = gql`
     value: String
   }
 
+  type RiskAreaFeed {
+    cursor: Int
+    totalRiskAreas: Int
+    hasNext: Boolean
+    riskAreas: [RiskArea]
+  }
+
   type View {
     title: String
     icon: String
@@ -62,7 +76,7 @@ exports.typeDefs = gql`
     performanceList: [Performance]
     noChangeSince: String
     personaList: [Persona]
-    opportunities(limit: Int): [Opportunity]
-    riskAreas(limit: Int): [RiskArea]
+    opportunities(limit: Int, cursor: Int): OpportunityFeed
+    riskAreas(limit: Int, cursor: Int): RiskAreaFeed
   }
 `;
