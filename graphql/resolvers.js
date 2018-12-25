@@ -6,7 +6,9 @@ const {
   personaList,
   opportunities,
   riskAreas,
+  logins,
 } = require('../data/dashboardData');
+//const { logins } = require('../data/loginData');
 
 exports.resolvers = {
   Query: {

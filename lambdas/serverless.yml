@@ -1,0 +1,30 @@
+service: python-lambdas
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: ${opt:stage, 'dev'}
+  environment: ${file(env.yml):${opt:stage} }
+  region: us-east-2
+  vpc:
+    securityGroupIds:
+      - sg-04c1f7c6dc6b2be33
+    subnetIds:
+      - subnet-12305468
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+
+functions:
+
+  user_create:
+    handler: handler.user_create
+
+  user_login:
+    handler: handler.user_login
+
+  dummy_authenticated_endpoint:
+    handler: handler.dummy_authenticated_endpoint
