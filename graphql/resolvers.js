@@ -19,36 +19,24 @@ exports.resolvers = {
     performanceList: () => programPerformance,
     noChangeSince: () => noChangeSince,
     personaList: () => personaList,
-    opportunities: (parent, { limit, cursor }) => {
+    opportunities: (parent, { limit = opportunities.length, cursor = 0 }) => {
       const totalOpportunities = opportunities.length;
       const newCursor = cursor + limit;
-      if (!cursor) {
-        cursor = 0;
-      }
-      const newOpportunities = limit
-        ? opportunities.slice(cursor, newCursor)
-        : opportunities.slice();
       return {
         cursor: newCursor,
         totalOpportunities,
         hasNext: newCursor < totalOpportunities,
-        opportunities: newOpportunities,
+        opportunities: opportunities.slice(cursor, newCursor),
       };
     },
-    riskAreas: (parent, { limit, cursor }) => {
+    riskAreas: (parent, { limit = riskAreas.length, cursor = 0 }) => {
       const totalRiskAreas = riskAreas.length;
-      if (!cursor) {
-        cursor = 0;
-      }
       const newCursor = cursor + limit;
-      const newRiskAreas = limit
-        ? riskAreas.slice(cursor, newCursor)
-        : riskAreas.slice();
       return {
         cursor: newCursor,
         totalRiskAreas,
         hasNext: newCursor < totalRiskAreas,
-        riskAreas: newRiskAreas,
+        riskAreas: riskAreas.slice(cursor, newCursor),
       };
     },
   },

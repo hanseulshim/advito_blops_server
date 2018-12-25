@@ -17,6 +17,3 @@ functions:
           path: graphql
           method: get
           cors: true
-
-plugins:
-  - serverless-python-requirements
