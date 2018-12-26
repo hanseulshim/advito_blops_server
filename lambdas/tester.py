@@ -26,7 +26,6 @@ simulate_environment_variables()
 
 # Imports
 import unittest
-import os
 from test.usertests import UserTests
 
 
