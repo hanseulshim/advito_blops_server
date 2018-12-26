@@ -5,6 +5,9 @@ import base64
 
 lambda_client = boto3.client('lambda')
 
+# The three classes below are used for creating the login response
+# A LoginResponse is what is returned by the GraphQL login function.
+# A LoginResponse contains a ResponseBody which contains a ApiDataSet.
 class ApiDataSet(graphene.ObjectType):
     displayName = graphene.String()
     clientId = graphene.Int()
@@ -21,6 +24,7 @@ class LoginResponse(graphene.ObjectType):
     statusCode = graphene.Int()
     body = graphene.Field(ResponseBody)
 
+# This class defines the arguments required for the create advito user mutation and houses the mutation function.
 class CreateAdvitoUser(graphene.Mutation):
     class Arguments:
         client_id = graphene.Int()
@@ -46,6 +50,7 @@ class CreateAdvitoUser(graphene.Mutation):
 
         return CreateAdvitoUser(advitoUser=advitoUser)
 
+# Defines the AdvitoUser class so that we can create and return AdvitoUser objects.
 class AdvitoUser(graphene.ObjectType):
     client_id = graphene.Int()
     username = graphene.String()
@@ -54,18 +59,11 @@ class AdvitoUser(graphene.ObjectType):
     name_first = graphene.String()
     email = graphene.String()
 
-class Query(graphene.ObjectType):
-    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
-
-    advitoUser = graphene.Field(AdvitoUser)
-
-    def resolve_login(self, info, username, password):
-        return user_login(username, password)
-
-
+# This class defines the mutations. More mutations can be added here in the future.
 class MyMutations(graphene.ObjectType):
     create_advito_user = CreateAdvitoUser.Field()
 
+# This is the function that the mutation function calls that actually invokes the lambda function for creating the user.
 def create_user(client_id, username, pwd, name_last, name_first, email):
 
     payload = {
@@ -88,8 +86,9 @@ def create_user(client_id, username, pwd, name_last, name_first, email):
         Payload=bytes(encoded_str)
     )
 
+# This is the function called by the login resolver that passes the username and password to the login lambda function.
+# It then receives the response from the login lambda and converts the response into an object that can be returned by graphQL.
 def user_login(username, pwd):
-
     payload = {
         "username": username,
         "pwd": pwd
@@ -119,4 +118,12 @@ def user_login(username, pwd):
 
     return loginresponse
 
+class Query(graphene.ObjectType):
+    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
+
+    advitoUser = graphene.Field(AdvitoUser)
+
+    def resolve_login(self, info, username, password):
+        return user_login(username, password)  
+  
 schema = graphene.Schema(query=Query, mutation=MyMutations)
