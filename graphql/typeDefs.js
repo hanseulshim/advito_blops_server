@@ -30,6 +30,7 @@ exports.typeDefs = gql`
   }
 
   type OpportunityFeed {
+    prevCursor: Int
     cursor: Int
     totalOpportunities: Int
     hasNext: Boolean
@@ -55,6 +56,7 @@ exports.typeDefs = gql`
   }
 
   type RiskAreaFeed {
+    prevCursor: Int
     cursor: Int
     totalRiskAreas: Int
     hasNext: Boolean
