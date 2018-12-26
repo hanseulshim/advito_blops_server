@@ -28,7 +28,6 @@ provider:
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
-
 custom:
   pythonRequirements:
     dockerizePip: non-linux
