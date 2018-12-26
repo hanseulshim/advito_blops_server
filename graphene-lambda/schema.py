@@ -71,7 +71,6 @@ def create_user(client_id, username, pwd, name_last, name_first, email):
         "languageDefault": "English"
     }
     payload_str = json.dumps(payload)
-    print(payload_str)
     encoded_str = payload_str.encode('ascii')
 
     invoke_response = lambda_client.invoke(
@@ -88,7 +87,6 @@ def user_login(username, pwd):
         "pwd": pwd
     }
     payload_str = json.dumps(payload)
-    print(payload_str)
     encoded_str = payload_str.encode('ascii')
 
     invoke_response = lambda_client.invoke(
