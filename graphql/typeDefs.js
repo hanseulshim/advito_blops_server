@@ -10,7 +10,9 @@ exports.typeDefs = gql`
 
   type Info {
     title: String
+    description: String
     icon: String
+    disabled: Boolean
     button: String
   }
 
@@ -24,11 +26,13 @@ exports.typeDefs = gql`
   type Opportunity {
     title: String
     value: String
+    unit: String
   }
 
   type Performance {
     title: String
     value: String
+    unit: String
   }
 
   type Persona {
