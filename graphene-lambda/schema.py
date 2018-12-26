@@ -124,6 +124,6 @@ class Query(graphene.ObjectType):
     advitoUser = graphene.Field(AdvitoUser)
 
     def resolve_login(self, info, username, password):
-        return user_login(username, password)
-
+        return user_login(username, password)  
+  
 schema = graphene.Schema(query=Query, mutation=MyMutations)
