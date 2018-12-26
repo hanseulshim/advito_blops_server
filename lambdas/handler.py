@@ -57,6 +57,7 @@ def handler_decorator(func):
             }
             status_code = 400
 
+
         except InvalidSessionError as e:
             session.rollback()
             body = {
@@ -66,6 +67,7 @@ def handler_decorator(func):
                 "apidataset": None
             }
             status_code = 400
+
 
         except IntegrityError as e:
             session.rollback()
@@ -196,6 +198,8 @@ def user_login(event, context, session):
         "apimessage": "User successfully logged in.",
         "apidataset": {
             "displayName": user.name_first + " " + user.name_last,
+            "clientId": user.client_id,
+            "profilePicturePath": user.profile_picture_path,
             "sessionToken": user_session.session_token
         }
     }
