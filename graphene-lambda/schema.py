@@ -7,6 +7,8 @@ lambda_client = boto3.client('lambda')
 
 class ApiDataSet(graphene.ObjectType):
     displayName = graphene.String()
+    clientId = graphene.Int()
+    profilePicturePath = graphene.String()
     sessionToken = graphene.String()
 
 class ResponseBody(graphene.ObjectType):
@@ -83,20 +85,18 @@ def user_login(username, password):
 
     response = invoke_response['Payload'].read().decode('utf-8')
     response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])    
+    responsebody = ResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    loginresponse = LoginResponse(response_dict['statusCode'])
     
     if (response_dict['statusCode'] == 200):
-        response_payload = json.loads(response_dict["body"])
         dataset = response_payload['apidataset']
-        
-        apidataset = ApiDataSet(dataset['displayName'], dataset['sessionToken'])
-        responsebody = ResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+        apidataset = ApiDataSet(dataset['displayName'], dataset['clientId'], dataset['profilePicturePath'], dataset['sessionToken'])
         responsebody.apidataset = apidataset
-        loginresponse = LoginResponse(response_dict['statusCode'])
-        loginresponse.body = responsebody
-        
-        return loginresponse
-    else:
-        return "Invalide username/password"
+    
+    loginresponse.body = responsebody
+    
+    return loginresponse
 
 class Query(graphene.ObjectType):
     login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
