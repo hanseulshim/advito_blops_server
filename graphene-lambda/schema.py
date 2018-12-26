@@ -54,6 +54,14 @@ class AdvitoUser(graphene.ObjectType):
     name_first = graphene.String()
     email = graphene.String()
 
+class Query(graphene.ObjectType):
+    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
+
+    advitoUser = graphene.Field(AdvitoUser)
+
+    def resolve_login(self, info, username, password):
+        return user_login(username, password)
+
 
 class MyMutations(graphene.ObjectType):
     create_advito_user = CreateAdvitoUser.Field()
@@ -110,13 +118,5 @@ def user_login(username, pwd):
     loginresponse.body = responsebody
 
     return loginresponse
-
-class Query(graphene.ObjectType):
-    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
-
-    advitoUser = graphene.Field(AdvitoUser)
-
-    def resolve_login(self, info, username, password):
-        return user_login(username, password)
 
 schema = graphene.Schema(query=Query, mutation=MyMutations)
