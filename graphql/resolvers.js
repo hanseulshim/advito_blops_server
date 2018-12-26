@@ -6,10 +6,7 @@ const {
   personaList,
   opportunities,
   riskAreas,
-  logins,
 } = require('../data/dashboardData');
-//const { logins } = require('../data/loginData');
-
 
 exports.resolvers = {
   Query: {
@@ -20,8 +17,29 @@ exports.resolvers = {
     performanceList: () => programPerformance,
     noChangeSince: () => noChangeSince,
     personaList: () => personaList,
-    opportunities: () => opportunities,
-    riskAreas: () => riskAreas,
-    logins: (username, password) => { console.log(username); return logins },
+    opportunities: (parent, { limit = opportunities.length, cursor = 0 }) => {
+      const totalOpportunities = opportunities.length;
+      const newCursor = cursor + limit;
+      const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
+      return {
+        prevCursor,
+        cursor: newCursor,
+        totalOpportunities,
+        hasNext: newCursor < totalOpportunities,
+        opportunities: opportunities.slice(cursor, newCursor),
+      };
+    },
+    riskAreas: (parent, { limit = riskAreas.length, cursor = 0 }) => {
+      const totalRiskAreas = riskAreas.length;
+      const newCursor = cursor + limit;
+      const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
+      return {
+        prevCursor: prevCursor,
+        cursor: newCursor,
+        totalRiskAreas,
+        hasNext: newCursor < totalRiskAreas,
+        riskAreas: riskAreas.slice(cursor, newCursor),
+      };
+    },
   },
 };
