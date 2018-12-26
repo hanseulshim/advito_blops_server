@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, InvalidSessionError, ExpiredSessionError
+from advito.error import LoginError, InvalidSessionError, ExpiredSessionError, NotFoundError
 
 
 def deserialize_user_create(user_json):
@@ -16,20 +16,20 @@ def deserialize_user_create(user_json):
     :param user_json: Serialized user as a python dict.
     """
 
-    # Salts and hashes password. Writes result back to json.
-    salt_and_hash = salt_hash(user_json['pwd'])
-    user_json['pwd'] = salt_and_hash[0]
-    user_json['user_salt'] = salt_and_hash[1]
-
-    # Sets default values
-    user_json['is_enabled'] = True
-    user_json['must_change_pwd'] = False
-    user_json['pwd_expiration'] = '01/01/2024'
-    user_json['created'] = '01/01/1900'
-    user_json['modified'] = '12/12/2018'
-
-    # Returns deserialized user
-    return AdvitoUser(**user_json)
+    # Deserializes user and returns it
+    user =  AdvitoUser (
+        client_id = user_json['clientId'],
+        username = user_json['username'],
+        pwd = user_json['pwd'],
+        name_last = user_json['nameLast'],
+        name_first = user_json['nameFirst'],
+        email = user_json['email'],
+        phone = user_json['phone'],
+        profile_picture_path = user_json.get('profilePicturePath', None),
+        timezone_default = user_json.get('timezoneDefault', None),
+        language_default = user_json.get('languageDefault', None)
+    )
+    return user
 
 
 
@@ -60,8 +60,31 @@ class UserService:
         :param session: SQLAlchemy session used for db operations.
         """
 
+        # Salts and hashes password. Writes result back to object.
+        salt_and_hash = salt_hash(user.pwd)
+        user.pwd = salt_and_hash[0]
+        user.user_salt = salt_and_hash[1]
+
         # Converts to AdvitoUser and saves it
         session.add(user)
+
+
+    def get_by_username(self, username, session):
+
+        """
+        Gets an AdvitoUser by username
+        :param username: Username of the user to get
+        :param session: SQLAlchemy session used for db operations.
+        :return: AdvitoUser instance.
+        """
+
+        user = session \
+            .query(AdvitoUser) \
+            .filter_by(username=username) \
+            .first()
+
+        if user is None:
+            raise NotFoundError("Could not find user '{}'".format(username))
 
 
     def login(self, username, password, session):

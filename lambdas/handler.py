@@ -3,7 +3,6 @@ import urllib.parse
 import base64
 import secrets
 import hashlib
-import boto3
 import os
 import traceback
 from datetime import datetime
@@ -25,14 +24,14 @@ engine = create_engine(db_connection)
 # Creates services that control business logic
 user_service = UserService(session_duration_sec)
 
-
 ################ Decorators ##################
 def handler_decorator(func):
+
 
     """
     Decorates a handler function by supplying it with a SQLAlchemy session object.
     Includes error-handling code in the event that an Exception is thrown.
-    :param func: Handler function to be decorated.
+    :param func: Handler function to be decorated. Function should expect an AWS event, an AWS context and an SQLAlchemy session.
     :return: Decorated version of handler function supplied.
     """
 
@@ -58,12 +57,24 @@ def handler_decorator(func):
             }
             status_code = 400
 
-        except (IntegrityError, InvalidSessionError) as e:
+
+        except InvalidSessionError as e:
             session.rollback()
             body = {
                 "success": False,
                 "apicode": "INVALID",
                 "apimessage": str(e),
+                "apidataset": None
+            }
+            status_code = 400
+
+
+        except IntegrityError as e:
+            session.rollback()
+            body = {
+                "success": False,
+                "apicode": "INVALID",
+                "apimessage": "Database rejected update/insert.",
                 "apidataset": None
             }
             status_code = 400
@@ -108,7 +119,28 @@ def handler_decorator(func):
             "body": json.dumps(body)
         }
 
-    # Sends decorated
+    # Returns decorated function
+    return wrapper
+
+
+def authenticate_decorator(func):
+
+    """
+    Decorates a function such that it checks that the token in the request exists in the database and is not expired.
+    After the check, it invokes the underlying function
+    """
+
+    def wrapper(event, context, session):
+
+        # Validates that user is logged in
+        session_token = event["sessionToken"]
+        payload = event["payload"]
+        user_service.validate_logged_in(session_token, session)
+
+        # Invokes underlying function
+        return func(event, context, session)
+
+    # Returns decorated function
     return wrapper
 
 
@@ -126,15 +158,14 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from json, inserts and commits
-    user_create_json = event
-    user = deserialize_user_create(user_create_json)
+    user = deserialize_user_create(event)
     user_service.create(user, session)
 
     # Creates response and returns it
     return {
-        "success": False,
-        "apicode": "INVALID",
-        "apimessage": "Input was not unique.",
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully created.",
         "apidataset": {
             "message": "User successfully created!"
         }
@@ -162,22 +193,19 @@ def user_login(event, context, session):
 
     # Creates response and returns it
     return {
-        "success": False,
+        "success": True,
         "apicode": "OK",
         "apimessage": "User successfully logged in.",
         "apidataset": {
             "displayName": user.name_first + " " + user.name_last,
+            "clientId": user.client_id,
+            "profilePicturePath": user.profile_picture_path,
             "sessionToken": user_session.session_token
         }
     }
 
 @handler_decorator
+@authenticate_decorator
 def dummy_authenticated_endpoint(event, context, session):
-
-    # Unpacks request and validates that user is logged in
-    session_token = event["sessionToken"]
     payload = event["payload"]
-    user_service.validate_logged_in(session_token, session)
-
-    # Main code
     return payload
