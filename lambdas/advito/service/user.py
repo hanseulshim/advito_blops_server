@@ -16,14 +16,7 @@ def deserialize_user_create(user_json):
     :param user_json: Serialized user as a python dict.
     """
 
-    # Sets default values
-    user_json['is_enabled'] = True
-    user_json['must_change_pwd'] = False
-    user_json['pwd_expiration'] = '01/01/2024'
-    user_json['created'] = '01/01/1900'
-    user_json['modified'] = '12/12/2018'
-
-    # Returns deserialized user
+    # Deserializes user and returns it
     user =  AdvitoUser (
         client_id = user_json['clientId'],
         username = user_json['username'],
@@ -36,7 +29,6 @@ def deserialize_user_create(user_json):
         timezone_default = user_json.get('timezoneDefault', None),
         language_default = user_json.get('languageDefault', None)
     )
-
     return user
 
 
