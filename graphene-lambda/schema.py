@@ -76,6 +76,20 @@ class SidebarData(graphene.ObjectType):
     icon = graphene.String()
     alert = graphene.Boolean()
 
+class VDListObject(graphene.ObjectType):
+    title = graphene.String()
+    icon = graphene.String()
+    domo = graphene.Boolean()
+    link = graphene.String()
+
+class ViewData(graphene.ObjectType):
+    title = graphene.String()
+    description = graphene.String()
+    icon = graphene.String()
+    disabled = graphene.Boolean()
+    button = graphene.String()
+    list = graphene.List(VDListObject)
+
 # This is the function that the mutation function calls that actually invokes the lambda function for creating the user.
 def create_user(client_id, username, pwd, name_last, name_first, email):
 
@@ -141,6 +155,8 @@ class Query(graphene.ObjectType):
     riskAreas = graphene.List(DashboardData)
     upcomingActions = graphene.List(SidebarData)
     activeAlerts = graphene.List(SidebarData)
+    viewData = graphene.List(ViewData)
+    infoData = graphene.List(ViewData)
     
     def resolve_login(self, info, username, password):
         return user_login(username, password)  
@@ -205,5 +221,41 @@ class Query(graphene.ObjectType):
             SidebarData('', 'ATP to ancillary spend is 5.2', 'air.png', True)
         ]
         return active_alert_list
+
+    def resolve_viewData(self, info):
+        list1 = [
+            VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
+            VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
+            VDListObject(title = 'Card Deck', icon = 'tool_active.png', domo = True, link = 'https://www.domo.com/')
+        ]
+        list2 = [
+            VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
+            VDListObject(title = 'Air program manager (A3)', icon = 'tool_disabled.png', link = '#')
+        ]
+        list3 = [
+            VDListObject(title = 'Hotel program analytics', icon = 'manager_disabled.png', link = '#'),
+            VDListObject(title = 'Hotel program manager (HPM)', icon = 'tool_disabled.png', link = '#')
+        ]
+
+        view_data_list = [
+            ViewData(title = '360 analytics', icon = 'analytics_active.png', disabled = False, list = list1),
+            ViewData(title = 'air', icon = 'air_disabled.png', disabled = True, list = list2),
+            ViewData(title = 'hotel', icon = 'hotel_disabled.png', disabled = True, list = list3)
+        ]
+
+        return view_data_list
+
+    def resolve_infoData(self, info):
+        info_data_list = [
+            ViewData(title = 'Webinar Name', description = 'Information about webinar', 
+                icon = 'tool_disabled.png', disabled = True, button = 'register'),
+            ViewData(title = 'Document Library', description = 'Information about library',
+                icon = 'library_active.png', disabled = False),
+            ViewData(title = 'Podcast', description = 'Information about podcast',
+                icon = 'podcast_disabled.png', disabled = True, button = 'download'),
+            ViewData(title = 'Item Name', description = 'Information about item',
+                icon = 'tool_disabled.png', disabled = True, button = 'download')
+        ]
+        return info_data_list
 
 schema = graphene.Schema(query=Query, mutation=MyMutations)

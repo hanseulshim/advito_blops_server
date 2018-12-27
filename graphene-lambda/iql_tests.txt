@@ -1,0 +1,125 @@
+#{
+#  login(username: "treyottaway", password: "Password1")
+#  {
+#    statusCode
+#    body 
+#    {
+#      success
+#      apicode
+#      apimessage
+#      apidataset
+#      {
+#        displayName
+#        clientId
+#        profilePicturePath
+#        sessionToken
+#      }
+#    }
+#  }
+#}
+
+#{
+#  programPerformance
+#  {
+#    title
+#    value
+#    unit
+#  }
+#}
+
+#{noChangeSince}
+
+#{
+#  personaList 
+#  {
+#    title
+#    value
+#    programShare
+#    color
+#  }
+#}
+
+#{
+#  opportunities
+#  {
+#    title
+#    value
+#    unit
+#  }
+#}
+
+#{
+#  riskAreas
+#  {
+#    title
+#    value
+#  }
+#}
+
+#{
+#  activeAlerts {
+#    header
+#    secondaryHeader
+#    icon
+#    alert
+#  }
+#}
+
+#{
+#  upcomingActions {
+#    header
+#    secondaryHeader
+#    icon
+#    alert
+#  }
+#}
+
+#{
+#  viewData
+#  {
+#    title
+#    icon
+#    disabled
+#    list
+#    {
+#      title
+#      icon
+#      domo
+#      link
+#    }
+#  }
+#}
+
+#{
+#  infoData
+#  {
+#    title
+#    description
+#    icon
+#    disabled
+#    button
+#  }
+#}
+
+#mutation myFirstMutation {
+#  createAdvitoUser(
+#    clientId: 2,
+#    username: "firstlast",
+#    pwd: "Password2",
+#    nameLast: "Last",
+#    nameFirst: "First",
+#    email: "firstlast@gmail.com"
+#  )
+#  {
+#    advitoUser {
+#      clientId
+#      username
+#      pwd
+#      nameLast
+#      nameFirst
+#      email
+#    }
+#  }
+#}
+
+
