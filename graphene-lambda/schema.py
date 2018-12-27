@@ -151,8 +151,8 @@ class Query(graphene.ObjectType):
     programPerformance = graphene.List(DashboardData)
     noChangeSince = graphene.String()
     personaList = graphene.List(DashboardData)
-    opportunities = graphene.List(DashboardData)
-    riskAreas = graphene.List(DashboardData)
+    opportunities = graphene.List(DashboardData, first=graphene.Int(), skip=graphene.Int())
+    riskAreas = graphene.List(DashboardData, first=graphene.Int(), skip=graphene.Int())
     upcomingActions = graphene.List(SidebarData)
     activeAlerts = graphene.List(SidebarData)
     viewData = graphene.List(ViewData)
@@ -181,7 +181,7 @@ class Query(graphene.ObjectType):
         ]
         return persona_list
 
-    def resolve_opportunities(self, info):
+    def resolve_opportunities(self, info, first=None, skip=None):
         opportunities_list = [
             DashboardData(title = 'Expenses approved above rate caps / per diems', value = '27% /$375K', unit = 'impact'),
             DashboardData(title = 'ABR higher than ANR', value = '30% / $500K', unit = 'impact'),
@@ -191,9 +191,16 @@ class Query(graphene.ObjectType):
             DashboardData(title = 'New item', value = 'XX% / $XX', unit = 'expired'),
             DashboardData(title = 'New item', value = 'XX% / $XX', unit = ''),
         ]
+
+        if (skip):
+            opportunities_list = opportunities_list[skip:]
+
+        if (first):
+            opportunities_list = opportunities_list[:first]
+
         return opportunities_list
 
-    def resolve_riskAreas(self, info):
+    def resolve_riskAreas(self, info, first=None, skip=None):
         risk_areas_list = [
             DashboardData(title = 'Number of markets with ATP change more than 15%', value = '10'),
             DashboardData(title = 'Number of markets with rate availability lower than 80%', value = '14'),
@@ -203,6 +210,13 @@ class Query(graphene.ObjectType):
             DashboardData(title = 'New item', value = 'XXX'),
             DashboardData(title = 'New item', value = 'XXX')
         ]
+
+        if (skip):
+            risk_areas_list = risk_areas_list[skip:]
+
+        if (first):
+            risk_areas_list = risk_areas_list[:first]
+
         return risk_areas_list
 
     def resolve_upcomingActions(self, info):
