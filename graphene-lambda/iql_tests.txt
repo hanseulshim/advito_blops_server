@@ -40,19 +40,33 @@
 #}
 
 #{
-#  opportunities(first: 4, skip: 1)
+#  opportunities(limit: 4, cursor: 2)
 #  {
-#    title
-#    value
-#    unit
+#    prevCursor
+#    cursor
+#    totalOpportunities
+#    hasNext
+#    opportunities
+#    {
+#      title
+#      value
+#      unit
+#    }
 #  }
 #}
 
 #{
-#  riskAreas(first: 3, skip: 2)
+#  riskAreas(limit: 4, cursor: 1)
 #  {
-#    title
-#    value
+#    prevCursor
+#    cursor
+#    totalOpportunities
+#    hasNext
+#    riskAreas
+#    {
+#      title
+#      value
+#    }
 #  }
 #}
 
