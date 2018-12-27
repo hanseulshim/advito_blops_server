@@ -1,5 +1,8 @@
 service: python-lambdas
 
+
+# Determines where to deploy, what stage, what VPC, etc.
+# This applies to all lambdas (functions).
 provider:
   name: aws
   runtime: python3.6
@@ -11,20 +14,41 @@ provider:
       - sg-04c1f7c6dc6b2be33
     subnetIds:
       - subnet-12305468
+
+
+# Plugins to enhance the application
 plugins:
   - serverless-python-requirements
 
+
+# Specifies custom container
 custom:
   pythonRequirements:
     dockerizePip: non-linux
 
+
+# Excludes files that should not be packaged
+package:
+  exclude:
+    - requirements.txt
+    - input/**
+    - tester.py
+    - update_schema.py
+    - test/**
+    - '**/__pycache__/**'
+
+
+# All lambdas (functions) to package.
 functions:
 
+  # Creates a new user
   user_create:
     handler: handler.user_create
 
+  # Logs in an existing user
   user_login:
     handler: handler.user_login
 
+  # Temporary dummy endpoint to test user authentication
   dummy_authenticated_endpoint:
     handler: handler.dummy_authenticated_endpoint

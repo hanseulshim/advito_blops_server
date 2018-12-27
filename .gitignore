@@ -11,3 +11,6 @@ venv
 # Lambda directory files
 *__pycache__
 lambdas/env.yml
+
+# MAC generated files
+*.DS_Store
