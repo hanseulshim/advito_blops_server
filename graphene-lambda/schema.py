@@ -77,6 +77,13 @@ class Opportunities(graphene.ObjectType):
     hasNext = graphene.Boolean()
     opportunities = graphene.List(DashboardData)
 
+class RiskAreas(graphene.ObjectType):
+    prevCursor = graphene.Int()
+    cursor = graphene.Int()
+    totalOpportunities = graphene.Int()
+    hasNext = graphene.Boolean()
+    riskAreas = graphene.List(DashboardData)
+
 class SidebarData(graphene.ObjectType):
     header = graphene.String()
     secondaryHeader = graphene.String()
@@ -159,7 +166,7 @@ class Query(graphene.ObjectType):
     noChangeSince = graphene.String()
     personaList = graphene.List(DashboardData)
     opportunities = graphene.Field(Opportunities, limit=graphene.Int(), cursor=graphene.Int())
-    riskAreas = graphene.List(DashboardData, first=graphene.Int(), skip=graphene.Int())
+    riskAreas = graphene.Field(RiskAreas, limit=graphene.Int(), cursor=graphene.Int())
     upcomingActions = graphene.List(SidebarData)
     activeAlerts = graphene.List(SidebarData)
     viewData = graphene.List(ViewData)
@@ -212,7 +219,7 @@ class Query(graphene.ObjectType):
 
         return Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
 
-    def resolve_riskAreas(self, info, first=None, skip=None):
+    def resolve_riskAreas(self, info, limit = None, cursor = 0):
         risk_areas_list = [
             DashboardData(title = 'Number of markets with ATP change more than 15%', value = '10'),
             DashboardData(title = 'Number of markets with rate availability lower than 80%', value = '14'),
@@ -223,13 +230,18 @@ class Query(graphene.ObjectType):
             DashboardData(title = 'New item', value = 'XXX')
         ]
 
-        if (skip):
-            risk_areas_list = risk_areas_list[skip:]
+        if (limit == None):
+            limit = len(risk_areas_list)
 
-        if (first):
-            risk_areas_list = risk_areas_list[:first]
+        totalOpportunities = len(risk_areas_list)
+        newCursor = cursor + limit
+        prevCursor = 0
+        hasNext = newCursor < totalOpportunities
 
-        return risk_areas_list
+        if (cursor - limit >= 0):
+            prevCursor = cursor - limit
+
+        return RiskAreas(prevCursor, newCursor, totalOpportunities, hasNext, risk_areas_list[cursor:newCursor])
 
     def resolve_upcomingActions(self, info):
         upcoming_actions_list = [
