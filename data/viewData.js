@@ -1,7 +1,7 @@
 exports.viewData = [
   {
     title: '360 analytics',
-    icon: 'analytics_active.png',
+    icon: '360_console.png',
     disabled: false,
     list: [
       {
@@ -16,7 +16,7 @@ exports.viewData = [
       },
       {
         title: 'Card Deck',
-        icon: 'tool_active.png',
+        icon: 'domo_active.png',
         domo: true,
         link: 'https://www.domo.com/',
       },
@@ -24,7 +24,7 @@ exports.viewData = [
   },
   {
     title: 'air',
-    icon: 'air_disabled.png',
+    icon: 'air_console.png',
     disabled: true,
     list: [
       {
@@ -41,7 +41,7 @@ exports.viewData = [
   },
   {
     title: 'hotel',
-    icon: 'hotel_disabled.png',
+    icon: 'hotel_console.png',
     disabled: true,
     list: [
       {
@@ -62,7 +62,7 @@ exports.infoData = [
   {
     title: 'Webinar Name',
     description: 'Information about webinar',
-    icon: 'tool_disabled.png',
+    icon: 'webinar_disabled.png',
     disabled: true,
     button: 'register',
   },
@@ -83,7 +83,7 @@ exports.infoData = [
   {
     title: 'Item Name',
     description: 'Information about item',
-    icon: 'tool_disabled.png',
+    icon: 'item_disabled.png',
     disabled: true,
     button: 'download',
   },
