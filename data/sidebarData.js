@@ -22,25 +22,25 @@ exports.upcomingActions = [
 exports.activeAlerts = [
   {
     header: '',
-    secondaryHeader: 'Leakage to Program is 3.5',
+    secondaryHeader: 'Leakage to Program',
     icon: 'air.png',
     alert: true,
   },
   {
     header: '',
-    secondaryHeader: 'Performance against target is 6.5',
+    secondaryHeader: 'Performance against target',
     icon: 'air.png',
     alert: true,
   },
   {
     header: '',
-    secondaryHeader: 'Performance against target is 6.1',
+    secondaryHeader: 'Performance against target',
     icon: 'hotel.png',
     alert: true,
   },
   {
     header: '',
-    secondaryHeader: 'ATP to ancillary spend is 5.2',
+    secondaryHeader: 'ATP to ancillary spend',
     icon: 'air.png',
     alert: true,
   },
