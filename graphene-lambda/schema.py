@@ -70,6 +70,13 @@ class DashboardData(graphene.ObjectType):
     programShare = graphene.Int()
     color = graphene.String()
 
+class Opportunities(graphene.ObjectType):
+    prevCursor = graphene.Int()
+    cursor = graphene.Int()
+    totalOpportunities = graphene.Int()
+    hasNext = graphene.Boolean()
+    opportunities = graphene.List(DashboardData)
+
 class SidebarData(graphene.ObjectType):
     header = graphene.String()
     secondaryHeader = graphene.String()
@@ -151,7 +158,7 @@ class Query(graphene.ObjectType):
     programPerformance = graphene.List(DashboardData)
     noChangeSince = graphene.String()
     personaList = graphene.List(DashboardData)
-    opportunities = graphene.List(DashboardData, first=graphene.Int(), skip=graphene.Int())
+    opportunities = graphene.Field(Opportunities, limit=graphene.Int(), cursor=graphene.Int())
     riskAreas = graphene.List(DashboardData, first=graphene.Int(), skip=graphene.Int())
     upcomingActions = graphene.List(SidebarData)
     activeAlerts = graphene.List(SidebarData)
@@ -181,7 +188,7 @@ class Query(graphene.ObjectType):
         ]
         return persona_list
 
-    def resolve_opportunities(self, info, first=None, skip=None):
+    def resolve_opportunities(self, info, limit = None, cursor = 0):
         opportunities_list = [
             DashboardData(title = 'Expenses approved above rate caps / per diems', value = '27% /$375K', unit = 'impact'),
             DashboardData(title = 'ABR higher than ANR', value = '30% / $500K', unit = 'impact'),
@@ -192,13 +199,18 @@ class Query(graphene.ObjectType):
             DashboardData(title = 'New item', value = 'XX% / $XX', unit = ''),
         ]
 
-        if (skip):
-            opportunities_list = opportunities_list[skip:]
+        if (limit == None):
+            limit = len(opportunities_list)
 
-        if (first):
-            opportunities_list = opportunities_list[:first]
+        totalOpportunities = len(opportunities_list)
+        newCursor = cursor + limit
+        prevCursor = 0
+        hasNext = newCursor < totalOpportunities
 
-        return opportunities_list
+        if (cursor - limit >= 0):
+            prevCursor = cursor - limit
+
+        return Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
 
     def resolve_riskAreas(self, info, first=None, skip=None):
         risk_areas_list = [
