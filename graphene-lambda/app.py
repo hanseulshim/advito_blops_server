@@ -8,7 +8,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.add_url_rule(
     '/graphql',
-    view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=False))
+    view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
 
 cors = CORS(app, resources={r"/graphql": {"origins": "http://localhost:3000"}})
 
