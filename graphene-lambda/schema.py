@@ -264,7 +264,7 @@ class Query(graphene.ObjectType):
         list1 = [
             VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
             VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
-            VDListObject(title = 'Card Deck', icon = 'tool_active.png', domo = True, link = 'https://www.domo.com/')
+            VDListObject(title = 'Card Deck', icon = 'domo_active.png', domo = True, link = 'https://www.domo.com/')
         ]
         list2 = [
             VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
@@ -276,9 +276,9 @@ class Query(graphene.ObjectType):
         ]
 
         view_data_list = [
-            ViewData(title = '360 analytics', icon = 'analytics_active.png', disabled = False, list = list1),
-            ViewData(title = 'air', icon = 'air_disabled.png', disabled = True, list = list2),
-            ViewData(title = 'hotel', icon = 'hotel_disabled.png', disabled = True, list = list3)
+            ViewData(title = '360 analytics', icon = '360_console.png', disabled = False, list = list1),
+            ViewData(title = 'air', icon = 'air_console.png', disabled = True, list = list2),
+            ViewData(title = 'hotel', icon = 'hotel_console.png', disabled = True, list = list3)
         ]
 
         return view_data_list
@@ -286,13 +286,13 @@ class Query(graphene.ObjectType):
     def resolve_infoData(self, info):
         info_data_list = [
             ViewData(title = 'Webinar Name', description = 'Information about webinar', 
-                icon = 'tool_disabled.png', disabled = True, button = 'register'),
+                icon = 'webinar_disabled.png', disabled = True, button = 'register'),
             ViewData(title = 'Document Library', description = 'Information about library',
                 icon = 'library_active.png', disabled = False),
             ViewData(title = 'Podcast', description = 'Information about podcast',
                 icon = 'podcast_disabled.png', disabled = True, button = 'download'),
             ViewData(title = 'Item Name', description = 'Information about item',
-                icon = 'tool_disabled.png', disabled = True, button = 'download')
+                icon = 'item_disabled.png', disabled = True, button = 'download')
         ]
         return info_data_list
 
