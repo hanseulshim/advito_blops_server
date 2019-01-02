@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
-from advito.error import AdvitoError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
+from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
 
 
 # Unpacks environment variables to build DB client and services
@@ -47,7 +47,7 @@ def handler_decorator(func):
             session.commit()
             status_code = 200
 
-        except LoginError as e:
+        except (LoginError, LogoutError) as e:
             session.rollback()
             body = {
                 "success": False,
@@ -56,7 +56,6 @@ def handler_decorator(func):
                 "apidataset": None
             }
             status_code = 400
-
 
         except InvalidSessionError as e:
             session.rollback()
@@ -202,6 +201,31 @@ def user_login(event, context, session):
             "profilePicturePath": user.profile_picture_path,
             "sessionToken": user_session.session_token
         }
+    }
+
+
+@handler_decorator
+def user_logout(event, context, session):
+
+    """
+    Logs out a user.
+    :param event: Login JSON as a dict.
+    :param context: AWS context.
+    :param session: Session used for database connectivity.
+    """
+
+    # Acquires session info
+    logout_json = event
+    session_token = logout_json['sessionToken']
+    user_service.logout(session_token, session)
+    session.commit()
+
+    # Creates response and returns it
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully logged out.",
+        "apidataset": None
     }
 
 @handler_decorator

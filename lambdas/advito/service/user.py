@@ -124,6 +124,34 @@ class UserService:
         return (user, user_session)
 
 
+    def logout(self, session_token, session):
+
+        """
+        Logs out an AdvitoUser.
+        :param username: String token string of user to log out.
+        :param session: SQLAlchemy session used for db operations.
+        """
+
+        # Finds session to expire
+        db_session = session \
+            .query(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_token == session_token) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .first()
+
+        # Ensures session exists
+        if db_session == None:
+            raise LogoutError("User not logged in. Logout is impossible.")
+
+        # Expires session
+        session.query(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_token == session_token) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .update({"session_end" : datetime.now()}, synchronize_session=False)
+
+
+
+
     def validate_logged_in(self, session_token, session):
 
         """

@@ -114,6 +114,28 @@ class UserTests(unittest.TestCase):
             self.assertIn('sessionToken', apidataset_dict)
 
 
+    def test_user_logout(self):
+
+        """
+        Tests functionality of 'user_logout' in handler.
+        """
+
+        # Logs in a user
+        user = self.users[0]
+        event = {
+            "username": user['username'],
+            "pwd": user['pwd']
+        }
+        response = handler.user_login(event=event, context=None)
+        body_dict = json.loads(response['body'])
+        session_token = body_dict['apidataset']['sessionToken']
+
+        # Logs out user
+        event = { "sessionToken": session_token }
+        response = handler.user_logout(event=event, context=None)
+        body_dict = json.loads(response['body'])
+
+
     def test_dummy_authenticated_endpoint(self):
 
         """
