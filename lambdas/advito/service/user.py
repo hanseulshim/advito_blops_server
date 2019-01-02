@@ -6,7 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, InvalidSessionError, ExpiredSessionError, NotFoundError
+from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError
 
 
 def deserialize_user_create(user_json):
