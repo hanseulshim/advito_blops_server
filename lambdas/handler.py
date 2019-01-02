@@ -47,7 +47,7 @@ def handler_decorator(func):
             session.commit()
             status_code = 200
 
-        except LoginError as e:
+        except (LoginError, LogoutError) as e:
             session.rollback()
             body = {
                 "success": False,
@@ -56,7 +56,6 @@ def handler_decorator(func):
                 "apidataset": None
             }
             status_code = 400
-
 
         except InvalidSessionError as e:
             session.rollback()
