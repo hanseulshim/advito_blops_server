@@ -4,6 +4,9 @@ class AdvitoError(Exception):
 class LoginError(AdvitoError):
     pass
 
+class LogoutError(AdvitoError):
+    pass
+
 class BadRequestError(AdvitoError):
     pass
 

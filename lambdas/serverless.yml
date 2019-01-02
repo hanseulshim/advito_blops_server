@@ -49,6 +49,10 @@ functions:
   user_login:
     handler: handler.user_login
 
+  # Logs out an existing user
+  user_logout:
+    handler: handler.user_logout
+
   # Temporary dummy endpoint to test user authentication
   dummy_authenticated_endpoint:
     handler: handler.dummy_authenticated_endpoint
