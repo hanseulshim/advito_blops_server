@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
+from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
 
 
@@ -23,6 +24,7 @@ engine = create_engine(db_connection)
 
 # Creates services that control business logic
 user_service = UserService(session_duration_sec)
+amorphous_service = AmorphousService()
 
 ################ Decorators ##################
 def handler_decorator(func):
@@ -233,3 +235,11 @@ def user_logout(event, context, session):
 def dummy_authenticated_endpoint(event, context, session):
     payload = event["payload"]
     return payload
+
+
+@handler_decorator
+@authenticate_decorator
+def udf_story_air(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_air(client_id, session)
+    return result
