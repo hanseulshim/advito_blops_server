@@ -56,3 +56,6 @@ functions:
   # Temporary dummy endpoint to test user authentication
   dummy_authenticated_endpoint:
     handler: handler.dummy_authenticated_endpoint
+
+  # Endpoint for udf_story_air
+    handler: handler.udf_story_air
