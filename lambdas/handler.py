@@ -135,7 +135,6 @@ def authenticate_decorator(func):
 
         # Validates that user is logged in
         session_token = event["sessionToken"]
-        payload = event["payload"]
         user_service.validate_logged_in(session_token, session)
 
         # Invokes underlying function
@@ -242,4 +241,9 @@ def dummy_authenticated_endpoint(event, context, session):
 def udf_story_air(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air(client_id, session)
-    return result
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
