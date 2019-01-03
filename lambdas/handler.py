@@ -238,6 +238,7 @@ def dummy_authenticated_endpoint(event, context, session):
 
 
 @handler_decorator
+@authenticate_decorator
 def udf_story_air(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air(client_id, session)
