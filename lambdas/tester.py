@@ -26,7 +26,8 @@ simulate_environment_variables()
 
 # Imports
 import unittest
-from test.usertests import UserTests
+from test.user_tests import UserTests
+from test.amorphous_service_tests import AmorphousServiceTests
 
 
 # Starts all tests imported
