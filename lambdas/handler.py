@@ -134,7 +134,9 @@ def authenticate_decorator(func):
     def wrapper(event, context, session):
 
         # Validates that user is logged in
-        session_token = event["sessionToken"]
+        session_token = event.get('sessionToken')
+        if session_token is None:
+            raise InvalidSessionError('Required field "sessionToken" not supplied.')
         user_service.validate_logged_in(session_token, session)
 
         # Invokes underlying function
@@ -241,6 +243,18 @@ def dummy_authenticated_endpoint(event, context, session):
 def udf_story_air(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air(client_id, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
+
+@handler_decorator
+# @authenticate_decorator
+def udf_story_air_traffic(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_air_traffic(client_id, session)
     return {
         "success": True,
         "apicode": "OK",
