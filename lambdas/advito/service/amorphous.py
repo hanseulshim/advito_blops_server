@@ -32,3 +32,23 @@ class AmorphousService:
 
         # Turns to dictionary and returns
         return dict(rowproxy)
+
+
+    def udf_story_air_traffic(self, client_id, session):
+
+        """
+        Passthrough function that invokes the postgres function 'udf_story_air_traffic'
+        and simply returns the results.
+        :param client_id: Integer representing the client id.
+        :param session: SQLAlchemy session used for DB operations.
+        :return: JSON dictionaory.
+        """
+
+        # Executes funciton and gets row proxy.
+        rowproxy = session.execute (
+            "SELECT udf_story_air_traffic(:client_id)",
+            { "client_id": client_id }
+        ).first()
+
+        # Turns to dictionary and returns
+        return dict(rowproxy)
