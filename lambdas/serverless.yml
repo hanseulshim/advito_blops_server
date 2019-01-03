@@ -58,4 +58,5 @@ functions:
     handler: handler.dummy_authenticated_endpoint
 
   # Endpoint for udf_story_air
+  udf_story_air:
     handler: handler.udf_story_air
