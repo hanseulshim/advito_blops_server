@@ -53,13 +53,21 @@ functions:
   user_logout:
     handler: handler.user_logout
 
-  # Temporary dummy endpoint to test user authentication
-  dummy_authenticated_endpoint:
-    handler: handler.dummy_authenticated_endpoint
-
   # Endpoint for udf_story_air
   udf_story_air:
     handler: handler.udf_story_air
+
+  # Endpoint for udf_story_air_airlines
+  udf_story_air_airlines:
+    handler: handler.udf_story_air_airlines
+
+  # Endpoint for udf_story_air_cabins
+  udf_story_air_cabins:
+    handler: handler.udf_story_air_cabins
+
+  # Endpoint for udf_story_air_routes
+  udf_story_air_routes:
+    handler: handler.udf_story_air_routes
 
   # Endpoint for udf_story_air_traffic
   udf_story_air_traffic:
