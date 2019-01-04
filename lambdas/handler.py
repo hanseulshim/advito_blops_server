@@ -233,13 +233,6 @@ def user_logout(event, context, session):
 
 @handler_decorator
 @authenticate_decorator
-def dummy_authenticated_endpoint(event, context, session):
-    payload = event["payload"]
-    return payload
-
-
-@handler_decorator
-@authenticate_decorator
 def udf_story_air(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air(client_id, session)
@@ -251,7 +244,44 @@ def udf_story_air(event, context, session):
     }
 
 @handler_decorator
-# @authenticate_decorator
+@authenticate_decorator
+def udf_story_air_airlines(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_air_airlines(client_id, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
+
+@handler_decorator
+@authenticate_decorator
+def udf_story_air_cabins(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_air_cabins(client_id, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
+
+@handler_decorator
+@authenticate_decorator
+def udf_story_air_routes(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_air_routes(client_id, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
+
+
+@handler_decorator
+@authenticate_decorator
 def udf_story_air_traffic(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air_traffic(client_id, session)
