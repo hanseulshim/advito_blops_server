@@ -1019,7 +1019,7 @@ exports.routes = {
     title: 'Airline Tickets by Departure Countries',
     summary:
       'Among Transatlantic flights, the most popular departure country was the United States, at 35% of tickets. This was a decerease of 3% from 2017. The largest increase occured for France which saw a 25% increase from 8% of Transatlantic tickets in 2017 to 10% of Transatnaltic tickets in 2018.',
-    label: 'Translantic',
+    label: 'Transatlantic',
     context: 'transatlantic',
     total: 125,
     colors: [
