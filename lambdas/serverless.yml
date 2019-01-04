@@ -72,3 +72,7 @@ functions:
   # Endpoint for udf_story_air_traffic
   udf_story_air_traffic:
     handler: handler.udf_story_air_traffic
+
+# Endpoint for udf_story_hotel
+udf_story_hotel:
+  handler: handler.udf_story_hotel

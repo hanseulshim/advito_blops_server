@@ -291,3 +291,15 @@ def udf_story_air_traffic(event, context, session):
         "apimessage": "Data successfully fetched.",
         "apidataset": result
     }
+
+@handler_decorator
+@authenticate_decorator
+def udf_story_hotel(event, context, session):
+    client_id = event['clientId']
+    result = amorphous_service.udf_story_hotel(client_id, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": result
+    }
