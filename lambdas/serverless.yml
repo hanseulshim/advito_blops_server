@@ -73,6 +73,6 @@ functions:
   udf_story_air_traffic:
     handler: handler.udf_story_air_traffic
 
-# Endpoint for udf_story_hotel
-udf_story_hotel:
-  handler: handler.udf_story_hotel
+  # Endpoint for udf_story_hotel
+  udf_story_hotel:
+    handler: handler.udf_story_hotel
