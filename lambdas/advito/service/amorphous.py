@@ -130,3 +130,79 @@ class AmorphousService:
 
         # Turns to dictionary and returns
         return dict(rowproxy)
+
+    def udf_story_hotel_1(self, client_id, session):
+
+        """
+        Passthrough function that invokes the postgres function 'udf_story_hotel_1'
+        and simply returns the results.
+        :param client_id: Integer representing the client id.
+        :param session: SQLAlchemy session used for DB operations.
+        :return: JSON dictionaory.
+        """
+
+        # Executes funciton and gets row proxy.
+        rowproxy = session.execute (
+            "SELECT udf_story_hotel_1(:client_id)",
+            { "client_id": client_id }
+        ).first()
+
+        # Turns to dictionary and returns
+        return dict(rowproxy)
+
+    def udf_story_hotel(self, client_id, session):
+
+        """
+        Passthrough function that invokes the postgres function 'udf_story_hotel_2'
+        and simply returns the results.
+        :param client_id: Integer representing the client id.
+        :param session: SQLAlchemy session used for DB operations.
+        :return: JSON dictionaory.
+        """
+
+        # Executes funciton and gets row proxy.
+        rowproxy = session.execute (
+            "SELECT udf_story_hotel_2(:client_id)",
+            { "client_id": client_id }
+        ).first()
+
+        # Turns to dictionary and returns
+        return dict(rowproxy)
+
+    def udf_story_hotel(self, client_id, session):
+
+        """
+        Passthrough function that invokes the postgres function 'udf_story_hotel_3'
+        and simply returns the results.
+        :param client_id: Integer representing the client id.
+        :param session: SQLAlchemy session used for DB operations.
+        :return: JSON dictionaory.
+        """
+
+        # Executes funciton and gets row proxy.
+        rowproxy = session.execute (
+            "SELECT udf_story_hotel_3(:client_id)",
+            { "client_id": client_id }
+        ).first()
+
+        # Turns to dictionary and returns
+        return dict(rowproxy
+
+    def udf_story_hotel(self, client_id, session):
+
+        """
+        Passthrough function that invokes the postgres function 'udf_story_hotel_4'
+        and simply returns the results.
+        :param client_id: Integer representing the client id.
+        :param session: SQLAlchemy session used for DB operations.
+        :return: JSON dictionaory.
+        """
+
+        # Executes funciton and gets row proxy.
+        rowproxy = session.execute (
+            "SELECT udf_story_hotel_4(:client_id)",
+            { "client_id": client_id }
+        ).first()
+
+        # Turns to dictionary and returns
+        return dict(rowproxy)

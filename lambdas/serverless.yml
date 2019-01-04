@@ -76,3 +76,19 @@ functions:
   # Endpoint for udf_story_hotel
   udf_story_hotel:
     handler: handler.udf_story_hotel
+
+  # Endpoint for udf_story_hotel_1
+  udf_story_hotel_1:
+    handler: handler.udf_story_hotel_1
+
+  # Endpoint for udf_story_hotel_2
+  udf_story_hotel_2:
+    handler: handler.udf_story_hotel_2
+
+  # Endpoint for udf_story_hotel_3
+  udf_story_hotel_3:
+    handler: handler.udf_story_hotel_3
+
+    # Endpoint for udf_story_hotel_4
+    udf_story_hotel_4:
+      handler: handler.udf_story_hotel_4
