@@ -5,6 +5,124 @@ import base64
 
 lambda_client = boto3.client('lambda')
 
+# I should not name a variable type. We may have a serious problem here.
+# Objects used Air Summary and Traffic Lane.
+class KpisObject(graphene.ObjectType):
+    title = graphene.String()
+    value = graphene.Int()
+    delta = graphene.Int()
+    percent = graphene.Float()
+    change = graphene.String()
+    type = graphene.String()
+    icon = graphene.String()
+
+class BarchartDataObject(graphene.ObjectType):
+    category = graphene.String()
+    value = graphene.Float()
+    change = graphene.String()
+
+class HotelBarchartDataObject(graphene.ObjectType):
+    category = graphene.String()
+    value = graphene.Float()
+    delta = graphene.Float()
+    change = graphene.String()
+    percent = graphene.Float()
+
+class BarchartObject(graphene.ObjectType):
+    title = graphene.String()
+    type = graphene.String()
+    data = graphene.List(BarchartDataObject)
+
+class HotelBarchartObject(graphene.ObjectType):
+    title = graphene.String()
+    type = graphene.String()
+    data = graphene.List(HotelBarchartDataObject)
+
+class CoordsObject(graphene.ObjectType):
+    latitude = graphene.Float()
+    longitude = graphene.Float()
+
+class LocationsObject(graphene.ObjectType):
+    thickness = graphene.Float()
+    height = graphene.Float()
+    opacity = graphene.Float()
+    coords = graphene.List(CoordsObject)
+    origin = graphene.String()
+    destination = graphene.String()
+
+class AirData(graphene.ObjectType):
+    title = graphene.String()
+    summary = graphene.String()
+    kpis = graphene.List(KpisObject)
+    barchart = graphene.List(BarchartObject)
+    locations = graphene.List(LocationsObject)
+
+# Objects used for Top Airlines and Cabin Use.
+class AirlineSubCategories(graphene.ObjectType):
+    name = graphene.String()
+    value = graphene.Int()
+    delta = graphene.Int()
+    percent = graphene.Float()
+    color = graphene.String()
+
+class AirlineCategories(graphene.ObjectType):
+    title = graphene.String()
+    icon = graphene.String()
+    total = graphene.Int()
+    subCategories = graphene.List(AirlineSubCategories)
+
+class Airline(graphene.ObjectType):
+    title = graphene.String()
+    summary = graphene.String()
+    barchart = graphene.List(BarchartObject)
+    categories = graphene.List(AirlineCategories)
+
+# Objects used for Airline tickets by route types.
+class AirRouteListElement(graphene.ObjectType):
+    category = graphene.String()
+    value = graphene.Int()
+    prop = graphene.String()
+    nextProp = graphene.String()
+
+class DonutData(graphene.ObjectType):
+    category = graphene.String()
+    value = graphene.Float()
+    nextLevel = graphene.String()
+
+class AirRouteSub(graphene.ObjectType):
+    title = graphene.String()
+    summary = graphene.String()
+    label = graphene.String()
+    context = graphene.String()
+    total = graphene.Int()
+    colors = graphene.List(graphene.String)
+    donutData = graphene.List(DonutData)
+
+class AirRoute(graphene.ObjectType):
+    airRoot = graphene.Field(AirRouteSub)
+    transatlantic = graphene.Field(AirRouteSub)
+    unitedStates = graphene.Field(AirRouteSub)
+    jfk = graphene.Field(AirRouteSub)
+
+# Objects used for Hotel Summary.
+class HotelLocationsObject(graphene.ObjectType):
+    title = graphene.String()
+    radius = graphene.Float()
+    latitude = graphene.Float()
+    longitude = graphene.Float()
+
+class HotelData(graphene.ObjectType):
+    title = graphene.String()
+    summary = graphene.String()
+    kpis = graphene.List(KpisObject)
+    barchart = graphene.List(HotelBarchartObject)
+    locations = graphene.List(HotelLocationsObject)
+
+class RoomNights(graphene.ObjectType):
+    hotelRoot = graphene.Field(AirRouteSub)
+    europe = graphene.Field(AirRouteSub)
+    unitedKingdom = graphene.Field(AirRouteSub)
+
 # The three classes below are used for creating the login response
 # A LoginResponse is what is returned by the GraphQL login function.
 # A LoginResponse contains a ResponseBody which contains a ApiDataSet.
@@ -20,9 +138,63 @@ class ResponseBody(graphene.ObjectType):
     apimessage = graphene.String()
     apidataset = graphene.Field(ApiDataSet)
 
+class AirDataResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(AirData)
+
+class AirlineResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(Airline)
+
+class AirRouteResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(AirRoute)
+
+class HotelDataResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(HotelData)
+
+class RoomNightsResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(RoomNights)
+
 class LoginResponse(graphene.ObjectType):
     statusCode = graphene.Int()
     body = graphene.Field(ResponseBody)
+
+class LogoutResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(ResponseBody)
+
+class AirDataResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(AirDataResponseBody)
+
+class AirlineResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(AirlineResponseBody)
+
+class AirRouteResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(AirRouteResponseBody)
+
+class HotelDataResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(HotelDataResponseBody)
+
+class RoomNightsResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(RoomNightsResponseBody)
 
 # This class defines the arguments required for the create advito user mutation and houses the mutation function.
 class CreateAdvitoUser(graphene.Mutation):
@@ -104,6 +276,7 @@ class ViewData(graphene.ObjectType):
     button = graphene.String()
     list = graphene.List(VDListObject)
 
+
 # This is the function that the mutation function calls that actually invokes the lambda function for creating the user.
 def create_user(client_id, username, pwd, name_last, name_first, email):
 
@@ -159,8 +332,278 @@ def user_login(username, pwd):
 
     return loginresponse
 
+def user_logout(sessionToken):
+    payload = {"sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = 'python-lambdas-dev-user_logout',
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = ResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    logoutresponse = LogoutResponse(response_dict['statusCode'])
+    logoutresponse.body = responsebody
+
+    return logoutresponse
+
+def get_air_data_json(air_data):
+    kpis_list = [KpisObject(k['title'], k['value'], k['delta'], k['percent'], k['change'], 
+        k['type'], k['icon']) for k in air_data['kpis']]
+
+    barchart_list = []
+    for i in air_data['barchart']:
+        bc_data_list = []
+        for j in i['data']:
+            bc_data_list += [BarchartDataObject(j['category'], j['value'], j['change'])]
+        barchart_list += [BarchartObject(i['title'], i['type'], bc_data_list)]
+
+    locations_list = []
+    for i in air_data['locations']:
+        coords_list = []
+        for j in i['coords']:
+            coords_list += [CoordsObject(j['latitude'], j['longitude'])]
+        locations_list += [LocationsObject(i['thickness'], i['height'], i['opacity'], coords_list, i['origin'], i['destination'])]
+
+    return AirData(air_data['title'], air_data['summary'], kpis_list, barchart_list, locations_list)
+
+def get_air_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = AirDataResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    airDataResponse = AirDataResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        air_data = response_payload['apidataset']
+        air_data = air_data[story_name]
+        air_data_object = get_air_data_json(air_data)
+        responsebody.apidataset = air_data_object
+
+    airDataResponse.body = responsebody
+
+    return airDataResponse
+
+def get_airline_data_json(airline_data):
+    barchart_list = []
+    if 'barchart' in airline_data.keys():
+        for i in airline_data['barchart']:
+            bc_data_list = []
+            for j in i['data']:
+                bc_data_list += [BarchartDataObject(j['category'], j['value'], j['change'])]
+            barchart_list += [BarchartObject(i['title'], i['type'], bc_data_list)]
+
+    categories_list = []
+    for i in airline_data['categories']:
+        sub_categories_list = []
+        for j in i['subcategories']:
+            sub_categories_list += [AirlineSubCategories(j['name'], j['value'], j['delta'], j['percent'], j['color'])]
+        categories_list += [AirlineCategories(i['title'], i['icon'], i['total'], sub_categories_list)]
+
+    return Airline(airline_data['title'], airline_data['summary'], barchart_list, categories_list)
+
+def get_airline_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = AirlineResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    airlineResponse = AirlineResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        airline_data = response_payload['apidataset']
+        airline_data = airline_data[story_name]
+        airline_data_object = get_airline_data_json(airline_data)
+        responsebody.apidataset = airline_data_object
+
+    airlineResponse.body = responsebody
+
+    return airlineResponse
+
+def get_airroute_data_json(airroute_data):
+    airRoot = airroute_data['airRoot']
+    transatlantic = airroute_data['transatlantic']
+    unitedStates = airroute_data['unitedStates']
+    jfk = airroute_data['jfk']
+    airroute_data_list = [airRoot, transatlantic, unitedStates, jfk]
+    airroute_sub_list = []
+
+    for airrouteObject in airroute_data_list:
+        colors_list = [color for color in airrouteObject['colors']]
+
+        donut_data_list = []
+        for d in airrouteObject['donutData']:
+            if 'nextLevel' in d.keys():
+                donut_data_list += [DonutData(d['category'], d['value'], d['nextLevel'])]
+            else:
+                donut_data_list += [DonutData(d['category'], d['value'], '')]
+        
+        airroute_sub_list += [AirRouteSub(airrouteObject['title'], airrouteObject['summary'], airrouteObject['label'], 
+            airrouteObject['context'], airrouteObject['total'], colors_list, donut_data_list)]
+
+    return AirRoute(airroute_sub_list[0], airroute_sub_list[1], airroute_sub_list[2], airroute_sub_list[3])
+
+def get_airroute_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = AirRouteResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    airrouteResponse = AirRouteResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        airroute_data = response_payload['apidataset']
+        airroute_data = airroute_data[story_name]
+        airroute_data_object = get_airroute_data_json(airroute_data)
+        responsebody.apidataset = airroute_data_object
+
+    airrouteResponse.body = responsebody
+
+    return airrouteResponse
+
+def get_hotel_data_json(hotel_data):
+    kpis_list = [KpisObject(k['title'], k['value'], k['delta'], k['percent'], k['change'],
+        k['type'], k['icon']) for k in hotel_data['kpis']]
+
+    barchart_list = []
+    for i in hotel_data['barchart']:
+        bc_data_list = []
+        for j in i['data']:
+            bc_data_list += [HotelBarchartDataObject(j['category'], j['value'], j['delta'], j['change'], j['percent'])]
+        barchart_list += [HotelBarchartObject(i['title'], i['type'], bc_data_list)]
+
+    locations_list = [HotelLocationsObject(l['title'], l['radius'], l['latitude'], l['longitude']) for l in hotel_data['locations']]
+
+    return AirData(hotel_data['title'], hotel_data['summary'], kpis_list, barchart_list, locations_list)
+
+def get_hotel_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = HotelDataResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    hotelDataResponse = HotelDataResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        hotel_data = response_payload['apidataset']
+        hotel_data = hotel_data[story_name]
+        hotel_data_object = get_hotel_data_json(hotel_data)
+        responsebody.apidataset = hotel_data_object
+
+    hotelDataResponse.body = responsebody
+
+    return hotelDataResponse
+
+def get_roomnight_data_json(roomnight_data):
+    hotelRoot = roomnight_data['hotelRoot']
+    europe = roomnight_data['europe']
+    unitedKingdom = roomnight_data['unitedKingdom']
+    roomnight_data_list = [hotelRoot, europe, unitedKingdom]
+    roomnight_sub_list = []
+
+    for roomnightObject in roomnight_data_list:
+        colors_list = [color for color in roomnightObject['colors']]
+
+        donut_data_list = []
+        for d in roomnightObject['donutData']:
+            if 'nextLevel' in d.keys():
+                donut_data_list += [DonutData(d['category'], d['value'], d['nextLevel'])]
+            else:
+                donut_data_list += [DonutData(d['category'], d['value'], '')]
+        
+        roomnight_sub_list += [AirRouteSub(roomnightObject['title'], roomnightObject['summary'], roomnightObject['label'], 
+            roomnightObject['context'], roomnightObject['total'], colors_list, donut_data_list)]
+
+    return RoomNights(roomnight_sub_list[0], roomnight_sub_list[1], roomnight_sub_list[2])
+
+def get_roomnight_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = RoomNightsResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    roomnightResponse = RoomNightsResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        roomnight_data = response_payload['apidataset']
+        roomnight_data = roomnight_data[story_name]
+        roomnight_data_object = get_roomnight_data_json(roomnight_data)
+        responsebody.apidataset = roomnight_data_object
+
+    roomnightResponse.body = responsebody
+
+    return roomnightResponse
+
 class Query(graphene.ObjectType):
     login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
+    logout = graphene.Field(LogoutResponse, sessionToken=graphene.String())
+    
+    airSummary = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airTraffic = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airAirlines = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airCabins = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airRoute = graphene.Field(AirRouteResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+
+    hotelSummary = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    roomNights = graphene.Field(RoomNightsResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+
     advitoUser = graphene.Field(AdvitoUser)
     programPerformance = graphene.List(DashboardData)
     noChangeSince = graphene.String()
@@ -174,6 +617,30 @@ class Query(graphene.ObjectType):
     
     def resolve_login(self, info, username, password):
         return user_login(username, password)  
+
+    def resolve_logout(self, info, sessionToken):
+        return user_logout(sessionToken)
+
+    def resolve_airSummary(self, info, clientId, sessionToken):
+        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air', 'udf_story_air')
+
+    def resolve_airTraffic(self, info, clientId, sessionToken):
+        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_traffic', 'udf_story_air_traffic')
+
+    def resolve_airAirlines(self, info, clientId, sessionToken):
+        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_airlines', 'udf_story_air_airlines')
+
+    def resolve_airCabins(self, info, clientId, sessionToken):
+        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_cabins', 'udf_story_air_cabins')
+
+    def resolve_airRoute(self, info, clientId, sessionToken):
+        return get_airroute_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_routes', 'udf_story_air_routes')
+
+    def resolve_hotelSummary(self, info, clientId, sessionToken):
+        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel', 'udf_story_hotel')
+    
+    def resolve_roomNights(self, info, clientId, sessionToken):
+        return get_roomnight_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4')
 
     def resolve_programPerformance(self, info):
         program_performance_list = [
@@ -297,3 +764,13 @@ class Query(graphene.ObjectType):
         return info_data_list
 
 schema = graphene.Schema(query=Query, mutation=MyMutations)
+
+def test_fun():
+    with open('data/air_summary.json') as f:
+        as_data = json.load(f)
+
+    return as_data
+
+
+
+

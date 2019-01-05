@@ -150,7 +150,7 @@ class AmorphousService:
         # Turns to dictionary and returns
         return dict(rowproxy)
 
-    def udf_story_hotel(self, client_id, session):
+    def udf_story_hotel_2(self, client_id, session):
 
         """
         Passthrough function that invokes the postgres function 'udf_story_hotel_2'
@@ -169,7 +169,7 @@ class AmorphousService:
         # Turns to dictionary and returns
         return dict(rowproxy)
 
-    def udf_story_hotel(self, client_id, session):
+    def udf_story_hotel_3(self, client_id, session):
 
         """
         Passthrough function that invokes the postgres function 'udf_story_hotel_3'
@@ -186,9 +186,9 @@ class AmorphousService:
         ).first()
 
         # Turns to dictionary and returns
-        return dict(rowproxy
+        return dict(rowproxy)
 
-    def udf_story_hotel(self, client_id, session):
+    def udf_story_hotel_4(self, client_id, session):
 
         """
         Passthrough function that invokes the postgres function 'udf_story_hotel_4'
