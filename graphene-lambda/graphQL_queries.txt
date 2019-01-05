@@ -1,0 +1,687 @@
+{
+  login(username: "Admin", password: "Password2")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        displayName
+        clientId
+        profilePicturePath
+        sessionToken
+      }
+    }
+  }
+}
+
+{
+  airSummary(clientId: 1, sessionToken: "Suuo3kMT3jjEX2LkX3ITVA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        kpis
+        {
+          title
+          value
+          delta
+          percent
+          change
+          type
+          icon
+        }
+        barchart 
+    {
+      title
+      type
+      data
+      {
+        category
+        value
+        change
+      }
+    }
+    locations
+    {
+      thickness
+      height
+      opacity
+      coords
+      {
+        latitude
+        longitude
+      }
+      origin
+      destination
+    }
+      }
+    }
+  }
+}
+
+{
+  airTraffic(clientId: 1, sessionToken: "8MpRYK757gWW2a6hb3ZGpA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        kpis
+        {
+          title
+          value
+          delta
+          percent
+          change
+          type
+          icon
+        }
+        barchart 
+    {
+      title
+      type
+      data
+      {
+        category
+        value
+        change
+      }
+    }
+    locations
+    {
+      thickness
+      height
+      opacity
+      coords
+      {
+        latitude
+        longitude
+      }
+      origin
+      destination
+    }
+      }
+    }
+  }
+}
+
+{
+  airAirlines(clientId: 1, sessionToken: "eTTIklEhQYFMjMwTP+lo+A==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        categories
+        {
+          title
+          icon
+          total
+          subCategories 
+          {
+            name
+            value
+            delta
+            percent
+            color
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  airCabins(clientId: 1, sessionToken: "8MpRYK757gWW2a6hb3ZGpA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        barchart 
+        {
+          title
+          type
+          data
+          {
+            category
+            change
+            value
+          }
+        }
+        categories
+        {
+          title
+          icon
+          total
+          subCategories 
+          {
+            name
+            value
+            delta
+            color
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  airRoute(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        airRoot
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+        transatlantic
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+        unitedStates
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+        jfk
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  hotelSummary(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        kpis
+        {
+          title
+          value
+          delta
+          change
+          percent
+          type
+          icon
+        }
+        barchart
+        {
+          title
+          type
+          data
+          {
+            category
+            value
+            delta
+            change
+            percent
+          }
+        }
+        locations
+        {
+          title
+          radius
+          latitude
+          longitude
+        }
+      }
+    }
+  }
+}
+
+{
+  roomNights(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        hotelRoot
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+        europe
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+        unitedKingdom
+        {
+          title
+          summary
+          label
+          context
+          total
+          colors
+          donutData 
+          {
+            category
+            value
+            nextLevel
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  hotelSpend(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        summary
+        kpis
+        {
+          title
+          value
+          delta
+          change
+          percent
+          type
+          icon
+        }
+        barchart
+        {
+          title
+          type
+          data
+          {
+            category
+            value
+            delta
+            change
+            percent
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  topHotelChains(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset 
+      {
+        title
+        summary
+        categories
+        {
+          title
+          type
+          icon
+          total
+          subCategories
+          {
+            name
+            value
+            color
+          }
+        }
+        barchart
+        {
+          title
+          type
+          data
+          {
+            category
+            value
+            delta
+            change
+            percent
+          }
+        }
+      }
+    }
+  }
+}
+
+{
+  topHotelTiers(clientId: 1, sessionToken: "wgonIE/rspAqsvZ/MQ7XzA==")
+  {
+    statusCode
+    body
+    {
+      success
+      apicode
+      apimessage
+      apidataset 
+      {
+        title
+        summary
+        categories
+        {
+          title
+          type
+          icon
+          total
+          subCategories
+          {
+            name
+            value
+            color
+          }
+        }
+        barchart
+        {
+          title
+          type
+          data
+          {
+            category
+            value
+            delta
+            change
+            percent
+          }
+        }
+      }
+    }
+  }
+}
+
+
+#{
+#  logout(sessionToken: "u2xRPShtgIFpcN6Efb20nw==")
+#  {
+#    statusCode
+#    body
+#    {
+#      success
+#      apicode
+#      apimessage
+#    }
+#  }
+#}
+
+#{
+#  programPerformance
+#  {
+#    title
+#    value
+#    unit
+#  }
+#}
+
+#{noChangeSince}
+
+
+
+#{
+#  airSummary
+#  {
+#    title
+#    summary
+#    kpis
+#    {
+#      title
+#      value
+#      delta
+#      change
+#      type
+#      icon
+#    }
+#    barchart 
+#    {
+#      title
+#      type
+#      data
+#      {
+#        category
+#        value
+#        change
+#      }
+#    }
+#    locations
+#    {
+#      thickness
+#      height
+#      opacity
+#      coords
+#      {
+#        latitude
+#        longitude
+#      }
+#      to
+#      From
+#    }
+#  }
+#}
+
+#{
+#  personaList 
+#  {
+#    title
+#    value
+#    programShare
+#    color
+#  }
+#}
+
+#{
+#  opportunities(limit: 4, cursor: 2)
+#  {
+#    prevCursor
+#    cursor
+#    totalOpportunities
+#    hasNext
+#    opportunities
+#    {
+#      title
+#      value
+#      unit
+#    }
+#  }
+#}
+
+#{
+#  riskAreas(limit: 4, cursor: 1)
+#  {
+#    prevCursor
+#    cursor
+#    totalOpportunities
+#    hasNext
+#    riskAreas
+#    {
+#      title
+#      value
+#    }
+#  }
+#}
+
+#{
+#  activeAlerts {
+#    header
+#    secondaryHeader
+#    icon
+#    alert
+#  }
+#}
+
+#{
+#  upcomingActions {
+#    header
+#    secondaryHeader
+#    icon
+#    alert
+#  }
+#}
+
+#{
+#  viewData
+#  {
+#    title
+#    icon
+#    disabled
+#    list
+#    {
+#      title
+#      icon
+#      domo
+#      link
+#    }
+#  }
+#}
+
+#{
+#  infoData
+#  {
+#    title
+#    description
+#    icon
+#    disabled
+#    button
+#  }
+#}
+
+#mutation myFirstMutation {
+#  createAdvitoUser(
+#    clientId: 2,
+#    username: "firstlast",
+#    pwd: "Password2",
+#    nameLast: "Last",
+#    nameFirst: "First",
+#    email: "firstlast@gmail.com"
+#  )
+#  {
+#    advitoUser {
+#      clientId
+#      username
+#      pwd
+#      nameLast
+#      nameFirst
+#      email
+#    }
+#  }
+#}
+

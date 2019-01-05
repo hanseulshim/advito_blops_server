@@ -21,22 +21,10 @@ class BarchartDataObject(graphene.ObjectType):
     value = graphene.Float()
     change = graphene.String()
 
-class HotelBarchartDataObject(graphene.ObjectType):
-    category = graphene.String()
-    value = graphene.Float()
-    delta = graphene.Float()
-    change = graphene.String()
-    percent = graphene.Float()
-
 class BarchartObject(graphene.ObjectType):
     title = graphene.String()
     type = graphene.String()
     data = graphene.List(BarchartDataObject)
-
-class HotelBarchartObject(graphene.ObjectType):
-    title = graphene.String()
-    type = graphene.String()
-    data = graphene.List(HotelBarchartDataObject)
 
 class CoordsObject(graphene.ObjectType):
     latitude = graphene.Float()
@@ -104,7 +92,19 @@ class AirRoute(graphene.ObjectType):
     unitedStates = graphene.Field(AirRouteSub)
     jfk = graphene.Field(AirRouteSub)
 
-# Objects used for Hotel Summary.
+# Objects used for Hotel Summary and Hotel Spend.
+class HotelBarchartDataObject(graphene.ObjectType):
+    category = graphene.String()
+    value = graphene.Float()
+    delta = graphene.Float()
+    change = graphene.String()
+    percent = graphene.Float()
+
+class HotelBarchartObject(graphene.ObjectType):
+    title = graphene.String()
+    type = graphene.String()
+    data = graphene.List(HotelBarchartDataObject)
+
 class HotelLocationsObject(graphene.ObjectType):
     title = graphene.String()
     radius = graphene.Float()
@@ -118,10 +118,31 @@ class HotelData(graphene.ObjectType):
     barchart = graphene.List(HotelBarchartObject)
     locations = graphene.List(HotelLocationsObject)
 
+# Room nights
 class RoomNights(graphene.ObjectType):
     hotelRoot = graphene.Field(AirRouteSub)
     europe = graphene.Field(AirRouteSub)
     unitedKingdom = graphene.Field(AirRouteSub)
+
+# Objects used for Hotel Chains and Hotel Tiers
+# Objects used for Top Airlines and Cabin Use.
+class HotelChainSubCategories(graphene.ObjectType):
+    name = graphene.String()
+    value = graphene.Float()
+    color = graphene.String()
+
+class HotelChainCategories(graphene.ObjectType):
+    title = graphene.String()
+    type = graphene.String()
+    icon = graphene.String()
+    total = graphene.Float()
+    subCategories = graphene.List(HotelChainSubCategories)
+
+class HotelChain(graphene.ObjectType):
+    title = graphene.String()
+    summary = graphene.String()
+    categories = graphene.List(HotelChainCategories)
+    barchart = graphene.List(HotelBarchartObject)
 
 # The three classes below are used for creating the login response
 # A LoginResponse is what is returned by the GraphQL login function.
@@ -168,6 +189,12 @@ class RoomNightsResponseBody(graphene.ObjectType):
     apimessage = graphene.String()
     apidataset = graphene.Field(RoomNights)
 
+class HotelChainResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(HotelChain)
+
 class LoginResponse(graphene.ObjectType):
     statusCode = graphene.Int()
     body = graphene.Field(ResponseBody)
@@ -195,6 +222,10 @@ class HotelDataResponse(graphene.ObjectType):
 class RoomNightsResponse(graphene.ObjectType):
     statusCode = graphene.Int()
     body = graphene.Field(RoomNightsResponseBody)
+
+class HotelChainResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(HotelChainResponseBody)
 
 # This class defines the arguments required for the create advito user mutation and houses the mutation function.
 class CreateAdvitoUser(graphene.Mutation):
@@ -509,7 +540,9 @@ def get_hotel_data_json(hotel_data):
             bc_data_list += [HotelBarchartDataObject(j['category'], j['value'], j['delta'], j['change'], j['percent'])]
         barchart_list += [HotelBarchartObject(i['title'], i['type'], bc_data_list)]
 
-    locations_list = [HotelLocationsObject(l['title'], l['radius'], l['latitude'], l['longitude']) for l in hotel_data['locations']]
+    locations_list = []
+    if 'locations' in hotel_data.keys():
+        locations_list = [HotelLocationsObject(l['title'], l['radius'], l['latitude'], l['longitude']) for l in hotel_data['locations']]
 
     return AirData(hotel_data['title'], hotel_data['summary'], kpis_list, barchart_list, locations_list)
 
@@ -591,6 +624,61 @@ def get_roomnight_data(clientId, sessionToken, functionName, story_name):
 
     return roomnightResponse
 
+def get_hotelchain_data_json(hotelchain_data):
+    barchart_list = []
+    if 'barchart' in hotelchain_data.keys():
+        for i in hotelchain_data['barchart']:
+            bc_data_list = []
+            for j in i['data']:
+                if 'value' in j.keys():
+                    bc_data_list += [HotelBarchartDataObject(j['category'], j['value'], j['delta'], j['change'], j['percent'])]
+                else:
+                    bc_data_list += [HotelBarchartDataObject(j['category'], 0, j['delta'], j['change'], j['percent'])]
+            barchart_list += [HotelBarchartObject(i['title'], i['type'], bc_data_list)]
+
+    categories_list = []
+    for i in hotelchain_data['categories']:
+        sub_categories_list = []
+        for j in i['subCategories']:
+            if 'value' in j.keys():
+                sub_categories_list += [HotelChainSubCategories(j['name'], j['value'], j['color'])]
+            else:
+                sub_categories_list += [HotelChainSubCategories(j['name'], 0, j['color'])]
+        if ('type' in i.keys()):
+            categories_list += [HotelChainCategories(i['title'], i['type'], i['icon'], i['total'], sub_categories_list)]
+        else:
+            categories_list += [HotelChainCategories(i['title'], '', i['icon'], i['total'], sub_categories_list)]
+
+    return HotelChain(hotelchain_data['title'], hotelchain_data['summary'], categories_list, barchart_list)
+
+def get_hotelchain_data(clientId, sessionToken, functionName, story_name):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = functionName,
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+    responsebody = HotelChainResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+    hotelchainResponse = HotelChainResponse(response_dict['statusCode'])
+
+    if (response_dict['statusCode'] == 200):
+        hotelchain_data = response_payload['apidataset']
+        hotelchain_data = hotelchain_data[story_name]
+        hotelchain_data_object = get_hotelchain_data_json(hotelchain_data)
+        responsebody.apidataset = hotelchain_data_object
+
+    hotelchainResponse.body = responsebody
+
+    return hotelchainResponse
+
 class Query(graphene.ObjectType):
     login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
     logout = graphene.Field(LogoutResponse, sessionToken=graphene.String())
@@ -603,6 +691,9 @@ class Query(graphene.ObjectType):
 
     hotelSummary = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     roomNights = graphene.Field(RoomNightsResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    hotelSpend = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    topHotelChains = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    topHotelTiers = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String())
 
     advitoUser = graphene.Field(AdvitoUser)
     programPerformance = graphene.List(DashboardData)
@@ -641,6 +732,15 @@ class Query(graphene.ObjectType):
     
     def resolve_roomNights(self, info, clientId, sessionToken):
         return get_roomnight_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4')
+
+    def resolve_hotelSpend(self, info, clientId, sessionToken):
+        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_1', 'udf_story_hotel_1')
+
+    def resolve_topHotelChains(self, info, clientId, sessionToken):
+        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_2', 'udf_story_hotel_2')
+
+    def resolve_topHotelTiers(self, info, clientId, sessionToken):
+        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_3', 'udf_story_hotel_3')
 
     def resolve_programPerformance(self, info):
         program_performance_list = [
