@@ -12,6 +12,7 @@ exports.storyDefs = `
     category: String,
     value: Float,
     delta: Float,
+    percent: Float,
     change: String,
   }
 
@@ -30,6 +31,7 @@ exports.storyDefs = `
     title: String,
     value: Float,
     delta: Float,
+    percent: Float,
     change: String,
     type: String,
     icon: String,
@@ -54,6 +56,7 @@ exports.storyDefs = `
     name: String,
     value: Float,
     delta: Float,
+    percent: Float,
     color: String,
   }
 
