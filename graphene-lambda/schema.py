@@ -130,6 +130,8 @@ class RoomNights(graphene.ObjectType):
 class HotelChainSubCategories(graphene.ObjectType):
     name = graphene.String()
     value = graphene.Float()
+    delta = graphene.Int()
+    percent = graphene.Float()
     color = graphene.String()
 
 class HotelChainCategories(graphene.ObjectType):
@@ -697,9 +699,9 @@ def get_hotelchain_data_json(hotelchain_data):
         sub_categories_list = []
         for j in i['subCategories']:
             if 'value' in j.keys():
-                sub_categories_list += [HotelChainSubCategories(j['name'], j['value'], j['color'])]
+                sub_categories_list += [HotelChainSubCategories(j['name'], j['value'], 0, 0, j['color'])]
             else:
-                sub_categories_list += [HotelChainSubCategories(j['name'], 0, j['color'])]
+                sub_categories_list += [HotelChainSubCategories(j['name'], 0, 0, 0, j['color'])]
         if ('type' in i.keys()):
             categories_list += [HotelChainCategories(i['title'], i['type'], i['icon'], i['total'], sub_categories_list)]
         else:
