@@ -87,10 +87,11 @@ class AirRouteSub(graphene.ObjectType):
     donutData = graphene.List(DonutData)
 
 class AirRoute(graphene.ObjectType):
-    airRoot = graphene.Field(AirRouteSub)
-    transatlantic = graphene.Field(AirRouteSub)
-    unitedStates = graphene.Field(AirRouteSub)
-    jfk = graphene.Field(AirRouteSub)
+    donutData = graphene.Field(AirRouteSub)
+    #airRoot = graphene.Field(AirRouteSub)
+    #transatlantic = graphene.Field(AirRouteSub)
+    #unitedStates = graphene.Field(AirRouteSub)
+    #jfk = graphene.Field(AirRouteSub)
 
 # Objects used for Hotel Summary and Hotel Spend.
 class HotelBarchartDataObject(graphene.ObjectType):
@@ -175,7 +176,7 @@ class AirRouteResponseBody(graphene.ObjectType):
     success = graphene.Boolean()
     apicode = graphene.String()
     apimessage = graphene.String()
-    apidataset = graphene.Field(AirRoute)
+    apidataset = graphene.Field(AirRouteSub)
 
 class HotelDataResponseBody(graphene.ObjectType):
     success = graphene.Boolean()
@@ -272,6 +273,10 @@ class DashboardData(graphene.ObjectType):
     unit = graphene.String()
     programShare = graphene.Int()
     color = graphene.String()
+    header = graphene.String()
+    secondaryHeader = graphene.String()
+    icon = graphene.String()
+    alert = graphene.Boolean()
 
 class Opportunities(graphene.ObjectType):
     prevCursor = graphene.Int()
@@ -307,6 +312,56 @@ class ViewData(graphene.ObjectType):
     button = graphene.String()
     list = graphene.List(VDListObject)
 
+# Response Body and Response class for noChangeSince
+class NoChangeSinceResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.String()
+
+class NoChangeSinceResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(NoChangeSinceResponseBody)
+
+class DashboardDataResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.List(DashboardData)
+
+class DashboardDataResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(DashboardDataResponseBody)
+
+class ViewDataResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.List(ViewData)
+
+class ViewDataResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(ViewDataResponseBody)
+
+class OpportunitiesResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(Opportunities)
+
+class OpportunitiesResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(OpportunitiesResponseBody)
+
+class RiskAreasResponseBody(graphene.ObjectType):
+    success = graphene.Boolean()
+    apicode = graphene.String()
+    apimessage = graphene.String()
+    apidataset = graphene.Field(RiskAreas)
+
+class RiskAreasResponse(graphene.ObjectType):
+    statusCode = graphene.Int()
+    body = graphene.Field(RiskAreasResponseBody)
 
 # This is the function that the mutation function calls that actually invokes the lambda function for creating the user.
 def create_user(client_id, username, pwd, name_last, name_first, email):
@@ -478,12 +533,13 @@ def get_airline_data(clientId, sessionToken, functionName, story_name):
 
     return airlineResponse
 
-def get_airroute_data_json(airroute_data):
-    airRoot = airroute_data['airRoot']
-    transatlantic = airroute_data['transatlantic']
-    unitedStates = airroute_data['unitedStates']
-    jfk = airroute_data['jfk']
-    airroute_data_list = [airRoot, transatlantic, unitedStates, jfk]
+def get_airroute_data_json(airroute_data, title):
+    donutData = airroute_data[title]
+    #transatlantic = airroute_data['transatlantic']
+    #unitedStates = airroute_data['unitedStates']
+    #jfk = airroute_data['jfk']
+    #airroute_data_list = [airRoot, transatlantic, unitedStates, jfk]
+    airroute_data_list = [donutData]
     airroute_sub_list = []
 
     for airrouteObject in airroute_data_list:
@@ -499,9 +555,9 @@ def get_airroute_data_json(airroute_data):
         airroute_sub_list += [AirRouteSub(airrouteObject['title'], airrouteObject['summary'], airrouteObject['label'], 
             airrouteObject['context'], airrouteObject['total'], colors_list, donut_data_list)]
 
-    return AirRoute(airroute_sub_list[0], airroute_sub_list[1], airroute_sub_list[2], airroute_sub_list[3])
+    return airroute_sub_list[0]
 
-def get_airroute_data(clientId, sessionToken, functionName, story_name):
+def get_airroute_data(clientId, sessionToken, functionName, story_name, title):
     payload = {"clientId": clientId, "sessionToken": sessionToken}
     payload_str = json.dumps(payload)
     encoded_str = payload_str.encode('ascii')
@@ -522,7 +578,7 @@ def get_airroute_data(clientId, sessionToken, functionName, story_name):
     if (response_dict['statusCode'] == 200):
         airroute_data = response_payload['apidataset']
         airroute_data = airroute_data[story_name]
-        airroute_data_object = get_airroute_data_json(airroute_data)
+        airroute_data_object = get_airroute_data_json(airroute_data, title)
         responsebody.apidataset = airroute_data_object
 
     airrouteResponse.body = responsebody
@@ -679,90 +735,107 @@ def get_hotelchain_data(clientId, sessionToken, functionName, story_name):
 
     return hotelchainResponse
 
-class Query(graphene.ObjectType):
-    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
-    logout = graphene.Field(LogoutResponse, sessionToken=graphene.String())
-    
-    airSummary = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    airTraffic = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    airAirlines = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    airCabins = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    airRoute = graphene.Field(AirRouteResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+def get_noChangeSince(clientId, sessionToken):
+    if (len(sessionToken) != 0):
+        noChangeSinceResponse = NoChangeSinceResponse(200)
+        noChangeSinceResponseBody = NoChangeSinceResponseBody(True, "OK", "Data successfully fetched.", "July 30")
+    else:
+        noChangeSinceResponse = NoChangeSinceResponse(400)
+        noChangeSinceResponseBody = NoChangeSinceResponseBody(False, "INVALID", "No session found", "")
+    noChangeSinceResponse.body = noChangeSinceResponseBody
 
-    hotelSummary = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    roomNights = graphene.Field(RoomNightsResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    hotelSpend = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    topHotelChains = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    topHotelTiers = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    return noChangeSinceResponse
 
-    advitoUser = graphene.Field(AdvitoUser)
-    programPerformance = graphene.List(DashboardData)
-    noChangeSince = graphene.String()
-    personaList = graphene.List(DashboardData)
-    opportunities = graphene.Field(Opportunities, limit=graphene.Int(), cursor=graphene.Int())
-    riskAreas = graphene.Field(RiskAreas, limit=graphene.Int(), cursor=graphene.Int())
-    upcomingActions = graphene.List(SidebarData)
-    activeAlerts = graphene.List(SidebarData)
-    viewData = graphene.List(ViewData)
-    infoData = graphene.List(ViewData)
-    
-    def resolve_login(self, info, username, password):
-        return user_login(username, password)  
+def get_DashBoardData_List(clientId, sessionToken, queryName):
+    dashboardDataList = []
+    dashboardDataResponse = DashboardDataResponse(200)
+    dashboardDataResponseBody = DashboardDataResponseBody(True, "OK", "Data successfully fetched.")
 
-    def resolve_logout(self, info, sessionToken):
-        return user_logout(sessionToken)
-
-    def resolve_airSummary(self, info, clientId, sessionToken):
-        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air', 'udf_story_air')
-
-    def resolve_airTraffic(self, info, clientId, sessionToken):
-        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_traffic', 'udf_story_air_traffic')
-
-    def resolve_airAirlines(self, info, clientId, sessionToken):
-        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_airlines', 'udf_story_air_airlines')
-
-    def resolve_airCabins(self, info, clientId, sessionToken):
-        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_cabins', 'udf_story_air_cabins')
-
-    def resolve_airRoute(self, info, clientId, sessionToken):
-        return get_airroute_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_routes', 'udf_story_air_routes')
-
-    def resolve_hotelSummary(self, info, clientId, sessionToken):
-        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel', 'udf_story_hotel')
-    
-    def resolve_roomNights(self, info, clientId, sessionToken):
-        return get_roomnight_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4')
-
-    def resolve_hotelSpend(self, info, clientId, sessionToken):
-        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_1', 'udf_story_hotel_1')
-
-    def resolve_topHotelChains(self, info, clientId, sessionToken):
-        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_2', 'udf_story_hotel_2')
-
-    def resolve_topHotelTiers(self, info, clientId, sessionToken):
-        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_3', 'udf_story_hotel_3')
-
-    def resolve_programPerformance(self, info):
-        program_performance_list = [
+    if (queryName == 'program_performance'):
+        dashboardDataList = [
             DashboardData(title = 'Average Total Trip Cost', value = '$2,754', unit = ''),
             DashboardData(title = 'Booking Outside of Agency', value = '12% / $360K', unit = 'impact'),
             DashboardData(title = 'Expenses Out of Policy', value = '23% / $690K', unit = 'impact')
         ]
-        return program_performance_list
-
-    def resolve_noChangeSince(self, info):
-        return 'July 30'
-
-    def resolve_personaList(self, info):
-        persona_list = [
+    elif (queryName == 'persona_list'):
+        dashboardDataList = [
             DashboardData(title = 'road warrior', value = '$3,350', programShare = 25, color = '#ACD2CF'),
             DashboardData(title = 'executive', value = '$3,150', programShare = 40, color = '#90C3C1'),
             DashboardData(title = 'deal maker', value = '$2,561', programShare = 15, color = '#81BDB9'),
             DashboardData(title = 'on demand', value = '$1,955', programShare = 10, color = '#71B5B1')
         ]
-        return persona_list
+    elif (queryName == 'activeAlerts'):
+        dashboardDataList = [
+            DashboardData(header = '', secondaryHeader = 'Leakage to Program is 3.5', 
+                icon = 'air.png', alert = True),
+            DashboardData(header = '', secondaryHeader = 'Performance against target is 6.5', 
+                icon = 'air.png', alert = True),
+            DashboardData(header = '', secondaryHeader = 'Performance against target is 6.1', 
+                icon = 'air.png', alert = True),
+            DashboardData(header = '', secondaryHeader = 'ATP to ancillary spend is 5.2', 
+                icon = 'air.png', alert = True)
+        ]
+    elif (queryName == 'upcomingActions'):
+        dashboardDataList = [
+            DashboardData(header = 'October 31, 2018', secondaryHeader = '2nd Round Hotel Negotiations Due', 
+                icon = 'flag.png', alert = False),
+            DashboardData(header = 'January 31, 2018', secondaryHeader = 'Hotel Audits Due', 
+                icon = 'flag.png', alert = False),
+            DashboardData(header = 'Febuary 11, 2019', secondaryHeader = 'Delta Contract Expires', 
+                icon = 'flag.png', alert = False)
+        ]
+    
+    dashboardDataResponseBody.apidataset = dashboardDataList
+    dashboardDataResponse.body = dashboardDataResponseBody
 
-    def resolve_opportunities(self, info, limit = None, cursor = 0):
+    return dashboardDataResponse
+
+def get_ViewData_List(clientId, sessionToken, queryName):
+    viewDataList = []
+    viewDataResponse = ViewDataResponse(200)
+    viewDataResponseBody = ViewDataResponseBody(True, "OK", "Data successfully fetched.")
+
+    if (queryName == 'viewData'):
+        list1 = [
+            VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
+            VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
+            VDListObject(title = 'Card Deck', icon = 'domo_active.png', domo = True, link = 'https://www.domo.com/')
+        ]
+        list2 = [
+            VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
+            VDListObject(title = 'Air program manager (A3)', icon = 'tool_disabled.png', link = '#')
+        ]
+        list3 = [
+            VDListObject(title = 'Hotel program analytics', icon = 'manager_disabled.png', link = '#'),
+            VDListObject(title = 'Hotel program manager (HPM)', icon = 'tool_disabled.png', link = '#')
+        ]
+        viewDataList = [
+            ViewData(title = '360 analytics', icon = '360_console.png', disabled = False, list = list1),
+            ViewData(title = 'air', icon = 'air_console.png', disabled = True, list = list2),
+            ViewData(title = 'hotel', icon = 'hotel_console.png', disabled = True, list = list3)
+        ]
+    if (queryName == 'infoData'):
+        viewDataList = [
+            ViewData(title = 'Webinar Name', description = 'Information about webinar', 
+                icon = 'webinar_disabled.png', disabled = True, button = 'register'),
+            ViewData(title = 'Document Library', description = 'Information about library',
+                icon = 'library_active.png', disabled = False),
+            ViewData(title = 'Podcast', description = 'Information about podcast',
+                icon = 'podcast_disabled.png', disabled = True, button = 'download'),
+            ViewData(title = 'Item Name', description = 'Information about item',
+                icon = 'item_disabled.png', disabled = True, button = 'download')
+        ]
+
+    viewDataResponseBody.apidataset = viewDataList
+    viewDataResponse.body = viewDataResponseBody
+
+    return viewDataResponse
+
+def get_Opportunities(clientId, sessionToken, limit, cursor, queryName):
+    opportunitiesResponse = OpportunitiesResponse(200)
+    opportunitiesResponseBody = OpportunitiesResponseBody(True, "OK", "Data successfully fetched.")
+
+    if (queryName == 'opportunities'):
         opportunities_list = [
             DashboardData(title = 'Expenses approved above rate caps / per diems', value = '27% /$375K', unit = 'impact'),
             DashboardData(title = 'ABR higher than ANR', value = '30% / $500K', unit = 'impact'),
@@ -784,9 +857,17 @@ class Query(graphene.ObjectType):
         if (cursor - limit >= 0):
             prevCursor = cursor - limit
 
-        return Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
+        opportunitiesResponseBody.apidataset = Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
 
-    def resolve_riskAreas(self, info, limit = None, cursor = 0):
+    opportunitiesResponse.body = opportunitiesResponseBody
+
+    return opportunitiesResponse
+
+def get_RiskAreas(clientId, sessionToken, limit, cursor, queryName):
+    riskAreasResponse = RiskAreasResponse(200)
+    riskAreasResponseBody = RiskAreasResponseBody(True, "OK", "Data successfully fetched.")
+
+    if (queryName == 'riskAreas'):
         risk_areas_list = [
             DashboardData(title = 'Number of markets with ATP change more than 15%', value = '10'),
             DashboardData(title = 'Number of markets with rate availability lower than 80%', value = '14'),
@@ -808,60 +889,108 @@ class Query(graphene.ObjectType):
         if (cursor - limit >= 0):
             prevCursor = cursor - limit
 
-        return RiskAreas(prevCursor, newCursor, totalOpportunities, hasNext, risk_areas_list[cursor:newCursor])
+        riskAreasResponseBody.apidataset = RiskAreas(prevCursor, newCursor, totalOpportunities, hasNext, risk_areas_list[cursor:newCursor])
 
-    def resolve_upcomingActions(self, info):
-        upcoming_actions_list = [
-            SidebarData('October 31, 2018', '2nd Round Hotel Negotiations Due', 'flag.png', False),
-            SidebarData('January 31, 2018', 'Hotel Audits Due', 'flag.png', False),
-            SidebarData('Febuary 11, 2019', 'Delta Contract Expires', 'contracts.png', False)
-        ]
-        return upcoming_actions_list
+    riskAreasResponse.body = riskAreasResponseBody
 
-    def resolve_activeAlerts(self, info):
-        active_alert_list = [
-            SidebarData('', 'Leakage to Program is 3.5', 'air.png', True),
-            SidebarData('', 'Performance against target is 6.5', 'air.png', True),
-            SidebarData('', 'Performance against target is 6.1', 'air.png', True),
-            SidebarData('', 'ATP to ancillary spend is 5.2', 'air.png', True)
-        ]
-        return active_alert_list
+    return riskAreasResponse
 
-    def resolve_viewData(self, info):
-        list1 = [
-            VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
-            VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
-            VDListObject(title = 'Card Deck', icon = 'domo_active.png', domo = True, link = 'https://www.domo.com/')
-        ]
-        list2 = [
-            VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
-            VDListObject(title = 'Air program manager (A3)', icon = 'tool_disabled.png', link = '#')
-        ]
-        list3 = [
-            VDListObject(title = 'Hotel program analytics', icon = 'manager_disabled.png', link = '#'),
-            VDListObject(title = 'Hotel program manager (HPM)', icon = 'tool_disabled.png', link = '#')
-        ]
+class Query(graphene.ObjectType):
+    login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
+    logout = graphene.Field(LogoutResponse, sessionToken=graphene.String())
+    
+    airSummary = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airTraffic = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airAirlines = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    airCabins = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    donut = graphene.Field(AirRouteResponse, clientId=graphene.Int(), sessionToken=graphene.String(), title=graphene.String())
 
-        view_data_list = [
-            ViewData(title = '360 analytics', icon = '360_console.png', disabled = False, list = list1),
-            ViewData(title = 'air', icon = 'air_console.png', disabled = True, list = list2),
-            ViewData(title = 'hotel', icon = 'hotel_console.png', disabled = True, list = list3)
-        ]
+    hotelSummary = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    roomNights = graphene.Field(RoomNightsResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    hotelSpend = graphene.Field(HotelDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    topHotelChains = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    topHotelTiers = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String(), title=graphene.String())
 
-        return view_data_list
+    advitoUser = graphene.Field(AdvitoUser)
+    
+    #programPerformance = graphene.List(DashboardData)
+    programPerformance = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    noChangeSince = graphene.Field(NoChangeSinceResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    personaList = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    opportunities = graphene.Field(OpportunitiesResponse, clientId=graphene.Int(), sessionToken=graphene.String(), 
+        limit=graphene.Int(), cursor=graphene.Int())
+    riskAreas = graphene.Field(RiskAreasResponse, clientId=graphene.Int(), sessionToken=graphene.String(),
+        limit=graphene.Int(), cursor=graphene.Int())
+    upcomingActions = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    activeAlerts = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    viewData = graphene.Field(ViewDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    infoData = graphene.Field(ViewDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
+    
+    def resolve_login(self, info, username, password):
+        return user_login(username, password)  
 
-    def resolve_infoData(self, info):
-        info_data_list = [
-            ViewData(title = 'Webinar Name', description = 'Information about webinar', 
-                icon = 'webinar_disabled.png', disabled = True, button = 'register'),
-            ViewData(title = 'Document Library', description = 'Information about library',
-                icon = 'library_active.png', disabled = False),
-            ViewData(title = 'Podcast', description = 'Information about podcast',
-                icon = 'podcast_disabled.png', disabled = True, button = 'download'),
-            ViewData(title = 'Item Name', description = 'Information about item',
-                icon = 'item_disabled.png', disabled = True, button = 'download')
-        ]
-        return info_data_list
+    def resolve_logout(self, info, sessionToken):
+        return user_logout(sessionToken)
+
+    def resolve_airSummary(self, info, clientId, sessionToken):
+        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air', 'udf_story_air')
+
+    def resolve_airTraffic(self, info, clientId, sessionToken):
+        return get_air_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_traffic', 'udf_story_air_traffic')
+
+    def resolve_airAirlines(self, info, clientId, sessionToken):
+        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_airlines', 'udf_story_air_airlines')
+
+    def resolve_airCabins(self, info, clientId, sessionToken):
+        return get_airline_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_cabins', 'udf_story_air_cabins')
+
+    def resolve_donut(self, info, clientId, sessionToken, title):
+        if (title in ['airRoot', 'transatlantic', 'unitedStates', 'jfk']):
+            return get_airroute_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_air_routes', 'udf_story_air_routes', title)
+        elif (title in ['hotelRoot', 'europe', 'unitedKingdom']):
+            return get_airroute_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4', title)
+
+    def resolve_hotelSummary(self, info, clientId, sessionToken):
+        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel', 'udf_story_hotel')
+    
+    def resolve_roomNights(self, info, clientId, sessionToken):
+        return get_roomnight_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4')
+
+    def resolve_hotelSpend(self, info, clientId, sessionToken):
+        return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_1', 'udf_story_hotel_1')
+
+    def resolve_topHotelChains(self, info, clientId, sessionToken):
+        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_2', 'udf_story_hotel_2')
+
+    def resolve_topHotelTiers(self, info, clientId, sessionToken):
+        return get_hotelchain_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_3', 'udf_story_hotel_3')
+
+    def resolve_programPerformance(self, info, clientId, sessionToken):
+        return get_DashBoardData_List(clientId, sessionToken, 'program_performance')
+
+    def resolve_noChangeSince(self, info, clientId, sessionToken):
+        return get_noChangeSince(clientId, sessionToken)
+
+    def resolve_personaList(self, info, clientId, sessionToken):
+        return get_DashBoardData_List(clientId, sessionToken, 'persona_list')
+
+    def resolve_opportunities(self, info, clientId, sessionToken, limit = None, cursor = 0):
+        return get_Opportunities(clientId, sessionToken, limit, cursor, 'opportunities')
+
+    def resolve_riskAreas(self, info, clientId, sessionToken, limit = None, cursor = 0):
+        return get_RiskAreas(clientId, sessionToken, limit, cursor, 'riskAreas')
+
+    def resolve_upcomingActions(self, info, clientId, sessionToken):
+        return get_DashBoardData_List(clientId, sessionToken, 'upcomingActions')
+
+    def resolve_activeAlerts(self, info, clientId, sessionToken):
+        return get_DashBoardData_List(clientId, sessionToken, 'activeAlerts')
+
+    def resolve_viewData(self, info, clientId, sessionToken):
+        return get_ViewData_List(clientId, sessionToken, 'viewData')
+
+    def resolve_infoData(self, info, clientId, sessionToken):
+        return get_ViewData_List(clientId, sessionToken, 'infoData')
 
 schema = graphene.Schema(query=Query, mutation=MyMutations)
 
