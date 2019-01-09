@@ -524,16 +524,38 @@
 #  }
 #}
 
-#{
-#  programPerformance
-#  {
-#    title
-#    value
-#    unit
-#  }
-#}
+{
+  programPerformance(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        value
+        unit
+      }
+    }
+  }
+}
 
-#{noChangeSince}
+{
+  noChangeSince(clientId:2, sessionToken:"T/BMATVoKvLXnR8DAPIGiA==") 
+  {
+  statusCode
+  body
+    {
+    apicode
+    apimessage
+    success
+    apidataset
+  	}
+	}
+}
 
 
 
@@ -578,91 +600,163 @@
 #  }
 #}
 
-#{
-#  personaList 
-#  {
-#    title
-#    value
-#    programShare
-#    color
-#  }
-#}
+{
+  personaList(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        value
+        programShare
+        color
+      }
+    }
+  }
+}
 
-#{
-#  opportunities(limit: 4, cursor: 2)
-#  {
-#    prevCursor
-#    cursor
-#    totalOpportunities
-#    hasNext
-#    opportunities
-#    {
-#      title
-#      value
-#      unit
-#    }
-#  }
-#}
+{
+  opportunities(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==", limit: 4, cursor: 2)
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        prevCursor
+        cursor
+        totalOpportunities
+        hasNext
+        opportunities
+        {
+          title
+          value
+          unit
+        }
+      }
+    }
+  }
+}
 
-#{
-#  riskAreas(limit: 4, cursor: 1)
-#  {
-#    prevCursor
-#    cursor
-#    totalOpportunities
-#    hasNext
-#    riskAreas
-#    {
-#      title
-#      value
-#    }
-#  }
-#}
+{
+  riskAreas(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==", limit: 4, cursor: 2)
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        prevCursor
+        cursor
+        totalOpportunities
+        hasNext
+        riskAreas
+        {
+          title
+          value
+        }
+      }
+    }
+  }
+}
 
-#{
-#  activeAlerts {
-#    header
-#    secondaryHeader
-#    icon
-#    alert
-#  }
-#}
+{
+  activeAlerts(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        header
+        secondaryHeader
+        icon
+        alert
+      }
+    }
+  }
+}
 
-#{
-#  upcomingActions {
-#    header
-#    secondaryHeader
-#    icon
-#    alert
-#  }
-#}
+{
+  upcomingActions(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        header
+        secondaryHeader
+        icon
+        alert
+      }
+    }
+  }
+}
 
-#{
-#  viewData
-#  {
-#    title
-#    icon
-#    disabled
-#    list
-#    {
-#      title
-#      icon
-#      domo
-#      link
-#    }
-#  }
-#}
+{
+  viewData(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        icon
+        disabled
+        list
+        {
+          title
+          icon
+          domo
+          link
+        }
+      }
+    }
+  }
+}
 
-#{
-#  infoData
-#  {
-#    title
-#    description
-#    icon
-#    disabled
-#    button
-#  }
-#}
+{
+  infoData(clientId:2, sessionToken:"p5QRAI6at5Fq3iYJXTqkHQ==")
+  {
+    statusCode
+    body 
+    {
+      success
+      apicode
+      apimessage
+      apidataset
+      {
+        title
+        description
+        icon
+        disabled
+        button
+      }
+    }
+  }
+}
 
 #mutation myFirstMutation {
 #  createAdvitoUser(
