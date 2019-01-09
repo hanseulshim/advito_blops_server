@@ -378,8 +378,29 @@ def get_hotelchain_data(clientId, sessionToken, functionName, story_name):
 
     return hotelchainResponse
 
+# Dummy function to make sure the user is validated for the resolvers returning hardcoded data.
+def validate_user(clientId, sessionToken):
+    payload = {"clientId": clientId, "sessionToken": sessionToken}
+    payload_str = json.dumps(payload)
+    encoded_str = payload_str.encode('ascii')
+
+    invoke_response = lambda_client.invoke(
+        FunctionName = 'python-lambdas-dev-udf_story_hotel_3',
+        InvocationType = 'RequestResponse',
+        ClientContext = base64.b64encode(encoded_str).decode('utf-8'),
+        Payload=bytes(encoded_str)
+    )
+
+    response = invoke_response['Payload'].read().decode('utf-8')
+    response_dict = json.loads(response)
+    response_payload = json.loads(response_dict["body"])
+
+    return (response_dict, response_payload)
+
 def get_noChangeSince(clientId, sessionToken):
-    if (len(sessionToken) != 0):
+    (response_dict, response_payload) = validate_user(clientId, sessionToken)
+
+    if (response_dict['statusCode'] == 200):
         noChangeSinceResponse = NoChangeSinceResponse(200)
         noChangeSinceResponseBody = NoChangeSinceResponseBody(True, "OK", "Data successfully fetched.", "July 30")
     else:
@@ -390,43 +411,46 @@ def get_noChangeSince(clientId, sessionToken):
     return noChangeSinceResponse
 
 def get_DashBoardData_List(clientId, sessionToken, queryName):
-    dashboardDataList = []
-    dashboardDataResponse = DashboardDataResponse(200)
-    dashboardDataResponseBody = DashboardDataResponseBody(True, "OK", "Data successfully fetched.")
+    (response_dict, response_payload) = validate_user(clientId, sessionToken)
 
-    if (queryName == 'program_performance'):
-        dashboardDataList = [
-            DashboardData(title = 'Average Total Trip Cost', value = '$2,754', unit = ''),
-            DashboardData(title = 'Booking Outside of Agency', value = '12% / $360K', unit = 'impact'),
-            DashboardData(title = 'Expenses Out of Policy', value = '23% / $690K', unit = 'impact')
-        ]
-    elif (queryName == 'persona_list'):
-        dashboardDataList = [
-            DashboardData(title = 'road warrior', value = '$3,350', programShare = 25, color = '#ACD2CF'),
-            DashboardData(title = 'executive', value = '$3,150', programShare = 40, color = '#90C3C1'),
-            DashboardData(title = 'deal maker', value = '$2,561', programShare = 15, color = '#81BDB9'),
-            DashboardData(title = 'on demand', value = '$1,955', programShare = 10, color = '#71B5B1')
-        ]
-    elif (queryName == 'activeAlerts'):
-        dashboardDataList = [
-            DashboardData(header = '', secondaryHeader = 'Leakage to Program is 3.5', 
-                icon = 'air.png', alert = True),
-            DashboardData(header = '', secondaryHeader = 'Performance against target is 6.5', 
-                icon = 'air.png', alert = True),
-            DashboardData(header = '', secondaryHeader = 'Performance against target is 6.1', 
-                icon = 'air.png', alert = True),
-            DashboardData(header = '', secondaryHeader = 'ATP to ancillary spend is 5.2', 
-                icon = 'air.png', alert = True)
-        ]
-    elif (queryName == 'upcomingActions'):
-        dashboardDataList = [
-            DashboardData(header = 'October 31, 2018', secondaryHeader = '2nd Round Hotel Negotiations Due', 
-                icon = 'flag.png', alert = False),
-            DashboardData(header = 'January 31, 2018', secondaryHeader = 'Hotel Audits Due', 
-                icon = 'flag.png', alert = False),
-            DashboardData(header = 'Febuary 11, 2019', secondaryHeader = 'Delta Contract Expires', 
-                icon = 'flag.png', alert = False)
-        ]
+    dashboardDataList = []
+    dashboardDataResponse = DashboardDataResponse(response_dict['statusCode'])
+    dashboardDataResponseBody = DashboardDataResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
+
+    if (response_dict['statusCode'] == 200):
+        if (queryName == 'program_performance'):
+            dashboardDataList = [
+                DashboardData(title = 'Average Total Trip Cost', value = '$2,754', unit = ''),
+                DashboardData(title = 'Booking Outside of Agency', value = '12% / $360K', unit = 'impact'),
+                DashboardData(title = 'Expenses Out of Policy', value = '23% / $690K', unit = 'impact')
+            ]
+        elif (queryName == 'persona_list'):
+            dashboardDataList = [
+                DashboardData(title = 'road warrior', value = '$3,350', programShare = 25, color = '#ACD2CF'),
+                DashboardData(title = 'executive', value = '$3,150', programShare = 40, color = '#90C3C1'),
+                DashboardData(title = 'deal maker', value = '$2,561', programShare = 15, color = '#81BDB9'),
+                DashboardData(title = 'on demand', value = '$1,955', programShare = 10, color = '#71B5B1')
+            ]
+        elif (queryName == 'activeAlerts'):
+            dashboardDataList = [
+                DashboardData(header = '', secondaryHeader = 'Leakage to Program is 3.5', 
+                    icon = 'air.png', alert = True),
+                DashboardData(header = '', secondaryHeader = 'Performance against target is 6.5', 
+                    icon = 'air.png', alert = True),
+                DashboardData(header = '', secondaryHeader = 'Performance against target is 6.1', 
+                    icon = 'air.png', alert = True),
+                DashboardData(header = '', secondaryHeader = 'ATP to ancillary spend is 5.2', 
+                    icon = 'air.png', alert = True)
+            ]
+        elif (queryName == 'upcomingActions'):
+            dashboardDataList = [
+                DashboardData(header = 'October 31, 2018', secondaryHeader = '2nd Round Hotel Negotiations Due', 
+                    icon = 'flag.png', alert = False),
+                DashboardData(header = 'January 31, 2018', secondaryHeader = 'Hotel Audits Due', 
+                    icon = 'flag.png', alert = False),
+                DashboardData(header = 'Febuary 11, 2019', secondaryHeader = 'Delta Contract Expires', 
+                    icon = 'flag.png', alert = False)
+            ]
     
     dashboardDataResponseBody.apidataset = dashboardDataList
     dashboardDataResponse.body = dashboardDataResponseBody
@@ -434,40 +458,42 @@ def get_DashBoardData_List(clientId, sessionToken, queryName):
     return dashboardDataResponse
 
 def get_ViewData_List(clientId, sessionToken, queryName):
+    (response_dict, response_payload) = validate_user(clientId, sessionToken)
     viewDataList = []
-    viewDataResponse = ViewDataResponse(200)
-    viewDataResponseBody = ViewDataResponseBody(True, "OK", "Data successfully fetched.")
+    viewDataResponse = ViewDataResponse(response_dict['statusCode'])
+    viewDataResponseBody = ViewDataResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
 
-    if (queryName == 'viewData'):
-        list1 = [
-            VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
-            VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
-            VDListObject(title = 'Card Deck', icon = 'domo_active.png', domo = True, link = 'https://www.domo.com/')
-        ]
-        list2 = [
-            VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
-            VDListObject(title = 'Air program manager (A3)', icon = 'tool_disabled.png', link = '#')
-        ]
-        list3 = [
-            VDListObject(title = 'Hotel program analytics', icon = 'manager_disabled.png', link = '#'),
-            VDListObject(title = 'Hotel program manager (HPM)', icon = 'tool_disabled.png', link = '#')
-        ]
-        viewDataList = [
-            ViewData(title = '360 analytics', icon = '360_console.png', disabled = False, list = list1),
-            ViewData(title = 'air', icon = 'air_console.png', disabled = True, list = list2),
-            ViewData(title = 'hotel', icon = 'hotel_console.png', disabled = True, list = list3)
-        ]
-    if (queryName == 'infoData'):
-        viewDataList = [
-            ViewData(title = 'Webinar Name', description = 'Information about webinar', 
-                icon = 'webinar_disabled.png', disabled = True, button = 'register'),
-            ViewData(title = 'Document Library', description = 'Information about library',
-                icon = 'library_active.png', disabled = False),
-            ViewData(title = 'Podcast', description = 'Information about podcast',
-                icon = 'podcast_disabled.png', disabled = True, button = 'download'),
-            ViewData(title = 'Item Name', description = 'Information about item',
-                icon = 'item_disabled.png', disabled = True, button = 'download')
-        ]
+    if (response_dict['statusCode'] == 200):
+        if (queryName == 'viewData'):
+            list1 = [
+                VDListObject(title = 'Travel Manager Dashboard', icon = 'manager_active.png', link = '/travel'),
+                VDListObject(title = 'Executive Dashboard', icon = 'manager_active.png', link = '/executive'),
+                VDListObject(title = 'Card Deck', icon = 'domo_active.png', domo = True, link = 'https://www.domo.com/')
+            ]
+            list2 = [
+                VDListObject(title = 'Air program analytics', icon = 'manager_disabled.png', link = '#'),
+                VDListObject(title = 'Air program manager (A3)', icon = 'tool_disabled.png', link = '#')
+            ]
+            list3 = [
+                VDListObject(title = 'Hotel program analytics', icon = 'manager_disabled.png', link = '#'),
+                VDListObject(title = 'Hotel program manager (HPM)', icon = 'tool_disabled.png', link = '#')
+            ]
+            viewDataList = [
+                ViewData(title = '360 analytics', icon = '360_console.png', disabled = False, list = list1),
+                ViewData(title = 'air', icon = 'air_console.png', disabled = True, list = list2),
+                ViewData(title = 'hotel', icon = 'hotel_console.png', disabled = True, list = list3)
+            ]
+        if (queryName == 'infoData'):
+            viewDataList = [
+                ViewData(title = 'Webinar Name', description = 'Information about webinar', 
+                    icon = 'webinar_disabled.png', disabled = True, button = 'register'),
+                ViewData(title = 'Document Library', description = 'Information about library',
+                    icon = 'library_active.png', disabled = False),
+                ViewData(title = 'Podcast', description = 'Information about podcast',
+                    icon = 'podcast_disabled.png', disabled = True, button = 'download'),
+                ViewData(title = 'Item Name', description = 'Information about item',
+                    icon = 'item_disabled.png', disabled = True, button = 'download')
+            ]
 
     viewDataResponseBody.apidataset = viewDataList
     viewDataResponse.body = viewDataResponseBody
@@ -475,64 +501,68 @@ def get_ViewData_List(clientId, sessionToken, queryName):
     return viewDataResponse
 
 def get_Opportunities(clientId, sessionToken, limit, cursor, queryName):
-    opportunitiesResponse = OpportunitiesResponse(200)
-    opportunitiesResponseBody = OpportunitiesResponseBody(True, "OK", "Data successfully fetched.")
+    (response_dict, response_payload) = validate_user(clientId, sessionToken)
+    opportunitiesResponse = OpportunitiesResponse(response_dict['statusCode'])
+    opportunitiesResponseBody = OpportunitiesResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
 
-    if (queryName == 'opportunities'):
-        opportunities_list = [
-            DashboardData(title = 'Expenses approved above rate caps / per diems', value = '27% /$375K', unit = 'impact'),
-            DashboardData(title = 'ABR higher than ANR', value = '30% / $500K', unit = 'impact'),
-            DashboardData(title = 'NRT Utilization/Loss', value = '83% / $23K', unit = 'expired'),
-            DashboardData(title = 'ANR higher than ABR', value = '25% / $100K', unit = 'expired'),
-            DashboardData(title = 'New item', value = 'XX% / $XX', unit = 'impact'),
-            DashboardData(title = 'New item', value = 'XX% / $XX', unit = 'expired'),
-            DashboardData(title = 'New item', value = 'XX% / $XX', unit = ''),
-        ]
+    if(response_dict['statusCode'] == 200):
+        if (queryName == 'opportunities'):
+            opportunities_list = [
+                DashboardData(title = 'Expenses approved above rate caps / per diems', value = '27% /$375K', unit = 'impact'),
+                DashboardData(title = 'ABR higher than ANR', value = '30% / $500K', unit = 'impact'),
+                DashboardData(title = 'NRT Utilization/Loss', value = '83% / $23K', unit = 'expired'),
+                DashboardData(title = 'ANR higher than ABR', value = '25% / $100K', unit = 'expired'),
+                DashboardData(title = 'New item', value = 'XX% / $XX', unit = 'impact'),
+                DashboardData(title = 'New item', value = 'XX% / $XX', unit = 'expired'),
+                DashboardData(title = 'New item', value = 'XX% / $XX', unit = ''),
+            ]
 
-        if (limit == None):
-            limit = len(opportunities_list)
+            if (limit == None):
+                limit = len(opportunities_list)
 
-        totalOpportunities = len(opportunities_list)
-        newCursor = cursor + limit
-        prevCursor = 0
-        hasNext = newCursor < totalOpportunities
+            totalOpportunities = len(opportunities_list)
+            newCursor = cursor + limit
+            prevCursor = 0
+            hasNext = newCursor < totalOpportunities
 
-        if (cursor - limit >= 0):
-            prevCursor = cursor - limit
+            if (cursor - limit >= 0):
+                prevCursor = cursor - limit
 
-        opportunitiesResponseBody.apidataset = Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
+            opportunitiesResponseBody.apidataset = Opportunities(prevCursor, newCursor, totalOpportunities, hasNext, opportunities_list[cursor:newCursor])
 
     opportunitiesResponse.body = opportunitiesResponseBody
 
     return opportunitiesResponse
 
 def get_RiskAreas(clientId, sessionToken, limit, cursor, queryName):
-    riskAreasResponse = RiskAreasResponse(200)
-    riskAreasResponseBody = RiskAreasResponseBody(True, "OK", "Data successfully fetched.")
+    (response_dict, response_payload) = validate_user(clientId, sessionToken)
+    riskAreasResponse = RiskAreasResponse(response_dict['statusCode'])
+    riskAreasResponseBody = RiskAreasResponseBody(response_payload['success'], response_payload['apicode'], response_payload['apimessage'])
 
-    if (queryName == 'riskAreas'):
-        risk_areas_list = [
-            DashboardData(title = 'Number of markets with ATP change more than 15%', value = '10'),
-            DashboardData(title = 'Number of markets with rate availability lower than 80%', value = '14'),
-            DashboardData(title = 'Travelers in HRC/Markets', value = '512'),
-            DashboardData(title = 'Hosts in TBS/Markets', value = '125'),
-            DashboardData(title = 'New item', value = 'XXX'),
-            DashboardData(title = 'New item', value = 'XXX'),
-            DashboardData(title = 'New item', value = 'XXX')
-        ]
+    if(response_dict['statusCode'] == 200):
+        if (queryName == 'riskAreas'):
+            risk_areas_list = [
+                DashboardData(title = 'Number of markets with ATP change more than 15%', value = '10'),
+                DashboardData(title = 'Number of markets with rate availability lower than 80%', value = '14'),
+                DashboardData(title = 'Travelers in HRC/Markets', value = '512'),
+                DashboardData(title = 'Hosts in TBS/Markets', value = '125'),
+                DashboardData(title = 'New item', value = 'XXX'),
+                DashboardData(title = 'New item', value = 'XXX'),
+                DashboardData(title = 'New item', value = 'XXX')
+            ]
 
-        if (limit == None):
-            limit = len(risk_areas_list)
+            if (limit == None):
+                limit = len(risk_areas_list)
 
-        totalOpportunities = len(risk_areas_list)
-        newCursor = cursor + limit
-        prevCursor = 0
-        hasNext = newCursor < totalOpportunities
+            totalOpportunities = len(risk_areas_list)
+            newCursor = cursor + limit
+            prevCursor = 0
+            hasNext = newCursor < totalOpportunities
 
-        if (cursor - limit >= 0):
-            prevCursor = cursor - limit
+            if (cursor - limit >= 0):
+                prevCursor = cursor - limit
 
-        riskAreasResponseBody.apidataset = RiskAreas(prevCursor, newCursor, totalOpportunities, hasNext, risk_areas_list[cursor:newCursor])
+            riskAreasResponseBody.apidataset = RiskAreas(prevCursor, newCursor, totalOpportunities, hasNext, risk_areas_list[cursor:newCursor])
 
     riskAreasResponse.body = riskAreasResponseBody
 
