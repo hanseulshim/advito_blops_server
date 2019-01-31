@@ -26,8 +26,8 @@ def deserialize_user_create(user_json):
         email = user_json['email'],
         phone = user_json['phone'],
         profile_picture_path = user_json.get('profilePicturePath', None),
-        timezone_default = user_json.get('timezoneDefault', None),
-        language_default = user_json.get('languageDefault', None)
+        default_timezone = user_json.get('timezoneDefault', None),
+        default_language = user_json.get('languageDefault', None)
     )
     return user
 
