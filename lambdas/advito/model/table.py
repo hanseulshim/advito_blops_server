@@ -1,5 +1,5 @@
 # coding: utf-8
-from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime, ForeignKey, Integer, Numeric, String, Table, Text, UniqueConstraint, text
+from sqlalchemy import BigInteger, Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, JSON, Numeric, String, Table, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -49,6 +49,26 @@ class Agency(Base):
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
 
+class Alert(Base):
+    __tablename__ = 'alert'
+
+    id = Column(BigInteger, primary_key=True)
+    application_id = Column(BigInteger, nullable=False)
+    user_id = Column(BigInteger)
+    role_id = Column(BigInteger)
+    client_id = Column(BigInteger)
+    alert_status = Column(String(32), nullable=False, server_default=text("'Active'::character varying"))
+    alert_type = Column(String(32), nullable=False)
+    alert_timestamp = Column(DateTime, nullable=False)
+    alert_expiration_timestamp = Column(DateTime)
+    is_deleted = Column(Boolean, nullable=False, server_default=text("false"))
+    alert_text = Column(String(256), nullable=False)
+    alert_detail = Column(String(256))
+    alert_note = Column(Text)
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+
 class Client(Base):
     __tablename__ = 'client'
 
@@ -56,7 +76,9 @@ class Client(Base):
     client_name = Column(String(32), nullable=False)
     client_name_full = Column(String(64), nullable=False)
     client_tag = Column(String(8), nullable=False)
-    client_code = Column(String(8), nullable=False)
+    client_code = Column(String(32))
+    lanyon_client_code = Column(String(16))
+    gcn = Column(String(16))
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     logo_path = Column(String(128))
     description = Column(Text)
@@ -159,6 +181,30 @@ t_temp_import_agency = Table(
 )
 
 
+class TempImportAirport(Base):
+    __tablename__ = 'temp_import_airport'
+
+    airport_code = Column(String(255))
+    airport_name = Column(String(255))
+    airport_address = Column(String(255))
+    latitude = Column(String(255))
+    longitude = Column(String(255))
+    airport_name2 = Column(String(255))
+    airport_type = Column(String(255))
+    city_code = Column(String(255))
+    city_name = Column(String(255))
+    state_code = Column(String(255))
+    state_name = Column(String(255))
+    country_code = Column(String(255))
+    country_name = Column(String(255))
+    subregion_code = Column(String(255))
+    subregion_name = Column(String(255))
+    subregion_name_short = Column(String(255))
+    region_code = Column(String(255))
+    region_name = Column(String(255))
+    id = Column(String(255), primary_key=True)
+
+
 t_temp_import_reason_codes = Table(
     'temp_import_reason_codes', metadata,
     Column('agency', String(255)),
@@ -169,6 +215,273 @@ t_temp_import_reason_codes = Table(
     Column('local_reason_code_desc', String(255)),
     Column('global_reason_code', String(255)),
     Column('global_reason_code_desc', String(255))
+)
+
+
+class TempStoryAir01Barchart(Base):
+    __tablename__ = 'temp_story_air01_barchart'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255), nullable=False)
+    type = Column(String(255), nullable=False)
+
+
+t_temp_story_air01_barchart_data = Table(
+    'temp_story_air01_barchart_data', metadata,
+    Column('barchartid', BigInteger),
+    Column('category', String(255)),
+    Column('value', Integer),
+    Column('change', String(255))
+)
+
+
+class TempStoryAir01Kpi(Base):
+    __tablename__ = 'temp_story_air01_kpi'
+
+    title = Column(String(255), primary_key=True)
+    kpi_value = Column(Integer)
+    delta = Column(Float)
+    change = Column(String(255))
+    kpi_type = Column(String(255))
+    icon = Column(String(255))
+    percent = Column(Float)
+
+
+class TempStoryAir01Location(Base):
+    __tablename__ = 'temp_story_air01_location'
+
+    id = Column(BigInteger, primary_key=True)
+    thickness = Column(Integer)
+    height = Column(Float)
+    opacity = Column(Float)
+    _from = Column('from', String(255))
+    to = Column(String(255))
+
+
+class TempStoryAir01LocationCoord(Base):
+    __tablename__ = 'temp_story_air01_location_coord'
+
+    id = Column(BigInteger, primary_key=True)
+    locationid = Column(BigInteger, nullable=False)
+    latitude = Column(Numeric(10, 7), nullable=False)
+    longitude = Column(Numeric(10, 7), nullable=False)
+
+
+class TempStoryAir02Bar(Base):
+    __tablename__ = 'temp_story_air02_bar'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    type = Column(String(255))
+
+
+class TempStoryAir02BarDatum(Base):
+    __tablename__ = 'temp_story_air02_bar_data'
+
+    id = Column(BigInteger, primary_key=True)
+    barid = Column(BigInteger)
+    category = Column(String(255))
+    value = Column(Integer)
+    change = Column(String(255))
+
+
+class TempStoryAir02Kpi(Base):
+    __tablename__ = 'temp_story_air02_kpi'
+
+    title = Column(String(255), primary_key=True)
+    value = Column(Integer)
+    delta = Column(Integer)
+    change = Column(String(255))
+    type = Column(String(255))
+    icon = Column(String(255))
+    percent = Column(Float)
+
+
+class TempStoryAir02Location(Base):
+    __tablename__ = 'temp_story_air02_location'
+
+    id = Column(BigInteger, primary_key=True)
+    thickness = Column(Integer)
+    height = Column(Float)
+    opacity = Column(Float)
+    _from = Column('from', String(255))
+    to = Column(String(255))
+
+
+class TempStoryAir02LocationCoord(Base):
+    __tablename__ = 'temp_story_air02_location_coord'
+
+    id = Column(BigInteger, primary_key=True)
+    locationid = Column(BigInteger, nullable=False)
+    latitude = Column(Numeric(10, 7), nullable=False)
+    longitude = Column(Numeric(10, 7), nullable=False)
+
+
+class TempStoryAir03Category(Base):
+    __tablename__ = 'temp_story_air03_category'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    icon = Column(String(255))
+    total = Column(Integer)
+
+
+class TempStoryAir03Subcategory(Base):
+    __tablename__ = 'temp_story_air03_subcategory'
+
+    id = Column(BigInteger, primary_key=True)
+    categoryid = Column(BigInteger)
+    name = Column(String(255))
+    value = Column(String(255))
+    delta = Column(String(255))
+    color = Column(String(255))
+    percent = Column(Float)
+
+
+class TempStoryAir04Bar(Base):
+    __tablename__ = 'temp_story_air04_bar'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    type = Column(String(255))
+
+
+class TempStoryAir04BarDatum(Base):
+    __tablename__ = 'temp_story_air04_bar_data'
+
+    id = Column(BigInteger, primary_key=True)
+    barid = Column(BigInteger)
+    category = Column(String(255))
+    change = Column(String(255))
+    value = Column(Integer)
+
+
+class TempStoryAir04Category(Base):
+    __tablename__ = 'temp_story_air04_category'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    icon = Column(String(255))
+    total = Column(Integer)
+
+
+class TempStoryAir04Subcategory(Base):
+    __tablename__ = 'temp_story_air04_subcategory'
+
+    id = Column(BigInteger, primary_key=True)
+    categoryid = Column(BigInteger)
+    name = Column(String(255))
+    value = Column(Integer)
+    delta = Column(String(255))
+    color = Column(String(255))
+    percent = Column(Float)
+
+
+t_temp_story_air05_airport = Table(
+    'temp_story_air05_airport', metadata,
+    Column('category', String(255)),
+    Column('value', Integer),
+    Column('prop', String(255))
+)
+
+
+class TempStoryAir05Color(Base):
+    __tablename__ = 'temp_story_air05_colors'
+
+    id = Column(BigInteger, primary_key=True)
+    section = Column(String(255), nullable=False)
+    color_order = Column(Integer)
+    color = Column(String(16))
+
+
+t_temp_story_air05_country = Table(
+    'temp_story_air05_country', metadata,
+    Column('category', String(255)),
+    Column('value', Integer),
+    Column('prop', String(255)),
+    Column('nextProp', String(255))
+)
+
+
+class TempStoryAir05Datum(Base):
+    __tablename__ = 'temp_story_air05_data'
+
+    id = Column(BigInteger, primary_key=True)
+    category = Column(String(255))
+    value = Column(Integer)
+    prop = Column(String(255))
+    nextProp = Column(String(255))
+
+
+class TempStoryAir05Static(Base):
+    __tablename__ = 'temp_story_air05_static'
+
+    id = Column(BigInteger, primary_key=True)
+    section_label = Column(String(64), nullable=False)
+    section_json = Column(JSON, nullable=False)
+
+
+class TempStoryHotel01Bar(Base):
+    __tablename__ = 'temp_story_hotel01_bar'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    type = Column(String(255))
+
+
+class TempStoryHotel01BarDatum(Base):
+    __tablename__ = 'temp_story_hotel01_bar_data'
+
+    id = Column(BigInteger, primary_key=True)
+    barid = Column(BigInteger)
+    category = Column(String(255))
+    value = Column(Integer)
+    delta = Column(Integer)
+    change = Column(String(255))
+    percent = Column(Float)
+
+
+class TempStoryHotel01Kpi(Base):
+    __tablename__ = 'temp_story_hotel01_kpi'
+
+    id = Column(BigInteger, primary_key=True)
+    title = Column(String(255))
+    value = Column(Integer)
+    delta = Column(Integer)
+    change = Column(String(255))
+    type = Column(String(255))
+    icon = Column(String(255))
+    percent = Column(Float)
+
+
+t_temp_story_hotel01_location = Table(
+    'temp_story_hotel01_location', metadata,
+    Column('title', String(255)),
+    Column('radius', Integer),
+    Column('latitude', Numeric(10, 7)),
+    Column('longitude', Numeric(10, 7))
+)
+
+
+class TempStoryStatic(Base):
+    __tablename__ = 'temp_story_static'
+
+    id = Column(BigInteger, primary_key=True)
+    section_label = Column(String(64), nullable=False)
+    section_json = Column(JSON)
+
+
+t_v_city = Table(
+    'v_city', metadata,
+    Column('geo_city_id', BigInteger),
+    Column('geo_country_id', BigInteger),
+    Column('country_name', String(32)),
+    Column('geo_state_id', BigInteger),
+    Column('state_name', String(64)),
+    Column('city_name', String(128)),
+    Column('city_code', String(8)),
+    Column('latitude', Numeric(10, 7)),
+    Column('longitude', Numeric(10, 7))
 )
 
 
@@ -228,13 +541,14 @@ class AdvitoUser(Base):
     name_last = Column(String(64), nullable=False, index=True)
     name_first = Column(String(64), nullable=False)
     is_enabled = Column(Boolean, nullable=False, server_default=text("false"))
+    is_verified = Column(Boolean, nullable=False, server_default=text("false"))
     must_change_pwd = Column(Boolean, nullable=False, server_default=text("false"))
     pwd_expiration = Column(Date)
     email = Column(String(128), nullable=False)
-    phone = Column(String(32))
-    profile_picture_path = Column(String(128))
-    timezone_default = Column(String(128))
-    language_default = Column(String(16))
+    phone = Column(String(64))
+    profile_picture_path = Column(String(256))
+    default_timezone = Column(String(128))
+    default_language = Column(String(16))
     user_salt = Column(String(64))
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
@@ -250,6 +564,7 @@ class ClientUnit(Base):
     unit_name = Column(String(32), nullable=False)
     unit_name_full = Column(String(64), nullable=False)
     unit_tag = Column(String(8), nullable=False)
+    gcn = Column(String(16))
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     description = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
@@ -263,7 +578,7 @@ class GeoState(Base):
 
     id = Column(BigInteger, primary_key=True)
     geo_country_id = Column(ForeignKey('geo_country.id'), nullable=False)
-    state = Column(String(64), nullable=False)
+    state_name = Column(String(64), nullable=False)
     state_code = Column(String(8), nullable=False)
     latitude = Column(Numeric(10, 7))
     longitude = Column(Numeric(10, 7))
@@ -369,17 +684,64 @@ class ClientFeatureLink(Base):
     client = relationship('Client')
 
 
+class GeoCity(Base):
+    __tablename__ = 'geo_city'
+
+    id = Column(BigInteger, primary_key=True)
+    geo_country_id = Column(ForeignKey('geo_country.id'))
+    geo_state_id = Column(ForeignKey('geo_state.id'))
+    city_name = Column(String(128), nullable=False, index=True)
+    city_code = Column(String(8))
+    latitude = Column(Numeric(10, 7))
+    longitude = Column(Numeric(10, 7))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+    geo_country = relationship('GeoCountry')
+    geo_state = relationship('GeoState')
+
+
 class AdvitoUserSessionLog(Base):
     __tablename__ = 'advito_user_session_log'
 
     id = Column(BigInteger, primary_key=True)
+    advito_application_id = Column(ForeignKey('advito_application.id'), nullable=False)
     session_token = Column(ForeignKey('advito_user_session.session_token'), nullable=False)
     log_timestamp = Column(DateTime, nullable=False)
     log_action = Column(String(64), nullable=False)
     log_detail = Column(String(64))
-    log_result_code = Column(String(16))
-    log_summary_json = Column(Text)
+    result_code = Column(String(16))
+    log_object = Column(String(64))
+    log_object_id = Column(BigInteger)
+    summary_json = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
+    advito_application = relationship('AdvitoApplication')
     advito_user_session = relationship('AdvitoUserSession')
+
+
+class Airport(Base):
+    __tablename__ = 'airport'
+
+    id = Column(BigInteger, primary_key=True)
+    airport_name = Column(String(64), nullable=False)
+    airport_code = Column(String(8), nullable=False, unique=True)
+    is_active = Column(Boolean, nullable=False, server_default=text("true"))
+    airport_type = Column(String(32))
+    note = Column(Text)
+    address1 = Column(String(64))
+    address2 = Column(String(64))
+    geo_city_id = Column(ForeignKey('geo_city.id'), nullable=False)
+    geo_state_id = Column(ForeignKey('geo_state.id'))
+    geo_country_id = Column(ForeignKey('geo_country.id'), nullable=False)
+    latitude = Column(Numeric(10, 7))
+    longitude = Column(Numeric(10, 7))
+    region_code = Column(String(8))
+    subregion_code = Column(String(8))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+    geo_city = relationship('GeoCity')
+    geo_country = relationship('GeoCountry')
+    geo_state = relationship('GeoState')
