@@ -10,7 +10,7 @@ app.add_url_rule(
     '/graphql',
     view_func=GraphQLView.as_view('graphql', schema=schema, graphiql=True))
 
-cors = CORS(app, resources={r"/graphql": {"origins": "https://s3.amazonaws.com"}})
+cors = CORS(app)
 
 if __name__ == '__main__':
     app.run(threaded=True, debug=True)
