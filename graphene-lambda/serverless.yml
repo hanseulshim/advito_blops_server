@@ -22,11 +22,16 @@ custom:
 
 # Lambda functions.
 functions:
-  #hello:
-  #  handler: handler.hello
   app:
     handler: wsgi.handler
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
-      - http: POST /graphql
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
