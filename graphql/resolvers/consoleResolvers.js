@@ -8,36 +8,38 @@ const {
   riskAreas,
 } = require('../../data/dashboardData');
 
+const { generateResponse } = require('../helper');
+
 exports.consoleResolvers = {
-  activeAlerts: () => activeAlerts,
-  upcomingActions: () => upcomingActions,
-  infoData: () => infoData,
-  viewData: () => viewData,
-  programPerformance: () => programPerformance,
-  noChangeSince: () => noChangeSince,
-  personaList: () => personaList,
+  activeAlerts: () => generateResponse(activeAlerts),
+  upcomingActions: () => generateResponse(upcomingActions),
+  infoData: () => generateResponse(infoData),
+  viewData: () => generateResponse(viewData),
+  programPerformance: () => generateResponse(programPerformance),
+  noChangeSince: () => generateResponse(noChangeSince),
+  personaList: () => generateResponse(personaList),
   opportunities: (parent, { limit = opportunities.length, cursor = 0 }) => {
     const totalOpportunities = opportunities.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
-    return {
+    return generateResponse({
       prevCursor,
       cursor: newCursor,
       totalOpportunities,
       hasNext: newCursor < totalOpportunities,
       opportunities: opportunities.slice(cursor, newCursor),
-    };
+    });
   },
   riskAreas: (parent, { limit = riskAreas.length, cursor = 0 }) => {
     const totalRiskAreas = riskAreas.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
-    return {
+    return generateResponse({
       prevCursor: prevCursor,
       cursor: newCursor,
       totalRiskAreas,
       hasNext: newCursor < totalRiskAreas,
       riskAreas: riskAreas.slice(cursor, newCursor),
-    };
+    });
   },
 };

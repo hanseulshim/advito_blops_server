@@ -1,17 +1,26 @@
-exports.consoleDefs = `type Action {
-  header: String
-  secondaryHeader: String
-  icon: String
-  alert: Boolean
-}
+const { generateType, generateTypeList, generateQuery } = require('../helper');
 
-type Info {
-  title: String
-  description: String
-  icon: String
-  disabled: Boolean
-  button: String
-}
+exports.consoleDefs = `
+${generateTypeList(
+  'Action',
+  `{
+    header: String
+    secondaryHeader: String
+    icon: String
+    alert: Boolean
+  }`
+)}
+
+${generateTypeList(
+  'Info',
+  `{
+    title: String
+    description: String
+    icon: String
+    disabled: Boolean
+    button: String
+  }`
+)}
 
 type List {
   title: String
@@ -26,60 +35,82 @@ type Opportunity {
   unit: String
 }
 
-type OpportunityFeed {
-  prevCursor: Int
-  cursor: Int
-  totalOpportunities: Int
-  hasNext: Boolean
-  opportunities: [Opportunity]
-}
+${generateType(
+  'OpportunityFeed',
+  `{
+    prevCursor: Int
+    cursor: Int
+    totalOpportunities: Int
+    hasNext: Boolean
+    opportunities: [Opportunity]
+  }`
+)}
 
-type Performance {
-  title: String
-  value: String
-  unit: String
-}
+${generateTypeList(
+  'Performance',
+  `{
+    title: String
+    value: String
+    unit: String
+  }`
+)}
 
-type Persona {
-  title: String
-  value: String
-  programShare: Int
-  color: String
-}
+${generateTypeList(
+  'Persona',
+  `{
+    title: String
+    value: String
+    programShare: Int
+    color: String
+  }`
+)}
 
 type RiskArea {
   title: String
   value: String
 }
 
-type RiskAreaFeed {
-  prevCursor: Int
-  cursor: Int
-  totalRiskAreas: Int
-  hasNext: Boolean
-  riskAreas: [RiskArea]
+${generateType(
+  'RiskAreaFeed',
+  `{
+    prevCursor: Int
+    cursor: Int
+    totalRiskAreas: Int
+    hasNext: Boolean
+    riskAreas: [RiskArea]
+  }`
+)}
+
+${generateTypeList(
+  'View',
+  `{
+    title: String
+    icon: String
+    list: [List]
+    disabled: Boolean
+  }`
+)}
+
+type NoChangeSinceBody {
+  success: Boolean,
+  apicode: String,
+  apimessage: String,
+  apidataset: String,
 }
 
-type View {
-  title: String
-  icon: String
-  list: [List]
-  disabled: Boolean
+type NoChangeSince {
+  statusCode: Int,
+  body: NoChangeSinceBody
 }
+`;
 
-type Login {
-  user_id: Int
-  displayname: String
-  email: String
-  session_token: String
-}`;
-
-exports.consoleQuery = `activeAlerts: [Action]
-upcomingActions: [Action]
-infoData: [Info]
-viewData: [View]
-programPerformance: [Performance]
-noChangeSince: String
-personaList: [Persona]
-opportunities(limit: Int, cursor: Int): OpportunityFeed
-riskAreas(limit: Int, cursor: Int): RiskAreaFeed`;
+exports.consoleQuery = `
+${generateQuery('activeAlerts', 'Action')}
+${generateQuery('upcomingActions', 'Action')}
+${generateQuery('infoData', 'Info')}
+${generateQuery('viewData', 'View')}
+${generateQuery('programPerformance', 'Performance')}
+${generateQuery('noChangeSince', 'NoChangeSince')}
+${generateQuery('personaList', 'Persona')}
+opportunities(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
+riskAreas(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`;

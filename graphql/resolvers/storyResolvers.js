@@ -14,35 +14,37 @@ const {
   roomNights,
 } = require('../../data/hotelData');
 
+const { generateResponse } = require('../helper');
+
 exports.storyResolvers = {
   airMap: (parent, { title }) => {
     switch (title) {
       case 'airSummary':
-        return airSummary;
+        return generateResponse(airSummary);
       case 'trafficLaneOverview':
       default:
-        return trafficLaneOverview;
+        return generateResponse(trafficLaneOverview);
     }
   },
   hotelMap: (parent, { title }) => {
     switch (title) {
       case 'hotelSummary':
-        return hotelSummary;
+        return generateResponse(hotelSummary);
       case 'hotelSpend':
       default:
-        return hotelSpend;
+        return generateResponse(hotelSpend);
     }
   },
   visual: (parent, { title }) => {
     switch (title) {
       case 'topAirlines':
-        return topAirlines;
+        return generateResponse(topAirlines);
       case 'cabinUse':
-        return cabinUse;
+        return generateResponse(cabinUse);
       case 'topHotelChains':
-        return topHotelChains;
+        return generateResponse(topHotelChains);
       case 'topHotelTiers':
-        return topHotelTiers;
+        return generateResponse(topHotelTiers);
       default:
         return null;
     }
@@ -50,21 +52,21 @@ exports.storyResolvers = {
   donut: (parent, { title }) => {
     switch (title) {
       case 'airRoot':
-        return routes.airRoot;
+        return generateResponse(routes.airRoot);
       case 'transatlantic':
-        return routes.transatlantic;
+        return generateResponse(routes.transatlantic);
       case 'unitedStates':
-        return routes.unitedStates;
+        return generateResponse(routes.unitedStates);
       case 'jfk':
-        return routes.jfk;
+        return generateResponse(routes.jfk);
       case 'hotelRoot':
-        return roomNights.hotelRoot;
+        return generateResponse(roomNights.hotelRoot);
       case 'europe':
-        return roomNights.europe;
+        return generateResponse(roomNights.europe);
       case 'unitedKingdom':
-        return roomNights.unitedKingdom;
+        return generateResponse(roomNights.unitedKingdom);
       default:
-        return routes.airRoot;
+        return generateResponse(routes.airRoot);
     }
   },
 };
