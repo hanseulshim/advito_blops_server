@@ -22,6 +22,8 @@ custom:
 
 # Lambda functions.
 functions:
+  #hello:
+  #  handler: handler.hello
   app:
     handler: wsgi.handler
     events:
