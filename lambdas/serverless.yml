@@ -53,6 +53,10 @@ functions:
   user_logout:
     handler: handler.user_logout
 
+  # Gets a user by session token
+  user_get_by_session_token:
+    handler: handler.user_get_by_session_token
+
   # Endpoint for udf_story_air
   udf_story_air:
     handler: handler.udf_story_air
