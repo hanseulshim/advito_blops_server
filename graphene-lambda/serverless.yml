@@ -1,4 +1,4 @@
-service: graphene-lambda 
+service: graphene-lambda
 
 #
 provider:
@@ -6,13 +6,18 @@ provider:
   runtime: python3.6
   stage: ${opt:stage, 'test'}
   region: us-east-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource:
+        - "*"
 
 #
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
 
-# 
 custom:
   pythonRequirements:
     dockerizePip: non-linux
@@ -22,8 +27,6 @@ custom:
 
 # Lambda functions.
 functions:
-  #hello:
-  #  handler: handler.hello
   app:
     handler: wsgi.handler
     events:
