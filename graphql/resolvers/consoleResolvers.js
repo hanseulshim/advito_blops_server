@@ -8,21 +8,25 @@ const {
   riskAreas,
 } = require('../../data/dashboardData');
 
-const { generateResponse } = require('../helper');
+const { lambdaFakeInvoke } = require('../helper');
 
 exports.consoleResolvers = {
-  activeAlerts: () => generateResponse(activeAlerts),
-  upcomingActions: () => generateResponse(upcomingActions),
-  infoData: () => generateResponse(infoData),
-  viewData: () => generateResponse(viewData),
-  programPerformance: () => generateResponse(programPerformance),
-  noChangeSince: () => generateResponse(noChangeSince),
-  personaList: () => generateResponse(personaList),
-  opportunities: (parent, { limit = opportunities.length, cursor = 0 }) => {
+  activeAlerts: (_, payload) => lambdaFakeInvoke(payload, activeAlerts),
+  upcomingActions: (_, payload) => lambdaFakeInvoke(payload, upcomingActions),
+  infoData: (_, payload) => lambdaFakeInvoke(payload, infoData),
+  viewData: (_, payload) => lambdaFakeInvoke(payload, viewData),
+  programPerformance: (_, payload) =>
+    lambdaFakeInvoke(payload, programPerformance),
+  noChangeSince: (_, payload) => lambdaFakeInvoke(payload, noChangeSince),
+  personaList: (_, payload) => lambdaFakeInvoke(payload, personaList),
+  opportunities: (
+    _,
+    { limit = opportunities.length, cursor = 0, ...payload }
+  ) => {
     const totalOpportunities = opportunities.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
-    return generateResponse({
+    return lambdaFakeInvoke(payload, {
       prevCursor,
       cursor: newCursor,
       totalOpportunities,
@@ -30,11 +34,11 @@ exports.consoleResolvers = {
       opportunities: opportunities.slice(cursor, newCursor),
     });
   },
-  riskAreas: (parent, { limit = riskAreas.length, cursor = 0 }) => {
+  riskAreas: (_, { limit = riskAreas.length, cursor = 0, ...payload }) => {
     const totalRiskAreas = riskAreas.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
-    return generateResponse({
+    return lambdaFakeInvoke(payload, {
       prevCursor: prevCursor,
       cursor: newCursor,
       totalRiskAreas,

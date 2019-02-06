@@ -17,3 +17,10 @@ functions:
           path: graphql
           method: get
           cors: true
+
+custom:
+  serverless-offline:
+    port: 8080
+
+plugins:
+  - serverless-offline

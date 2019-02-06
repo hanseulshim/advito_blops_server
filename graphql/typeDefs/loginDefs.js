@@ -11,5 +11,5 @@ exports.loginDefs = generateType(
 );
 
 exports.loginQuery = `
-  login(username: String, password: String): Login
+  login(username: String, pwd: String): Login
 `;

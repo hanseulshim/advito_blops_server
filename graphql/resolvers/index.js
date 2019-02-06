@@ -1,17 +1,16 @@
 const { consoleResolvers } = require('./consoleResolvers');
 const { storyResolvers } = require('./storyResolvers');
-const { generateResponse } = require('../helper');
+const { generateResponse, lambdaInvoke } = require('../helper');
 
 exports.resolvers = {
   Query: {
     ...consoleResolvers,
     ...storyResolvers,
-    login: () =>
-      generateResponse({
-        displayName: 'Jonathan Smith',
-        clientId: 125,
-        profilePicturePath: 'test',
-        sessionToken: 'dfobiajdfobi',
-      }),
+    login: (_, payload) => {
+      return lambdaInvoke('python-lambdas-dev-user_login', {
+        username: payload.username,
+        pwd: payload.pwd,
+      });
+    },
   },
 };

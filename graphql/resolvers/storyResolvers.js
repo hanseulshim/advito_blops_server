@@ -1,72 +1,134 @@
-const {
-  airSummary,
-  trafficLaneOverview,
-  topAirlines,
-  cabinUse,
-  routes,
-} = require('../../data/airData');
+// TODO: delete these eventually
+// const {
+//   airSummary,
+//   trafficLaneOverview,
+//   topAirlines,
+//   cabinUse,
+//   routes,
+// } = require('../../data/airData');
 
-const {
-  hotelSummary,
-  hotelSpend,
-  topHotelChains,
-  topHotelTiers,
-  roomNights,
-} = require('../../data/hotelData');
+// const {
+//   hotelSummary,
+//   hotelSpend,
+//   topHotelChains,
+//   topHotelTiers,
+//   roomNights,
+// } = require('../../data/hotelData');
 
-const { generateResponse } = require('../helper');
+const { lambdaInvoke } = require('../helper');
 
 exports.storyResolvers = {
-  airMap: (parent, { title }) => {
+  airMap: (_, { title, ...payload }) => {
     switch (title) {
       case 'airSummary':
-        return generateResponse(airSummary);
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_air',
+          {
+            ...payload,
+          },
+          'udf_story_air'
+        );
       case 'trafficLaneOverview':
-      default:
-        return generateResponse(trafficLaneOverview);
-    }
-  },
-  hotelMap: (parent, { title }) => {
-    switch (title) {
-      case 'hotelSummary':
-        return generateResponse(hotelSummary);
-      case 'hotelSpend':
-      default:
-        return generateResponse(hotelSpend);
-    }
-  },
-  visual: (parent, { title }) => {
-    switch (title) {
-      case 'topAirlines':
-        return generateResponse(topAirlines);
-      case 'cabinUse':
-        return generateResponse(cabinUse);
-      case 'topHotelChains':
-        return generateResponse(topHotelChains);
-      case 'topHotelTiers':
-        return generateResponse(topHotelTiers);
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_air_traffic',
+          {
+            ...payload,
+          },
+          'udf_story_air_traffic'
+        );
       default:
         return null;
     }
   },
-  donut: (parent, { title }) => {
+  hotelMap: (_, { title, ...payload }) => {
+    switch (title) {
+      case 'hotelSummary':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_hotel',
+          {
+            ...payload,
+          },
+          'udf_story_hotel'
+        );
+      case 'hotelSpend':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_hotel_1',
+          {
+            ...payload,
+          },
+          'udf_story_hotel_1'
+        );
+      default:
+        return null;
+    }
+  },
+  visual: (_, { title, ...payload }) => {
+    switch (title) {
+      case 'topAirlines':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_air_airlines',
+          {
+            ...payload,
+          },
+          'udf_story_air_airlines'
+        );
+      case 'cabinUse':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_air_cabins',
+          {
+            ...payload,
+          },
+          'udf_story_air_cabins'
+        );
+      case 'topHotelChains':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_hotel_2',
+          {
+            ...payload,
+          },
+          'udf_story_hotel_2'
+        );
+      case 'topHotelTiers':
+        return lambdaInvoke(
+          'python-lambdas-dev-udf_story_hotel_3',
+          {
+            ...payload,
+          },
+          'udf_story_hotel_3'
+        );
+      default:
+        return null;
+    }
+  },
+  donut: async (_, { title, ...payload }) => {
     switch (title) {
       case 'airRoot':
-        return generateResponse(routes.airRoot);
       case 'transatlantic':
-        return generateResponse(routes.transatlantic);
       case 'unitedStates':
-        return generateResponse(routes.unitedStates);
       case 'jfk':
-        return generateResponse(routes.jfk);
+        const airResponse = await lambdaInvoke(
+          'python-lambdas-dev-udf_story_air_routes',
+          {
+            ...payload,
+          },
+          'udf_story_air_routes'
+        );
+        airResponse.body.apidataset = airResponse.body.apidataset[title];
+        return airResponse;
       case 'hotelRoot':
-        return generateResponse(roomNights.hotelRoot);
       case 'europe':
-        return generateResponse(roomNights.europe);
       case 'unitedKingdom':
-        return generateResponse(roomNights.unitedKingdom);
+        const hotelResponse = await lambdaInvoke(
+          'python-lambdas-dev-udf_story_hotel_4',
+          {
+            ...payload,
+          },
+          'udf_story_hotel_4'
+        );
+        hotelResponse.body.apidataset = hotelResponse.body.apidataset[title];
+        return hotelResponse;
       default:
-        return generateResponse(routes.airRoot);
+        null;
     }
   },
 };

@@ -16,6 +16,6 @@
     "nodemon": "^1.18.5"
   },
   "devDependencies": {
-    "serverless-python-requirements": "^4.2.5"
+    "serverless-offline": "^4.2.1"
   }
 }
