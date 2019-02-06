@@ -7,12 +7,12 @@ exports.viewData = [
       {
         title: 'Travel Manager Dashboard',
         icon: 'manager_active.png',
-        link: '/travel',
+        link: '/travel/dashboard',
       },
       {
         title: 'Executive Dashboard',
         icon: 'manager_active.png',
-        link: '/executive',
+        link: '/executive/dashboard',
       },
       {
         title: 'Card Deck',
