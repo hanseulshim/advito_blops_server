@@ -18,5 +18,3 @@ if __name__ == '__main__':
 @app.route("/")
 def hello2():
     return "Hello World!"
-
-

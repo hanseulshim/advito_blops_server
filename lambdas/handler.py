@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, deserialize_user_create
+from advito.service.user import UserService, serialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
@@ -187,9 +187,8 @@ def user_login(event, context, session):
     """
 
     # Acquires username and password
-    login_json = event
-    username = login_json['username']
-    password = login_json['pwd']
+    username = event['username']
+    password = event['pwd']
 
     # Tries to login
     (user, user_session) = user_service.login(username, password, session)
@@ -207,6 +206,59 @@ def user_login(event, context, session):
             "sessionToken": user_session.session_token
         }
     }
+
+@handler_decorator
+def user_get_by_session_token(event, context, session):
+
+    """
+    Acquires a user by their session token.
+    :param event: Token JSON as dict. Example:
+    {
+        "sessionToken": "abc123"
+    }
+    :param context: AWS context.
+    :param session: Session used for database connectivity.
+    """
+
+    # Acquires session token
+    session_token = event['sessionToken']
+    user = user_service.get_by_session_token(session_token, session)
+    user_json = serialize_user(user)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": user_json
+    }
+
+@handler_decorator
+def user_set_by_session_token(event, context, session):
+
+    """
+    Sets information about a user with a given session token.
+    :param event: Login JSON as a dict.
+    :param context: AWS context.
+    :param session: Session used for database connectivity.
+    """
+    pass
+
+@handler_decorator
+def user_get_access(event, context, session):
+
+    """
+    Gets access information about all other users.
+    :param event: JSON request as a dict. Example:
+    {
+        "sessionToken": "abc123"
+    }
+    :param context: AWS context
+    :param session: Session used for database connectivity
+    """
+
+    session_token = event['sessionToken']                           # Gets session token
+    application_role_service.get_all_for(session_token, session)    # Using that user
 
 
 @handler_decorator

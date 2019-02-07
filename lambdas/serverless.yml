@@ -57,6 +57,14 @@ functions:
   application_role_get_all:
     handler: handler.application_role_get_all
 
+  # Gets a user with a session token
+  user_get_by_session_token:
+    handler: handler.user_get_by_session_token
+
+  # Sets a user with a session token
+  user_set_by_session_token:
+    handler: handler.user_set_by_session_token
+
   # Endpoint for udf_story_air
   udf_story_air:
     handler: handler.udf_story_air
@@ -93,6 +101,6 @@ functions:
   udf_story_hotel_3:
     handler: handler.udf_story_hotel_3
 
-    # Endpoint for udf_story_hotel_4
-    udf_story_hotel_4:
-      handler: handler.udf_story_hotel_4
+  # Endpoint for udf_story_hotel_4
+  udf_story_hotel_4:
+    handler: handler.udf_story_hotel_4

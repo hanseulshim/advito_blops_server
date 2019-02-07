@@ -9,27 +9,48 @@ from advito.util.string_util import salt_hash
 from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError
 
 
-def deserialize_user_create(user_json):
+def deserialize_user_create(user_create_json):
 
     """
     Utility function that parses a user_create json object and returns an AdvitoUser object
-    :param user_json: Serialized user as a python dict.
+    :param user_create_json: Serialized user as a python dict.
     """
 
     # Deserializes user and returns it
     user =  AdvitoUser (
-        client_id = user_json['clientId'],
-        username = user_json['username'],
-        pwd = user_json['pwd'],
-        name_last = user_json['nameLast'],
-        name_first = user_json['nameFirst'],
-        email = user_json['email'],
-        phone = user_json['phone'],
-        profile_picture_path = user_json.get('profilePicturePath', None),
-        default_timezone = user_json.get('timezoneDefault', None),
-        default_language = user_json.get('languageDefault', None)
+        client_id = user_create_json['clientId'],
+        username = user_create_json['username'],
+        pwd = user_create_json['pwd'],
+        name_last = user_create_json['nameLast'],
+        name_first = user_create_json['nameFirst'],
+        email = user_create_json['email'],
+        phone = user_create_json['phone'],
+        profile_picture_path = user_create_json.get('profilePicturePath', None),
+        default_timezone = user_create_json.get('timezoneDefault', None),
+        default_language = user_create_json.get('languageDefault', None)
     )
     return user
+
+
+def serialize_user(user):
+
+    """
+    Serializes a user as a python dict.
+    Does not include hashed/salted password.
+    :param user: AdvitoUser to serialize.
+    """
+
+    return {
+        'clientId': user.client_id,
+        'username': user.username,
+        'nameLast': user.name_last,
+        'nameFirst': user.name_first,
+        'email': user.email,
+        'phone': user.phone,
+        'profilePicturePath': user.profile_picture_path,
+        'timezoneDefault': user.default_timezone,
+        'languageDefault': user.default_language
+    }
 
 
 
@@ -38,7 +59,7 @@ class UserService:
     """
     Represents a service that performs operations on instances of `AdvitoUser`.
     Can insert users into database and select them.
-    Operations utilize an SQLAlchemy session object, but never commit.
+    Operations utilize an SQLAlchemy session object, but never commit/rollback.
     That is the responsibility of the caller.
     """
 
@@ -69,6 +90,36 @@ class UserService:
         session.add(user)
 
 
+    def get_by_session_token(self, session_token, session):
+
+        """
+        Gets an AdvitoUser by session_token.
+        :param session_token: Token given by user to query by.
+        :param session: Database session. Not to be confused with session_token.
+        """
+
+        # Gets id of user with given session token
+        user_session = session \
+            .query(AdvitoUserSession) \
+            .filter_by(session_token=session_token) \
+            .first()
+        if user_session is None:
+            raise NotFoundError("Could not find session token.")
+
+        # Gets user using id found
+        user_id = user_session.advito_user_id
+        user = session \
+            .query(AdvitoUser) \
+            .filter_by(id=user_id) \
+            .first()
+        if user is None:
+            raise NotFoundError("Session token was found, but no associated user was found. This should not happen.")
+
+        # Done
+        return user
+
+
+
     def get_by_username(self, username, session):
 
         """
@@ -82,9 +133,10 @@ class UserService:
             .query(AdvitoUser) \
             .filter_by(username=username) \
             .first()
-
         if user is None:
             raise NotFoundError("Could not find user '{}'".format(username))
+        return user
+
 
 
     def login(self, username, password, session):

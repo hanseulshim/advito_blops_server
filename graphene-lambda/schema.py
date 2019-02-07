@@ -5,9 +5,10 @@ import base64
 from blops_graphene_functions import *
 
 class Query(graphene.ObjectType):
+
     login = graphene.Field(LoginResponse, username=graphene.String(), password=graphene.String())
     logout = graphene.Field(LogoutResponse, sessionToken=graphene.String())
-    
+
     airSummary = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     airTraffic = graphene.Field(AirDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     airAirlines = graphene.Field(AirlineResponse, clientId=graphene.Int(), sessionToken=graphene.String())
@@ -21,22 +22,31 @@ class Query(graphene.ObjectType):
     topHotelTiers = graphene.Field(HotelChainResponse, clientId=graphene.Int(), sessionToken=graphene.String(), title=graphene.String())
 
     advitoUser = graphene.Field(AdvitoUser)
-    
-    #programPerformance = graphene.List(DashboardData)
+
     programPerformance = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     noChangeSince = graphene.Field(NoChangeSinceResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     personaList = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    opportunities = graphene.Field(OpportunitiesResponse, clientId=graphene.Int(), sessionToken=graphene.String(), 
-        limit=graphene.Int(), cursor=graphene.Int())
-    riskAreas = graphene.Field(RiskAreasResponse, clientId=graphene.Int(), sessionToken=graphene.String(),
-        limit=graphene.Int(), cursor=graphene.Int())
+    opportunities = graphene.Field (
+        OpportunitiesResponse,
+        clientId=graphene.Int(),
+        sessionToken=graphene.String(),
+        limit=graphene.Int(),
+        cursor=graphene.Int()
+    )
+    riskAreas = graphene.Field (
+        RiskAreasResponse,
+        clientId=graphene.Int(),
+        sessionToken=graphene.String(),
+        limit=graphene.Int(),
+        cursor=graphene.Int()
+    )
     upcomingActions = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     activeAlerts = graphene.Field(DashboardDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     viewData = graphene.Field(ViewDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
     infoData = graphene.Field(ViewDataResponse, clientId=graphene.Int(), sessionToken=graphene.String())
-    
+
     def resolve_login(self, info, username, password):
-        return user_login(username, password)  
+        return user_login(username, password)
 
     def resolve_logout(self, info, sessionToken):
         return user_logout(sessionToken)
@@ -61,7 +71,7 @@ class Query(graphene.ObjectType):
 
     def resolve_hotelSummary(self, info, clientId, sessionToken):
         return get_hotel_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel', 'udf_story_hotel')
-    
+
     def resolve_roomNights(self, info, clientId, sessionToken):
         return get_roomnight_data(clientId, sessionToken, 'python-lambdas-dev-udf_story_hotel_4', 'udf_story_hotel_4')
 
