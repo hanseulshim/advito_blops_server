@@ -19,7 +19,7 @@ provider:
 # Plugins to enhance the application
 plugins:
   - serverless-python-requirements
-
+  - serverless-plugin-warmup
 
 # Specifies custom container
 custom:
