@@ -59,7 +59,7 @@ class UserService:
     """
     Represents a service that performs operations on instances of `AdvitoUser`.
     Can insert users into database and select them.
-    Operations utilize an SQLAlchemy session object, but never commit.
+    Operations utilize an SQLAlchemy session object, but never commit/rollback.
     That is the responsibility of the caller.
     """
 
