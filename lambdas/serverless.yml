@@ -53,9 +53,17 @@ functions:
   user_logout:
     handler: handler.user_logout
 
-  # Gets a user by session token
+  # Gets a user with a session token
   user_get_by_session_token:
     handler: handler.user_get_by_session_token
+
+  # Sets a user with a session token
+  user_set_by_session_token:
+    handler: handler.user_set_by_session_token
+
+  # Gets user access information
+  user_get_access:
+    handler: handler.user_get_access
 
   # Endpoint for udf_story_air
   udf_story_air:
