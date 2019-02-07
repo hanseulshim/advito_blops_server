@@ -4,9 +4,17 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: us-east-2
+  timeout: 30
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+      Resource:
+        - '*'
 
 functions:
   graphql:
+    warmup: true
     handler: handler.graphqlHandler
     events:
       - http:
@@ -24,3 +32,4 @@ custom:
 
 plugins:
   - serverless-offline
+  - serverless-plugin-warmup
