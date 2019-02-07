@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, deserialize_user_create
+from advito.service.application_role import ApplicationRoleService
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
 
@@ -24,6 +25,7 @@ engine = create_engine(db_connection)
 
 # Creates services that control business logic
 user_service = UserService(session_duration_sec)
+application_role_service = ApplicationRoleService(user_service)
 amorphous_service = AmorphousService()
 
 ################ Decorators ##################
@@ -230,6 +232,21 @@ def user_logout(event, context, session):
         "apimessage": "User successfully logged out.",
         "apidataset": None
     }
+
+@handler_decorator
+def application_role_get_all(event, context, session):
+
+    """
+    Gets all application roles given a sessionToken.
+    :param event: Login JSON as a dict. Example:
+    {
+        "sessionToken": "abc123"
+    }
+    :param context: AWS context.
+    :param session: Session used for database connectivity.
+    """
+    session_token = event['sessionToken']
+    application_role_service.get_all_for(session_token, session)
 
 @handler_decorator
 @authenticate_decorator

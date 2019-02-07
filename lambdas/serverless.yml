@@ -53,6 +53,10 @@ functions:
   user_logout:
     handler: handler.user_logout
 
+  # Gets application role info for all users
+  application_role_get_all:
+    handler: handler.application_role_get_all
+
   # Endpoint for udf_story_air
   udf_story_air:
     handler: handler.udf_story_air
