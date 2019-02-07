@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user_create
-from advito.service.application_role import ApplicationRoleService
+from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
 
@@ -258,7 +258,7 @@ def user_get_access(event, context, session):
     """
 
     session_token = event['sessionToken']                           # Gets session token
-    application_role_service.get_all_for(session_token, session)    # Using that user
+    results = application_role_service.get_all_for(session_token, session)    # Using that user
 
 
 @handler_decorator
@@ -298,7 +298,17 @@ def application_role_get_all(event, context, session):
     :param session: Session used for database connectivity.
     """
     session_token = event['sessionToken']
-    application_role_service.get_all_for(session_token, session)
+    results = application_role_service.get_all_for(session_token, session)
+    serialized = []
+    for result in results:
+        user = result[0]
+        role = result[1]
+        entry = {
+            "user": serialize_user(user),
+            "role": serialize_application_role(role)
+        }
+        serialized.append(entry)
+    return serialized
 
 @handler_decorator
 @authenticate_decorator
