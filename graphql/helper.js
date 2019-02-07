@@ -45,7 +45,7 @@ exports.generateQuery = (query, data) => `
 ${query}(clientId: Int!, sessionToken: String!): ${data}
 `;
 
-exports.lambdaInvoke = async (functionName, payload, dataParam) => {
+exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const params = {
     FunctionName: functionName,
     InvocationType: 'RequestResponse',
@@ -54,8 +54,14 @@ exports.lambdaInvoke = async (functionName, payload, dataParam) => {
   const response = await lambda.invoke(params).promise();
   const responseBody = JSON.parse(response.Payload);
   responseBody.body = JSON.parse(responseBody.body);
+  if (response.statusCode !== 200) {
+    return responseBody;
+  }
   if (dataParam) {
     responseBody.body.apidataset = responseBody.body.apidataset[dataParam];
+    if (title) {
+      responseBody.body.apidataset = responseBody.body.apidataset[title];
+    }
   }
   return responseBody;
 };

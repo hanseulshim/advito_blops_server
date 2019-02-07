@@ -111,7 +111,8 @@ exports.storyResolvers = {
           {
             ...payload,
           },
-          'udf_story_air_routes'
+          'udf_story_air_routes',
+          title
         );
         airResponse.body.apidataset = airResponse.body.apidataset[title];
         return airResponse;
@@ -123,9 +124,9 @@ exports.storyResolvers = {
           {
             ...payload,
           },
-          'udf_story_hotel_4'
+          'udf_story_hotel_4',
+          title
         );
-        hotelResponse.body.apidataset = hotelResponse.body.apidataset[title];
         return hotelResponse;
       default:
         null;
