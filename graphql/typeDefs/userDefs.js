@@ -26,5 +26,5 @@ exports.userQuery = `
 `;
 
 exports.userMutation = `
-  ${generateQuery('updatePassword', 'PasswordResponse')}
+  updatePassword(clientId: Int!, sessionToken: String!, pwd: String!): PasswordResponse
 `;
