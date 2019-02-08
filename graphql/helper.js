@@ -54,7 +54,7 @@ exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const response = await lambda.invoke(params).promise();
   const responseBody = JSON.parse(response.Payload);
   responseBody.body = JSON.parse(responseBody.body);
-  if (response.statusCode !== 200) {
+  if (responseBody.statusCode !== 200) {
     return responseBody;
   }
   if (dataParam) {
