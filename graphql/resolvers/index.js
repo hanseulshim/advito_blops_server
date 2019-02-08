@@ -12,5 +12,10 @@ exports.resolvers = {
         pwd: payload.pwd,
       });
     },
+    logout: (_, payload) => {
+      return lambdaInvoke('python-lambdas-dev-user_logout', {
+        ...payload,
+      });
+    },
   },
 };

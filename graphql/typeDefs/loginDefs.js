@@ -1,6 +1,7 @@
 const { generateType } = require('../helper');
 
-exports.loginDefs = generateType(
+exports.loginDefs = `
+${generateType(
   'Login',
   `{
   displayName: String,
@@ -8,8 +9,22 @@ exports.loginDefs = generateType(
   profilePicturePath: String,
   sessionToken: String,
 }`
-);
+)}
+
+type LogoutBody {
+  success: Boolean,
+  apicode: String,
+  apimessage: String,
+}
+
+type Logout {
+  statusCode: Int,
+  body: LogoutBody
+}
+
+`;
 
 exports.loginQuery = `
-  login(username: String, pwd: String): Login
+  login(username: String!, pwd: String!): Login
+  logout(sessionToken: String!): Logout
 `;
