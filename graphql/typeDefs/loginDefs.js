@@ -15,6 +15,7 @@ type LogoutBody {
   success: Boolean,
   apicode: String,
   apimessage: String,
+  apidataset: String,
 }
 
 type Logout {
