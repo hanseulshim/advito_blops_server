@@ -114,7 +114,6 @@ exports.storyResolvers = {
           'udf_story_air_routes',
           title
         );
-        airResponse.body.apidataset = airResponse.body.apidataset[title];
         return airResponse;
       case 'hotelRoot':
       case 'europe':
