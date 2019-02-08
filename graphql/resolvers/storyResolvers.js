@@ -105,6 +105,14 @@ exports.storyResolvers = {
       case 'airRoot':
       case 'transatlantic':
       case 'unitedStates':
+        return await lambdaInvoke(
+          'python-lambdas-dev-udf_story_air_routes',
+          {
+            ...payload,
+          },
+          'udf_story_air_routes',
+          title
+        );
       case 'jfk':
         const airResponse = await lambdaInvoke(
           'python-lambdas-dev-udf_story_air_routes',
@@ -114,11 +122,40 @@ exports.storyResolvers = {
           'udf_story_air_routes',
           title
         );
+        const dataset = airResponse.body.apidataset;
+        dataset.donutData = dataset.donutData.map(v => ({
+          ...v,
+          tooltip: {
+            title: 'TOP AIRLINES',
+            tooltipData: [
+              {
+                name: 'British Airways',
+                value: Math.floor(Math.random() * 100) / 100,
+              },
+              {
+                name: 'Lufthansa',
+                value: Math.floor(Math.random() * 100) / 100,
+              },
+              {
+                name: 'KLM',
+                value: Math.floor(Math.random() * 100) / 100,
+              },
+              {
+                name: 'Singapore Airlines',
+                value: Math.floor(Math.random() * 100) / 100,
+              },
+              {
+                name: 'Other',
+                value: Math.floor(Math.random() * 100) / 100,
+              },
+            ],
+          },
+        }));
         return airResponse;
       case 'hotelRoot':
       case 'europe':
       case 'unitedKingdom':
-        const hotelResponse = await lambdaInvoke(
+        return await lambdaInvoke(
           'python-lambdas-dev-udf_story_hotel_4',
           {
             ...payload,
@@ -126,7 +163,6 @@ exports.storyResolvers = {
           'udf_story_hotel_4',
           title
         );
-        return hotelResponse;
       default:
         null;
     }

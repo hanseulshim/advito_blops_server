@@ -62,10 +62,21 @@ exports.storyDefs = `
     color: String,
   }
 
+  type TooltipData {
+    value: Float,
+    name: String,
+  }
+
+  type Tooltip {
+    title: String,
+    tooltipData: [TooltipData]
+  }
+
   type Donut {
     category: String,
     value: Float,
     nextLevel: String,
+    tooltip: Tooltip
   }
 
   ${generateType(
