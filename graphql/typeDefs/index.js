@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-lambda');
 const { consoleDefs, consoleQuery } = require('./consoleDefs');
 const { storyDefs, storyQuery } = require('./storyDefs');
 const { loginDefs, loginQuery } = require('./loginDefs');
-const { userDefs, userQuery } = require('./userDefs');
+const { userDefs, userQuery, userMutation } = require('./userDefs');
 
 exports.typeDefs = gql`
   ${consoleDefs}
@@ -14,5 +14,8 @@ exports.typeDefs = gql`
     ${storyQuery}
     ${loginQuery}
     ${userQuery}
+  }
+  type Mutation {
+    ${userMutation}
   }
 `;

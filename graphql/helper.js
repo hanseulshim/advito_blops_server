@@ -26,6 +26,19 @@ type ${type} {
   body: ${type}Body
 }`;
 
+exports.generateMutationType = type => `
+type ${type}Body {
+  success: Boolean,
+  apicode: String,
+  apimessage: String,
+  apidataset: String
+}
+
+type ${type} {
+  statusCode: Int,
+  body: ${type}Body
+}`;
+
 exports.generateTypeList = (type, data) => `
 type ${type}Data ${data}
 

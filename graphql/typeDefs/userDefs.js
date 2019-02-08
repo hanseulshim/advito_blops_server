@@ -1,4 +1,8 @@
-const { generateType } = require('../helper');
+const {
+  generateType,
+  generateQuery,
+  generateMutationType,
+} = require('../helper');
 
 exports.userDefs = `
   ${generateType(
@@ -13,8 +17,14 @@ exports.userDefs = `
       emailNotifications: Boolean
     }`
   )}
+
+  ${generateMutationType('PasswordResponse')}
 `;
 
 exports.userQuery = `
-  userProfile(clientId: Int!, sessionToken: String!): UserProfile
+  ${generateQuery('userProfile', 'UserProfile')}
+`;
+
+exports.userMutation = `
+  ${generateQuery('updatePassword', 'PasswordResponse')}
 `;
