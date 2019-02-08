@@ -55,5 +55,4 @@ class ApplicationRoleService:
             .query(AdvitoUser, AdvitoApplicationRole) \
             .join(AdvitoUserRoleLink) \
             .join(AdvitoApplicationRole) \
-            .filter(AdvitoUser.id == user.id) \
             .all()

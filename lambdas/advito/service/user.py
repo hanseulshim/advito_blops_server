@@ -4,9 +4,10 @@ import hashlib
 import json
 from datetime import datetime
 from datetime import timedelta
-from advito.model.table import AdvitoUser, AdvitoUserSession
+from advito.model.table import AdvitoUser, AdvitoUserSession, AdvitoApplicationRole, AdvitoUserRoleLink
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError
+from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError
+from advito.role import Role
 
 
 def deserialize_user_create(user_create_json):
@@ -41,6 +42,7 @@ def serialize_user(user):
     """
 
     return {
+        'id': user.id,
         'clientId': user.client_id,
         'username': user.username,
         'nameLast': user.name_last,
@@ -204,7 +206,7 @@ class UserService:
 
 
 
-    def validate_logged_in(self, session_token, session):
+    def validate_logged_in(self, session_token, session, roles=[]):
 
         """
         Validates that an AdvitoUser is logged in.
@@ -212,6 +214,7 @@ class UserService:
         If they are not, this method will raise an error.
         :param session_token: Session token to validate logged-in status.
         :param session: SQLAlchemy session used for db operations.
+        :param roles: List of Role enums that user must have in order be considered validated. Optional.
         :return: True if user is logged in. False otherwise.
         """
 
@@ -229,6 +232,24 @@ class UserService:
         # Check that session is not expired.
         if datetime.now() >= user_session.session_expiration:
             raise ExpiredSessionError("Session expired")
+
+        # Makes db call if certain roles are required
+        if len(roles) > 0:
+
+            # Determines the roles this user has. If they don't contain all that is in 'roll_ids', the user is not authenticated.
+            user_roles_query = session \
+                .query(AdvitoApplicationRole) \
+                .join(AdvitoUserRoleLink) \
+                .join(AdvitoUser) \
+                .join(AdvitoUserSession) \
+                .filter(AdvitoUser.id == AdvitoUserSession.advito_user_id)
+            user_roles = user_roles_query.all()
+            user_roles = [Role(user_role.id) for user_role in user_roles]
+            if not set(roles).issubset(user_roles):
+                role_names = [role.name for role in roles]
+                user_role_names = [user_role.name for user_role in user_roles]
+                raise UnauthorizedError("User had role(s) " + str(user_role_names) + " but must have role(s) " + str(role_names))
+
 
         # Update session in DB
         duration = timedelta(seconds = user_session.session_duration_sec)

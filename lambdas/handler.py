@@ -13,7 +13,8 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError
+from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
+from advito.role import Role
 
 
 # Unpacks environment variables to build DB client and services
@@ -61,7 +62,7 @@ def handler_decorator(func):
             }
             status_code = 400
 
-        except InvalidSessionError as e:
+        except (InvalidSessionError, UnauthorizedError) as e:
             session.rollback()
             body = {
                 "success": False,
@@ -126,26 +127,32 @@ def handler_decorator(func):
     return wrapper
 
 
-def authenticate_decorator(func):
+def authenticate_decorator(roles=[]):
 
     """
-    Decorates a function such that it checks that the token in the request exists in the database and is not expired.
-    After the check, it invokes the underlying function
+    Generates a decorator function that, when used, checks that the token in the request exists in the database and is not expired.
+    Then, checks that the session token is that of an admin user.
+    After the checks, it invokes the underlying function.
     """
+    def wrapper_generator(func):
 
-    def wrapper(event, context, session):
+        def wrapper(event, context, session):
 
-        # Validates that user is logged in
-        session_token = event.get('sessionToken')
-        if session_token is None:
-            raise InvalidSessionError('Required field "sessionToken" not supplied.')
-        user_service.validate_logged_in(session_token, session)
+            # Validates that user is logged in
+            session_token = event.get('sessionToken')
+            if session_token is None:
+                raise InvalidSessionError('Required field "sessionToken" not supplied.')
 
-        # Invokes underlying function
-        return func(event, context, session)
+            # Ensures that user is logged in has correct role
+            user_service.validate_logged_in(session_token, session, roles)
+
+            # Invokes underlying function
+            return func(event, context, session)
+
+        return wrapper
 
     # Returns decorated function
-    return wrapper
+    return wrapper_generator
 
 
 
@@ -245,23 +252,6 @@ def user_set_by_session_token(event, context, session):
     pass
 
 @handler_decorator
-def user_get_access(event, context, session):
-
-    """
-    Gets access information about all other users.
-    :param event: JSON request as a dict. Example:
-    {
-        "sessionToken": "abc123"
-    }
-    :param context: AWS context
-    :param session: Session used for database connectivity
-    """
-
-    session_token = event['sessionToken']                           # Gets session token
-    results = application_role_service.get_all_for(session_token, session)    # Using that user
-
-
-@handler_decorator
 def user_logout(event, context, session):
 
     """
@@ -286,6 +276,7 @@ def user_logout(event, context, session):
     }
 
 @handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
 def application_role_get_all(event, context, session):
 
     """
@@ -304,14 +295,19 @@ def application_role_get_all(event, context, session):
         user = result[0]
         role = result[1]
         entry = {
-            "user": serialize_user(user),
-            "role": serialize_application_role(role)
+            "userId": user.id,
+            "nameFirst": user.name_first,
+            "nameLast": user.name_last,
+            "username": user.username,
+            "email": user.email,
+            "role": role.role_name,
+            "roleId": role.id
         }
         serialized.append(entry)
     return serialized
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_air(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air(client_id, session)
@@ -323,7 +319,7 @@ def udf_story_air(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_air_airlines(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air_airlines(client_id, session)
@@ -335,7 +331,7 @@ def udf_story_air_airlines(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_air_cabins(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air_cabins(client_id, session)
@@ -347,7 +343,7 @@ def udf_story_air_cabins(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_air_routes(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air_routes(client_id, session)
@@ -360,7 +356,7 @@ def udf_story_air_routes(event, context, session):
 
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_air_traffic(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_air_traffic(client_id, session)
@@ -372,7 +368,7 @@ def udf_story_air_traffic(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_hotel(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_hotel(client_id, session)
@@ -384,7 +380,7 @@ def udf_story_hotel(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_hotel_1(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_hotel_1(client_id, session)
@@ -396,7 +392,7 @@ def udf_story_hotel_1(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_hotel_2(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_hotel_2(client_id, session)
@@ -408,7 +404,7 @@ def udf_story_hotel_2(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_hotel_3(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_hotel_3(client_id, session)
@@ -420,7 +416,7 @@ def udf_story_hotel_3(event, context, session):
     }
 
 @handler_decorator
-@authenticate_decorator
+@authenticate_decorator()
 def udf_story_hotel_4(event, context, session):
     client_id = event['clientId']
     result = amorphous_service.udf_story_hotel_4(client_id, session)
