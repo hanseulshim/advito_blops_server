@@ -115,6 +115,7 @@ exports.storyDefs = `
     'DonutList',
     `{
       title: String,
+      last: Boolean,
       summary: String,
       label: String,
       context: String,

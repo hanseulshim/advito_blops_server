@@ -123,6 +123,7 @@ exports.storyResolvers = {
           title
         );
         const dataset = airResponse.body.apidataset;
+        dataset.last = true;
         dataset.donutData = dataset.donutData.map(v => ({
           ...v,
           tooltip: {
