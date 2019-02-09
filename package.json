@@ -5,15 +5,13 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "sls offline"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.2.6",
     "apollo-server-lambda": "^2.3.0",
-    "graphql": "^14.0.2",
-    "nodemon": "^1.18.5"
+    "graphql": "^14.0.2"
   },
   "devDependencies": {
     "serverless-offline": "^4.2.1",
