@@ -6,4 +6,5 @@ exports.userResolvers = {
 
 exports.userResolversMutation = {
   updatePassword: (_, payload) => lambdaFakeInvoke(payload),
+  updateUserProfile: (_, payload) => lambdaFakeInvoke(payload),
 };

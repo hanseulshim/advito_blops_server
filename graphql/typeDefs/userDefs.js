@@ -19,6 +19,7 @@ exports.userDefs = `
   )}
 
   ${generateMutationType('PasswordResponse')}
+  ${generateMutationType('UserProfileResponse')}
 `;
 
 exports.userQuery = `
@@ -27,4 +28,14 @@ exports.userQuery = `
 
 exports.userMutation = `
   updatePassword(clientId: Int!, sessionToken: String!, pwd: String!): PasswordResponse
+  updateUserProfile(clientId: Int!,
+    sessionToken: String!,
+    firstName: String!,
+    lastName: String!,
+    profilePicturePath: String!,
+    username: String!,
+    timeFormat: String!,
+    timeZone: String!,
+    emailNotifications: Boolean!
+  ): UserProfileResponse
 `;
