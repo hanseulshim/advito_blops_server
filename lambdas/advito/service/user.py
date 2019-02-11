@@ -229,6 +229,9 @@ class UserService:
         if user_session is None:
             raise InvalidSessionError("No session found")
 
+        print(datetime.now())
+        print(user_session.session_expiration)
+
         # Check that session is not expired.
         if datetime.now() >= user_session.session_expiration:
             raise ExpiredSessionError("Session expired")

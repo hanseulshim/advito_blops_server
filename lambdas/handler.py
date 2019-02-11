@@ -250,22 +250,14 @@ def user_get_by_session_token(event, context, session):
     }
 
 @handler_decorator
-def user_set_by_session_token(event, context, session):
-
-    """
-    Sets information about a user with a given session token.
-    :param event: Login JSON as a dict.
-    :param context: AWS context.
-    :param session: Session used for database connectivity.
-    """
-    pass
-
-@handler_decorator
 def user_logout(event, context, session):
 
     """
     Logs out a user.
-    :param event: Login JSON as a dict.
+    :param event: Logout JSON as a dict. Example:
+    {
+        "sessionToken": "abc123"
+    }
     :param context: AWS context.
     :param session: Session used for database connectivity.
     """
@@ -285,6 +277,28 @@ def user_logout(event, context, session):
     }
 
 @handler_decorator
+def user_update(event, context, session):
+
+    """
+    Updates an existing users data.
+    :param event: User Update JSON as a dict. Example:
+    {
+        "sessionToken": "abc123",
+        "userId": 1337
+    }
+    userId is optional. If it is specified and it differs from the user that owns the sessionToken,
+    this method will fail unless the user is an Admin.
+    """
+
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": None
+    }
+
+
+@handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def user_access(event, context, session):
 
@@ -299,9 +313,11 @@ def user_access(event, context, session):
     :param session: Session used for database connectivity.
     """
 
-    session_token = event['sessionToken']
-    user = user_service.get_by_session_token(session_token, session)
-    results = application_role_service.get_user_access_by_client(user.client_id, session)
+    # Gets users that belong to specified client
+    client_id = event['clientId']
+    results = application_role_service.get_user_access_by_client(client_id, session)
+
+    # Serializes each user/role pair as json objects
     serialized = []
     for result in results:
         user = result[0]
@@ -316,7 +332,15 @@ def user_access(event, context, session):
             "roleId": role.id
         }
         serialized.append(entry)
-    return serialized
+
+    # Returns response
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": serialized
+    }
+
 
 @handler_decorator
 @authenticate_decorator()

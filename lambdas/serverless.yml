@@ -56,6 +56,11 @@ functions:
     warmup: true
     handler: handler.user_logout
 
+  # Updates an existing user
+  user_update:
+    warmup: true
+    handler: handler.user_update
+
   # Gets application role info for all users
   user_access:
     warmup: true
@@ -65,11 +70,6 @@ functions:
   user_get_by_session_token:
     warmup: true
     handler: handler.user_get_by_session_token
-
-  # Sets a user with a session token
-  user_set_by_session_token:
-    warmup: true
-    handler: handler.user_set_by_session_token
 
   # Endpoint for udf_story_air
   udf_story_air:
