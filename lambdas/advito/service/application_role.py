@@ -1,6 +1,22 @@
 import json
-from advito.model.table import AdvitoUserRoleLink, AdvitoApplicationRole
+from advito.model.table import AdvitoUser, AdvitoUserRoleLink, AdvitoApplicationRole
 from advito.error import NotFoundError
+
+
+def serialize_application_role(role):
+
+    """
+    Serializes an AdvitoApplicationRole as a python dict.
+    """
+    return {
+        "id": role.id,
+        "advitoApplicationId": role.advito_application_id,
+        "roleName": role.role_name,
+        "roleTag": role.role_tag,
+        "isActive": role.is_active,
+        "description": role.description,
+        "is_assignable": role.is_assignable
+    }
 
 
 class ApplicationRoleService:
@@ -34,11 +50,9 @@ class ApplicationRoleService:
             .user_service \
             .get_by_session_token(session_token, session)
 
-        # Gets
-        result = session \
-            .query(AdvitoUserRoleLink) \
-            .filter_by(advito_user_id=user.id) \
-            .join(AdvitoApplicationRole.advito_user) \
+        # Returns tuple of users and their roles
+        return session \
+            .query(AdvitoUser, AdvitoApplicationRole) \
+            .join(AdvitoUserRoleLink) \
+            .join(AdvitoApplicationRole) \
             .all()
-
-        print(result)

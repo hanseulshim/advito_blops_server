@@ -10,6 +10,9 @@ class LogoutError(AdvitoError):
 class BadRequestError(AdvitoError):
     pass
 
+class UnauthorizedError(AdvitoError):
+    pass
+
 class InvalidSessionError(AdvitoError):
     pass
 

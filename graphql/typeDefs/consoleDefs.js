@@ -61,7 +61,15 @@ ${generateTypeList(
     title: String
     value: String
     programShare: Int
-    color: String
+  }`
+)}
+
+${generateTypeList(
+  'Market',
+  `{
+    title: String
+    value: Float
+    programShare: Int
   }`
 )}
 
@@ -112,5 +120,6 @@ ${generateQuery('viewData', 'View')}
 ${generateQuery('programPerformance', 'Performance')}
 ${generateQuery('noChangeSince', 'NoChangeSince')}
 ${generateQuery('personaList', 'Persona')}
+${generateQuery('marketList', 'Market')}
 opportunities(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
 riskAreas(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`;

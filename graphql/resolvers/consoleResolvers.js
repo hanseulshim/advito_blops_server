@@ -4,6 +4,7 @@ const {
   programPerformance,
   noChangeSince,
   personaList,
+  marketList,
   opportunities,
   riskAreas,
 } = require('../../data/dashboardData');
@@ -19,6 +20,7 @@ exports.consoleResolvers = {
     lambdaFakeInvoke(payload, programPerformance),
   noChangeSince: (_, payload) => lambdaFakeInvoke(payload, noChangeSince),
   personaList: (_, payload) => lambdaFakeInvoke(payload, personaList),
+  marketList: (_, payload) => lambdaFakeInvoke(payload, marketList),
   opportunities: (
     _,
     { limit = opportunities.length, cursor = 0, ...payload }

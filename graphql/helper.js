@@ -26,6 +26,19 @@ type ${type} {
   body: ${type}Body
 }`;
 
+exports.generateMutationType = type => `
+type ${type}Body {
+  success: Boolean,
+  apicode: String,
+  apimessage: String,
+  apidataset: String
+}
+
+type ${type} {
+  statusCode: Int,
+  body: ${type}Body
+}`;
+
 exports.generateTypeList = (type, data) => `
 type ${type}Data ${data}
 
@@ -54,7 +67,7 @@ exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const response = await lambda.invoke(params).promise();
   const responseBody = JSON.parse(response.Payload);
   responseBody.body = JSON.parse(responseBody.body);
-  if (response.statusCode !== 200) {
+  if (responseBody.statusCode !== 200) {
     return responseBody;
   }
   if (dataParam) {

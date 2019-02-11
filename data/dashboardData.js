@@ -23,25 +23,44 @@ exports.personaList = [
     title: 'road warrior',
     value: '$3,350',
     programShare: 25,
-    color: '#ACD2CF',
   },
   {
     title: 'executive',
     value: '$3,150',
     programShare: 40,
-    color: '#90C3C1',
   },
   {
     title: 'deal maker',
     value: '$2,561',
     programShare: 15,
-    color: '#81BDB9',
   },
   {
     title: 'on demand',
     value: '$1,955',
     programShare: 10,
-    color: '#71B5B1',
+  },
+];
+
+exports.marketList = [
+  {
+    title: 'commercial',
+    value: 5.7,
+    programShare: 40,
+  },
+  {
+    title: 'international',
+    value: 3.8,
+    programShare: 25,
+  },
+  {
+    title: 'retail',
+    value: 5.8,
+    programShare: 15,
+  },
+  {
+    title: 'corporate',
+    value: 7.8,
+    programShare: 10,
   },
 ];
 
@@ -80,6 +99,8 @@ exports.riskAreas = [
   { title: 'New item', value: 'XXX' },
 ];
 
-exports.logins =
-  { user_id: 2, displayname: 'Joe User', session_token: 'fhawefbkalwef' };
-
+exports.logins = {
+  user_id: 2,
+  displayname: 'Joe User',
+  session_token: 'fhawefbkalwef',
+};
