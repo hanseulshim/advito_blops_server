@@ -43,56 +43,80 @@ functions:
 
   # Creates a new user
   user_create:
+    warmup: true
     handler: handler.user_create
 
   # Logs in an existing user
   user_login:
+    warmup: true
     handler: handler.user_login
 
   # Logs out an existing user
   user_logout:
+    warmup: true
     handler: handler.user_logout
 
   # Gets application role info for all users
   application_role_get_all:
+    warmup: true
     handler: handler.application_role_get_all
+
+  # Gets a user with a session token
+  user_get_by_session_token:
+    warmup: true
+    handler: handler.user_get_by_session_token
+
+  # Sets a user with a session token
+  user_set_by_session_token:
+    warmup: true
+    handler: handler.user_set_by_session_token
 
   # Endpoint for udf_story_air
   udf_story_air:
+    warmup: true
     handler: handler.udf_story_air
 
   # Endpoint for udf_story_air_airlines
   udf_story_air_airlines:
+    warmup: true
     handler: handler.udf_story_air_airlines
 
   # Endpoint for udf_story_air_cabins
   udf_story_air_cabins:
+    warmup: true
     handler: handler.udf_story_air_cabins
 
   # Endpoint for udf_story_air_routes
   udf_story_air_routes:
+    warmup: true
     handler: handler.udf_story_air_routes
 
   # Endpoint for udf_story_air_traffic
   udf_story_air_traffic:
+    warmup: true
     handler: handler.udf_story_air_traffic
 
   # Endpoint for udf_story_hotel
   udf_story_hotel:
+    warmup: true
     handler: handler.udf_story_hotel
 
   # Endpoint for udf_story_hotel_1
   udf_story_hotel_1:
+    warmup: true
     handler: handler.udf_story_hotel_1
 
   # Endpoint for udf_story_hotel_2
   udf_story_hotel_2:
+    warmup: true
     handler: handler.udf_story_hotel_2
 
   # Endpoint for udf_story_hotel_3
   udf_story_hotel_3:
+    warmup: true
     handler: handler.udf_story_hotel_3
 
-    # Endpoint for udf_story_hotel_4
-    udf_story_hotel_4:
-      handler: handler.udf_story_hotel_4
+  # Endpoint for udf_story_hotel_4
+  udf_story_hotel_4:
+    warmup: true
+    handler: handler.udf_story_hotel_4
