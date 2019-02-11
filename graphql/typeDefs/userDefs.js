@@ -5,6 +5,11 @@ const {
 } = require('../helper');
 
 exports.userDefs = `
+  type RecentActivity {
+    date: String,
+    activity: String,
+  }
+
   ${generateType(
     'UserProfile',
     `{
@@ -18,12 +23,22 @@ exports.userDefs = `
     }`
   )}
 
+  ${generateType(
+    'UserProfileOverview',
+    `{
+      myApplications: [String]
+      persona: String
+      recentActivities: [RecentActivity]
+    }`
+  )}
+
   ${generateMutationType('PasswordResponse')}
   ${generateMutationType('UserProfileResponse')}
 `;
 
 exports.userQuery = `
   ${generateQuery('userProfile', 'UserProfile')}
+  ${generateQuery('userProfileOverview', 'UserProfileOverview')}
 `;
 
 exports.userMutation = `

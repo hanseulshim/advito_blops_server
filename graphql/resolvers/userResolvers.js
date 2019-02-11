@@ -1,7 +1,12 @@
 const { lambdaFakeInvoke } = require('../helper');
-const { userProfile } = require('../../data/userProfileData');
+const {
+  userProfile,
+  userProfileOverview,
+} = require('../../data/userProfileData');
 exports.userResolvers = {
   userProfile: (_, payload) => lambdaFakeInvoke(payload, userProfile),
+  userProfileOverview: (_, payload) =>
+    lambdaFakeInvoke(payload, userProfileOverview),
 };
 
 exports.userResolversMutation = {
