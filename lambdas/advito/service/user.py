@@ -18,7 +18,7 @@ def deserialize_user_create(user_create_json):
     """
 
     # Deserializes user and returns it
-    user =  AdvitoUser (
+    user = AdvitoUser (
         client_id = user_create_json['clientId'],
         username = user_create_json['username'],
         pwd = user_create_json['pwd'],
@@ -242,7 +242,7 @@ class UserService:
                 .join(AdvitoUserRoleLink) \
                 .join(AdvitoUser) \
                 .join(AdvitoUserSession) \
-                .filter(AdvitoUser.id == AdvitoUserSession.advito_user_id)
+                .filter(AdvitoUserSession.session_token == session_token)
             user_roles = user_roles_query.all()
             user_roles = [Role(user_role.id) for user_role in user_roles]
             if not set(roles).issubset(user_roles):

@@ -159,6 +159,7 @@ def authenticate_decorator(roles=[]):
 ###################### Handlers ###########################
 
 @handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):
 
     """
@@ -168,9 +169,17 @@ def user_create(event, context, session):
     :param session: Session used for database connectivity.
     """
 
-    # Deserializes user from json, inserts and commits
+    # Deserializes user from event
     user = deserialize_user_create(event)
+
+    # Acquires role from event
+    role_name = event['role']
+    role = Role[role_name]
+
+    # Creates user and assigns it a role
     user_service.create(user, session)
+    session.flush()
+    application_role_service.create_for(user.id, role, session)
 
     # Creates response and returns it
     return {

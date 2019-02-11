@@ -23,9 +23,7 @@ class ApplicationRoleService:
 
     """
     Represents a service that performs operations on instances of `AdvitoApplicationRole`.
-    Can insert users into database and select them.
-    Operations utilize an SQLAlchemy session object, but never commit/rollback.
-    That is the responsibility of the caller.
+    Can add and remove roles to and from users.
     """
 
     def __init__(self, user_service):
@@ -35,6 +33,23 @@ class ApplicationRoleService:
         :param user_service: UserService dependency.
         """
         self.user_service = user_service
+
+
+    def create_for(self, user_id, role, session):
+
+        """
+        Creates a role for an AdvitoUser.
+        :param user: Id of AdvitoUser to create role for.
+        :param role: Name of AdvitoApplicationRole to give AdvitoUser.
+        :param session: SQLAlchemy session used for db operations.
+        """
+
+        link = AdvitoUserRoleLink (
+            advito_user_id = user_id,
+            advito_role_id = role.value
+        )
+        session.add(link)
+
 
 
     def get_all_for(self, session_token, session):
