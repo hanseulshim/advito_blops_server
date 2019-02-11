@@ -1,6 +1,7 @@
 # package directories
 node_modules
 lambdas/node_modules
+lambdas/input
 jspm_packages
 
 # Serverless directories
