@@ -57,9 +57,9 @@ functions:
     handler: handler.user_logout
 
   # Gets application role info for all users
-  application_role_get_all:
+  user_access:
     warmup: true
-    handler: handler.application_role_get_all
+    handler: handler.user_access
 
   # Gets a user with a session token
   user_get_by_session_token:

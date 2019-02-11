@@ -286,19 +286,22 @@ def user_logout(event, context, session):
 
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
-def application_role_get_all(event, context, session):
+def user_access(event, context, session):
 
     """
-    Gets all application roles given a sessionToken.
+    Gets user access information for a given client.
     :param event: Login JSON as a dict. Example:
     {
-        "sessionToken": "abc123"
+        "sessionToken": "abc123",
+        "clientId": 1
     }
     :param context: AWS context.
     :param session: Session used for database connectivity.
     """
+
     session_token = event['sessionToken']
-    results = application_role_service.get_all_for(session_token, session)
+    user = user_service.get_by_session_token(session_token, session)
+    results = application_role_service.get_user_access_by_client(user.client_id, session)
     serialized = []
     for result in results:
         user = result[0]

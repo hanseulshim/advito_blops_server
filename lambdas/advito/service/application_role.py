@@ -52,22 +52,18 @@ class ApplicationRoleService:
 
 
 
-    def get_all_for(self, session_token, session):
+    def get_user_access_by_client(self, client_id, session):
 
         """
         Gets all ApplicationRoleServices for a given AdvitoUser
-        :param session_token: Session token for an AdvitoUser. Used for determining of that user has the right privileges to query this function.
+        :param client_id: ID of client users belong underneath.
         :param session: SQLAlchemy session used for db operations.
         """
-
-        # Gets user of token
-        user = self \
-            .user_service \
-            .get_by_session_token(session_token, session)
 
         # Returns tuple of users and their roles
         return session \
             .query(AdvitoUser, AdvitoApplicationRole) \
             .join(AdvitoUserRoleLink) \
             .join(AdvitoApplicationRole) \
+            .filter(AdvitoUser.client_id == client_id) \
             .all()
