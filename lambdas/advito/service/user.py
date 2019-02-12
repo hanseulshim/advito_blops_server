@@ -57,20 +57,6 @@ def serialize_user(user):
         'dateFormatDefault': user.default_date_format
     }
 
-def massage_user_update(user_json):
-    dict = {}
-    for key, value in user_json.items():
-        newkey = key
-        if key == "nameLast": newkey = "name_last"
-        if key == "nameFirst": newkey = "name_first"
-        if key == "profilePicturePath": newkey = "profile_picture_path"
-        if key == "timezoneDefault": newkey = "default_timezone"
-        if key == "languageDefault": newkey = "default_language"
-        if key == "dateFormatDefault": newkey = "default_date_format"
-        dict[newkey] = value
-
-    return dict
-
 
 class UserService:
 
@@ -108,7 +94,7 @@ class UserService:
         session.add(user)
 
 
-    def update(self, user_id, user_dict, session):
+    def update(self, user, session):
 
         """
         Updates an AdvitoUser in the database.
@@ -116,15 +102,26 @@ class UserService:
         :param session: SQLAlchemy session used for db operations.
         """
 
-        # Gets password changes
-        pwd = user_dict
+        user_serialized = {
+            "username": user.username,
+            "user_salt": user.user_salt,
+            "name_last": user.name_last,
+            "name_first": user.name_first,
+            "email": user.email,
+            "phone": user.phone,
+            "profile_picture_path": user.profile_picture_path,
+            "default_timezone": user.default_timezone,
+            "default_language": user.default_language,
+            "default_date_format": user.default_date_format
+        }
 
-        # Converts to AdvitoUser and saves it
+        # Updates user in db
         row_count = session \
             .query(AdvitoUser) \
             .filter(AdvitoUser.id == user.id) \
-            .update(user_dict)
+            .update(user_serialized)
 
+        # Validates that a change occurred
         if row_count == 0:
             raise NotFoundError("Could not find user with specified id " + str(user.id))
 

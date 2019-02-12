@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, serialize_user, deserialize_user, massage_user_update
+from advito.service.user import UserService, serialize_user, deserialize_user
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
@@ -285,22 +285,17 @@ def user_update(event, context, session):
 
     """
     Updates an existing users data.
-    :param event: User Update JSON as a dict. Example:
-    {
-        "sessionToken": "abc123",
-        "userId": 1337
-    }
-    userId is optional. If it is specified and it differs from the user that owns the sessionToken,
-    this method will fail unless the user is an Admin.
+    :param event: User Update JSON as a dict.
     """
 
     # Deserializes user from event
     session_token = event['sessionToken']
+    user = deserialize_user(event)
     current_user = user_service.get(session_token, session)
-    user_update_dict = massage_user_update(event)
+    user.id = current_user.id
 
     # Creates user and assigns it a role
-    user_service.update(current_user.id, user_update_dict, session)
+    user_service.update(user, session)
 
     # Creates response and returns it
     return {
