@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, serialize_user, deserialize_user
+from advito.service.user import UserService, serialize_user, deserialize_user, massage_user_update
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
@@ -297,11 +297,10 @@ def user_update(event, context, session):
     # Deserializes user from event
     session_token = event['sessionToken']
     current_user = user_service.get(session_token, session)
-    user = deserialize_user(event)
-    user.id = current_user.id
+    user_update_dict = massage_user_update(event)
 
     # Creates user and assigns it a role
-    user_service.update(user, session)
+    user_service.update(current_user.id, user_update_dict, session)
 
     # Creates response and returns it
     return {
