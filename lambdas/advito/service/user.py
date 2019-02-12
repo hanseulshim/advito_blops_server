@@ -111,6 +111,7 @@ class UserService:
         user_serialized = {
             "username": user.username,
             "pwd": user.pwd,
+            "user_salt": user.user_salt,
             "name_last": user.name_last,
             "name_first": user.name_first,
             "email": user.email,

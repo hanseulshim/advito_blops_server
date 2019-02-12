@@ -13,7 +13,7 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
+from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
 
@@ -52,7 +52,7 @@ def handler_decorator(func):
             session.commit()
             status_code = 200
 
-        except (LoginError, LogoutError) as e:
+        except (NotFoundError, LoginError, LogoutError) as e:
             session.rollback()
             body = {
                 "success": False,
