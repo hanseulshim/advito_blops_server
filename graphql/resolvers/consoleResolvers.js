@@ -3,6 +3,8 @@ const { viewData, infoData } = require('../../data/viewData');
 const {
   programPerformanceTravel,
   programPerformanceExecutive,
+  netSpendAnalysisTravel,
+  netSpendAnalysisExecutive,
   noChangeSince,
   personaList,
   marketList,
@@ -23,6 +25,10 @@ exports.consoleResolvers = {
     lambdaFakeInvoke(payload, programPerformanceTravel),
   programPerformanceExecutive: (_, payload) =>
     lambdaFakeInvoke(payload, programPerformanceExecutive),
+  netSpendAnalysisTravel: (_, payload) =>
+    lambdaFakeInvoke(payload, netSpendAnalysisTravel),
+  netSpendAnalysisExecutive: (_, payload) =>
+    lambdaFakeInvoke(payload, netSpendAnalysisExecutive),
   noChangeSince: (_, payload) => lambdaFakeInvoke(payload, noChangeSince),
   personaList: (_, payload) => lambdaFakeInvoke(payload, personaList),
   marketList: (_, payload) => lambdaFakeInvoke(payload, marketList),

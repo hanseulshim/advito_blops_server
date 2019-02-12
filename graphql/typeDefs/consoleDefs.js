@@ -74,6 +74,22 @@ ${generateType(
 )}
 
 ${generateTypeList(
+  'NetSpendAnalysisTravel',
+  `{
+    date: String
+    value: Float
+  }`
+)}
+
+${generateTypeList(
+  'NetSpendAnalysisExecutive',
+  `{
+    date: String
+    value: Float
+  }`
+)}
+
+${generateTypeList(
   'Persona',
   `{
     title: String
@@ -141,6 +157,8 @@ ${generateQuery('infoData', 'Info')}
 ${generateQuery('viewData', 'View')}
 ${generateQuery('programPerformanceTravel', 'ProgramPerformanceTravel')}
 ${generateQuery('programPerformanceExecutive', 'ProgramPerformanceExecutive')}
+${generateQuery('netSpendAnalysisTravel', 'NetSpendAnalysisTravel')}
+${generateQuery('netSpendAnalysisExecutive', 'NetSpendAnalysisExecutive')}
 ${generateQuery('noChangeSince', 'NoChangeSince')}
 ${generateQuery('personaList', 'Persona')}
 ${generateQuery('marketList', 'Market')}

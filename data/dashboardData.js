@@ -16,6 +16,22 @@ exports.programPerformanceTravel = [
   },
 ];
 
+const netSpendAnalysisTravel = [];
+const netSpendAnalysisExecutive = [];
+for (let i = 1; i <= 15; i++) {
+  netSpendAnalysisTravel.push({
+    date: `2019-01-${i}`,
+    value: Math.floor(Math.random() * 10 + i),
+  });
+  netSpendAnalysisExecutive.push({
+    date: `2019-06-${i}`,
+    value: Math.floor(Math.random() * 10 + i),
+  });
+}
+
+exports.netSpendAnalysisTravel = netSpendAnalysisTravel;
+exports.netSpendAnalysisExecutive = netSpendAnalysisExecutive;
+
 exports.programPerformanceExecutive = {
   value: 7.1,
 };
@@ -211,9 +227,3 @@ exports.riskAreasExecutive = [
     ],
   },
 ];
-
-exports.logins = {
-  user_id: 2,
-  displayname: 'Joe User',
-  session_token: 'fhawefbkalwef',
-};
