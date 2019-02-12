@@ -120,9 +120,7 @@ class UserService:
             "default_language": user.default_language,
             "default_date_format": user.default_date_format
         }
-
-        print(user.id)
-        print(user_serialized)
+        user_serialized = { key:value for (key, value) in user_serialized.items() if value is not None }
 
         # Converts to AdvitoUser and saves it
         row_count = session \
