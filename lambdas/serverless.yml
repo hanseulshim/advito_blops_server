@@ -67,9 +67,9 @@ functions:
     handler: handler.user_access
 
   # Gets a user with a session token
-  user_get_by_session_token:
+  user_get:
     warmup: true
-    handler: handler.user_get_by_session_token
+    handler: handler.user_get
 
   # Endpoint for udf_story_air
   udf_story_air:

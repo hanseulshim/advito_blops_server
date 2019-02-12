@@ -39,7 +39,7 @@ class ApplicationRoleService:
 
         """
         Creates a role for an AdvitoUser.
-        :param user: Id of AdvitoUser to create role for.
+        :param user_id: Id of AdvitoUser to create role for.
         :param role: Name of AdvitoApplicationRole to give AdvitoUser.
         :param session: SQLAlchemy session used for db operations.
         """
@@ -49,6 +49,33 @@ class ApplicationRoleService:
             advito_role_id = role.value
         )
         session.add(link)
+
+
+    def update_for(self, user_id, role, session):
+
+        """
+        Updates a role for an AdvitoUser.
+        :param user_id: Id of AdvitoUser to create role for.
+        :param role: Name of AdvitoApplicationRole to give AdvitoUser.
+        :param session: SQLAlchemy session used for db operations.
+        """
+        session \
+            .query(AdvitoUserRoleLink) \
+            .filter(AdvitoUserRoleLink.advito_user_id == user_id) \
+            .update({ "advito_user_id": user_id, "advito_role_id": role.value })
+
+
+    def get_for(self, user_id, session):
+
+        """
+        Gets all roles for an AdvitoUser
+        :param user_id: Id of AdvitoUser to get roles for.
+        :param session: SQLAlchemy session used for db operations.
+        """
+        session \
+            .query(AdvitoUserRoleLink) \
+            .filter(AdvitoUserRoleLink.advito_user_id == user_id) \
+            .all()
 
 
 

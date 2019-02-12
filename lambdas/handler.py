@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, serialize_user, deserialize_user_create
+from advito.service.user import UserService, serialize_user, deserialize_user
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
@@ -170,7 +170,7 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from event
-    user = deserialize_user_create(event)
+    user = deserialize_user(event)
 
     # Acquires role from event
     role_name = event['role']
@@ -223,8 +223,9 @@ def user_login(event, context, session):
         }
     }
 
+
 @handler_decorator
-def user_get_by_session_token(event, context, session):
+def user_get(event, context, session):
 
     """
     Acquires a user by their session token.
@@ -238,7 +239,7 @@ def user_get_by_session_token(event, context, session):
 
     # Acquires session token
     session_token = event['sessionToken']
-    user = user_service.get_by_session_token(session_token, session)
+    user = user_service.get(session_token, session)
     user_json = serialize_user(user)
 
     # Done
@@ -248,6 +249,7 @@ def user_get_by_session_token(event, context, session):
         "apimessage": "Data successfully fetched.",
         "apidataset": user_json
     }
+
 
 @handler_decorator
 def user_logout(event, context, session):
@@ -276,7 +278,9 @@ def user_logout(event, context, session):
         "apidataset": None
     }
 
+
 @handler_decorator
+@authenticate_decorator()
 def user_update(event, context, session):
 
     """
@@ -290,11 +294,23 @@ def user_update(event, context, session):
     this method will fail unless the user is an Admin.
     """
 
+    # Deserializes user from event
+    session_token = event['sessionToken']
+    current_user = user_service.get(session_token, session)
+    user = deserialize_user(event)
+    user.id = current_user.id
+
+    # Creates user and assigns it a role
+    user_service.update(user, session)
+
+    # Creates response and returns it
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
-        "apidataset": None
+        "apimessage": "User successfully updated.",
+        "apidataset": {
+            "message": "User successfully updated!"
+        }
     }
 
 
