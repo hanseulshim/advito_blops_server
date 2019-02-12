@@ -1,4 +1,4 @@
-exports.programPerformance = [
+exports.programPerformanceTravel = [
   {
     title: 'Average Total Trip Cost',
     value: '$2,754',
@@ -15,6 +15,10 @@ exports.programPerformance = [
     unit: 'impact',
   },
 ];
+
+exports.programPerformanceExecutive = {
+  value: 7.1,
+};
 
 exports.noChangeSince = 'July 30';
 
@@ -64,17 +68,24 @@ exports.marketList = [
   },
 ];
 
-exports.opportunities = [
+exports.opportunitiesTravel = [
   {
     title: 'Expenses approved above rate caps / per diems',
-    value: '27% / $375K',
-    unit: 'impact',
+    value: '27%',
+    secondaryValue: '$375K',
+    secondaryUnit: 'impact',
   },
-  { title: 'ABR higher than ANR', value: '30% / $500K', unit: 'impact' },
+  {
+    title: 'ABR higher than ANR',
+    value: '30%',
+    secondaryValue: '$500k',
+    secondaryUnit: 'impact',
+  },
   {
     title: 'NRT Utilization/Loss',
-    value: '83% / $23K',
-    unit: 'expired',
+    value: '83%',
+    secondaryValue: '$23k',
+    secondaryUnit: 'expired',
   },
   {
     title: 'ANR higher than ABR',
@@ -86,7 +97,58 @@ exports.opportunities = [
   { title: 'New item', value: 'XX% / $XX', unit: '' },
 ];
 
-exports.riskAreas = [
+exports.opportunitiesExecutive = [
+  {
+    title: 'Amount to incentive/Rebate (personal card)',
+    value: '$150K',
+    divisions: [
+      { title: 'it', value: '$11K' },
+      { title: 'recruiting', value: '$3.1K' },
+      { title: 'product', value: '$2.9K' },
+    ],
+  },
+  {
+    title: 'Breakfast & Wifi Expensed',
+    value: '$200K',
+    divisions: [
+      { title: 'product', value: '$2.4K' },
+      { title: 'security', value: '23', secondaryValue: '$2.4K' },
+      { title: 'regulatory', value: '21', secondaryValue: '$1.7K' },
+    ],
+  },
+  {
+    title: 'Actual vs negotiated save rate',
+    value: '10%',
+    secondaryValue: '8%',
+    unit: 'Actual',
+    secondaryUnit: 'Negotiated',
+    divisions: [
+      { title: 'commercial sales', value: '5%', secondaryValue: '4%' },
+      { title: 'international sales', value: '4%', secondaryValue: '2.5%' },
+      { title: 'regulatory', value: '2%', secondaryValue: '1%' },
+    ],
+  },
+  {
+    title: 'Volume of ancillary spend',
+    value: '$800K',
+    divisions: [
+      { title: 'product', value: '$140k' },
+      { title: 'it', value: '$120k' },
+      { title: 'security', value: '$50k' },
+    ],
+  },
+  {
+    title: 'Contracted savings lost',
+    value: '$200K',
+    divisions: [
+      { title: 'international sales', value: '$15K' },
+      { title: 'retail sales', value: '$12.5K' },
+      { title: 'retail marketing', value: '$3.7K' },
+    ],
+  },
+];
+
+exports.riskAreasTravel = [
   { title: 'Number of markets with ATP change more than 15%', value: '10' },
   {
     title: 'Number of markets with rate availability lower than 80%',
@@ -97,6 +159,57 @@ exports.riskAreas = [
   { title: 'New item', value: 'XXX' },
   { title: 'New item', value: 'XXX' },
   { title: 'New item', value: 'XXX' },
+];
+
+exports.riskAreasExecutive = [
+  {
+    title: 'T&E spend to forecasted budget value',
+    value: '$3.2M',
+    secondaryValue: '$3.5M',
+    divisions: [
+      { title: 'regulatory', value: '$394K', secondaryValue: '$280K' },
+      { title: 'security', value: '$327K', secondaryValue: '$300K' },
+      { title: 'product', value: '$420K', secondaryValue: '$415K' },
+    ],
+  },
+  {
+    title: 'Non-expensed trips (days since trip)',
+    value: '21',
+    secondaryValue: '$150K',
+    divisions: [
+      { title: 'retail sales', value: '32', secondaryValue: '$24K' },
+      { title: 'it', value: '23', secondaryValue: '$18K' },
+      { title: 'international sales', value: '15', secondaryValue: '$32K' },
+    ],
+  },
+  {
+    title: 'Past due corporate cards',
+    value: '21%',
+    secondaryValue: '$98K',
+    divisions: [
+      { title: 'it', value: '26%', secondaryValue: '$15K' },
+      { title: 'commercial sales', value: '19%', secondaryValue: '$12K' },
+      { title: 'retail marketing', value: '16%', secondaryValue: '$8K' },
+    ],
+  },
+  {
+    title: 'Time away/employee burn out',
+    value: '34%',
+    divisions: [
+      { title: 'commercial sales', value: '42%' },
+      { title: 'international sales', value: '38%' },
+      { title: 'regulatory', value: '18%' },
+    ],
+  },
+  {
+    title: 'Approved out of policy spend',
+    value: '$472K',
+    divisions: [
+      { title: 'international sales', value: '$123K' },
+      { title: 'retail sales', value: '$52K' },
+      { title: 'recruiting', value: '$27K' },
+    ],
+  },
 ];
 
 exports.logins = {
