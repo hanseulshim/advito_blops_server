@@ -1,5 +1,6 @@
 const {
   generateType,
+  generateTypeList,
   generateQuery,
   generateMutationType,
 } = require('../helper');
@@ -13,13 +14,28 @@ exports.userDefs = `
   ${generateType(
     'UserProfile',
     `{
-      firstName: String,
-      lastName: String,
+      nameFirst: String,
+      nameLast: String,
       profilePicturePath: String,
       username: String,
-      timeFormat: String,
-      timeZone: String,
+      timezoneDefault: String,
+      dateFormatDefault: String,
       emailNotifications: Boolean
+    }`
+  )}
+
+  ${generateTypeList(
+    'UserInfo',
+    `{
+      userId: Int,
+      username: String,
+      active: Boolean,
+      nameFirst: String,
+      nameLast: String,
+      phone: String,
+      address: String,
+      role: String,
+      roleId: Int
     }`
   )}
 
@@ -41,40 +57,40 @@ exports.userDefs = `
 exports.userQuery = `
   ${generateQuery('userProfile', 'UserProfile')}
   ${generateQuery('userProfileOverview', 'UserProfileOverview')}
+  ${generateQuery('getUsers', 'UserInfo')}
 `;
 
 exports.userMutation = `
   updatePassword(clientId: Int!, sessionToken: String!, pwd: String!): PasswordResponse
-  updateUserProfile(clientId: Int!,
+  updateUserProfile(
     sessionToken: String!,
-    firstName: String!,
-    lastName: String!,
+    nameFirst: String!,
+    nameLast: String!,
     profilePicturePath: String!,
     username: String!,
-    timeFormat: String!,
-    timeZone: String!,
+    dateFormatDefault: String!,
+    timezoneDefault: String!,
     emailNotifications: Boolean!
   ): UserProfileResponse
-  editUser(clientId: Int!,
+  editUser(userId: Int!,
     sessionToken: String!,
     username: String!,
-    accountActive: Boolean!,
-    firstName: String!,
-    lastName: String!,
+    isEnabled: Boolean!,
+    nameFirst: String!,
+    nameLast: String!,
     phone: String,
     address: String,
-    role: String,
-    pwd: String
+    roleId: Int,
   ): EditUserResponse
   createUser(clientId: Int!,
     sessionToken: String!,
     username: String!,
-    accountActive: Boolean!,
-    firstName: String!,
-    lastName: String!,
+    isEnabled: Boolean!,
+    nameFirst: String!,
+    nameLast: String!,
     phone: String,
     address: String,
-    role: String,
+    roleId: Int,
     pwd: String!
   ): CreateUserResponse
 `;
