@@ -61,7 +61,7 @@ exports.userQuery = `
 `;
 
 exports.userMutation = `
-  updatePassword(clientId: Int!, sessionToken: String!, pwd: String!): PasswordResponse
+  updatePassword(clientId: Int!, sessionToken: String!, pwd: String!, confirmPwd: String!): PasswordResponse
   updateUserProfile(
     sessionToken: String!,
     nameFirst: String!,
@@ -91,6 +91,7 @@ exports.userMutation = `
     phone: String,
     address: String,
     roleId: Int,
-    pwd: String!
+    pwd: String!,
+    confirmPwd: String!,
   ): CreateUserResponse
 `;
