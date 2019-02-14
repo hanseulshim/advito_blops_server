@@ -1,8 +1,5 @@
 const { lambdaInvoke, lambdaFakeInvoke } = require('../helper');
-const {
-  userProfile,
-  userProfileOverview,
-} = require('../../data/userProfileData');
+const { userProfileOverview } = require('../../data/userProfileData');
 exports.userResolvers = {
   userProfile: (_, payload) =>
     lambdaInvoke('python-lambdas-dev-user_get', {
