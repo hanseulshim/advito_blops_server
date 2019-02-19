@@ -29,10 +29,21 @@ type List {
   link: String
 }
 
+type Division {
+  title: String,
+  value: String,
+  secondaryValue: String,
+  unit: String,
+  secondaryUnit: String,
+}
+
 type Opportunity {
   title: String
   value: String
   unit: String
+  secondaryValue: String
+  secondaryUnit: String
+  divisions: [Division]
 }
 
 ${generateType(
@@ -47,11 +58,34 @@ ${generateType(
 )}
 
 ${generateTypeList(
-  'Performance',
+  'ProgramPerformanceTravel',
   `{
     title: String
     value: String
     unit: String
+  }`
+)}
+
+${generateType(
+  'ProgramPerformanceExecutive',
+  `{
+    value: Float
+  }`
+)}
+
+${generateTypeList(
+  'NetSpendAnalysisTravel',
+  `{
+    date: String
+    value: Float
+  }`
+)}
+
+${generateTypeList(
+  'NetSpendAnalysisExecutive',
+  `{
+    date: String
+    value: Float
   }`
 )}
 
@@ -76,6 +110,10 @@ ${generateTypeList(
 type RiskArea {
   title: String
   value: String
+  unit: String
+  secondaryValue: String
+  secondaryUnit: String
+  divisions: [Division]
 }
 
 ${generateType(
@@ -117,9 +155,14 @@ ${generateQuery('activeAlerts', 'Action')}
 ${generateQuery('upcomingActions', 'Action')}
 ${generateQuery('infoData', 'Info')}
 ${generateQuery('viewData', 'View')}
-${generateQuery('programPerformance', 'Performance')}
+${generateQuery('programPerformanceTravel', 'ProgramPerformanceTravel')}
+${generateQuery('programPerformanceExecutive', 'ProgramPerformanceExecutive')}
+${generateQuery('netSpendAnalysisTravel', 'NetSpendAnalysisTravel')}
+${generateQuery('netSpendAnalysisExecutive', 'NetSpendAnalysisExecutive')}
 ${generateQuery('noChangeSince', 'NoChangeSince')}
 ${generateQuery('personaList', 'Persona')}
 ${generateQuery('marketList', 'Market')}
-opportunities(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
-riskAreas(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`;
+opportunitiesTravel(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
+opportunitiesExecutive(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
+riskAreasTravel(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed
+riskAreasExecutive(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`;

@@ -1,12 +1,17 @@
 const { activeAlerts, upcomingActions } = require('../../data/sidebarData');
 const { viewData, infoData } = require('../../data/viewData');
 const {
-  programPerformance,
+  programPerformanceTravel,
+  programPerformanceExecutive,
+  netSpendAnalysisTravel,
+  netSpendAnalysisExecutive,
   noChangeSince,
   personaList,
   marketList,
-  opportunities,
-  riskAreas,
+  opportunitiesTravel,
+  opportunitiesExecutive,
+  riskAreasTravel,
+  riskAreasExecutive,
 } = require('../../data/dashboardData');
 
 const { lambdaFakeInvoke } = require('../helper');
@@ -16,16 +21,22 @@ exports.consoleResolvers = {
   upcomingActions: (_, payload) => lambdaFakeInvoke(payload, upcomingActions),
   infoData: (_, payload) => lambdaFakeInvoke(payload, infoData),
   viewData: (_, payload) => lambdaFakeInvoke(payload, viewData),
-  programPerformance: (_, payload) =>
-    lambdaFakeInvoke(payload, programPerformance),
+  programPerformanceTravel: (_, payload) =>
+    lambdaFakeInvoke(payload, programPerformanceTravel),
+  programPerformanceExecutive: (_, payload) =>
+    lambdaFakeInvoke(payload, programPerformanceExecutive),
+  netSpendAnalysisTravel: (_, payload) =>
+    lambdaFakeInvoke(payload, netSpendAnalysisTravel),
+  netSpendAnalysisExecutive: (_, payload) =>
+    lambdaFakeInvoke(payload, netSpendAnalysisExecutive),
   noChangeSince: (_, payload) => lambdaFakeInvoke(payload, noChangeSince),
   personaList: (_, payload) => lambdaFakeInvoke(payload, personaList),
   marketList: (_, payload) => lambdaFakeInvoke(payload, marketList),
-  opportunities: (
+  opportunitiesTravel: (
     _,
-    { limit = opportunities.length, cursor = 0, ...payload }
+    { limit = opportunitiesTravel.length, cursor = 0, ...payload }
   ) => {
-    const totalOpportunities = opportunities.length;
+    const totalOpportunities = opportunitiesTravel.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
     return lambdaFakeInvoke(payload, {
@@ -33,11 +44,29 @@ exports.consoleResolvers = {
       cursor: newCursor,
       totalOpportunities,
       hasNext: newCursor < totalOpportunities,
-      opportunities: opportunities.slice(cursor, newCursor),
+      opportunities: opportunitiesTravel.slice(cursor, newCursor),
     });
   },
-  riskAreas: (_, { limit = riskAreas.length, cursor = 0, ...payload }) => {
-    const totalRiskAreas = riskAreas.length;
+  opportunitiesExecutive: (
+    _,
+    { limit = opportunitiesExecutive.length, cursor = 0, ...payload }
+  ) => {
+    const totalOpportunities = opportunitiesExecutive.length;
+    const newCursor = cursor + limit;
+    const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
+    return lambdaFakeInvoke(payload, {
+      prevCursor,
+      cursor: newCursor,
+      totalOpportunities,
+      hasNext: newCursor < totalOpportunities,
+      opportunities: opportunitiesExecutive.slice(cursor, newCursor),
+    });
+  },
+  riskAreasTravel: (
+    _,
+    { limit = riskAreasTravel.length, cursor = 0, ...payload }
+  ) => {
+    const totalRiskAreas = riskAreasTravel.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
     return lambdaFakeInvoke(payload, {
@@ -45,7 +74,22 @@ exports.consoleResolvers = {
       cursor: newCursor,
       totalRiskAreas,
       hasNext: newCursor < totalRiskAreas,
-      riskAreas: riskAreas.slice(cursor, newCursor),
+      riskAreas: riskAreasTravel.slice(cursor, newCursor),
+    });
+  },
+  riskAreasExecutive: (
+    _,
+    { limit = riskAreasExecutive.length, cursor = 0, ...payload }
+  ) => {
+    const totalRiskAreas = riskAreasExecutive.length;
+    const newCursor = cursor + limit;
+    const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
+    return lambdaFakeInvoke(payload, {
+      prevCursor: prevCursor,
+      cursor: newCursor,
+      totalRiskAreas,
+      hasNext: newCursor < totalRiskAreas,
+      riskAreas: riskAreasExecutive.slice(cursor, newCursor),
     });
   },
 };
