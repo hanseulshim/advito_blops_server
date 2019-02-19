@@ -242,12 +242,16 @@ class UserService:
         # Reads in user where username matches
         user = session \
             .query(AdvitoUser) \
-            .filter_by(username=username) \
+            .filter(AdvitoUser.username == username) \
             .first()
 
         # Checks that user exists
         if user is None:
             raise LoginError("User did not exist")
+
+        # Checks that user is enabled
+        if not user.is_enabled:
+            raise LoginError("User is not enabled")
 
         # Gets password and salt of existing user
         db_password = user.pwd
