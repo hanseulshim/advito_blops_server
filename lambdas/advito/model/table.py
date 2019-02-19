@@ -663,6 +663,7 @@ class AdvitoUser(Base):
     default_language = Column(String(16))
     user_salt = Column(String(64))
     default_date_format = Column(String(32))
+    address = Column(String(255))
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 

@@ -61,6 +61,11 @@ functions:
     warmup: true
     handler: handler.user_update
 
+  # Updates any user
+  user_update_any:
+    warmup: true
+    handler: handler.user_update_any
+
   # Gets application role info for all users
   user_access:
     warmup: true

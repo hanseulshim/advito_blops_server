@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, serialize_user, deserialize_user
+from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
@@ -170,11 +170,14 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from event
-    user = deserialize_user(event)
+
+    print(event)
+    user = deserialize_user_create(event)
+    print(user.__dict__)
 
     # Acquires role from event
-    role_name = event['role']
-    role = Role[role_name]
+    roleId = event['roleId']
+    role = Role(roleId)
 
     # Creates user and assigns it a role
     user_service.create(user, session)
@@ -186,9 +189,7 @@ def user_create(event, context, session):
         "success": True,
         "apicode": "OK",
         "apimessage": "User successfully created.",
-        "apidataset": {
-            "message": "User successfully created!"
-        }
+        "apidataset": "User successfully created."
     }
 
 
@@ -225,6 +226,7 @@ def user_login(event, context, session):
 
 
 @handler_decorator
+@authenticate_decorator()
 def user_get(event, context, session):
 
     """
@@ -252,6 +254,7 @@ def user_get(event, context, session):
 
 
 @handler_decorator
+@authenticate_decorator()
 def user_logout(event, context, session):
 
     """
@@ -302,9 +305,39 @@ def user_update(event, context, session):
         "success": True,
         "apicode": "OK",
         "apimessage": "User successfully updated.",
-        "apidataset": {
-            "message": "User successfully updated!"
-        }
+        "apidataset": "User successfully updated."
+    }
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def user_update_any(event, context, session):
+
+    """
+    Updates an existing users data.
+    Unlike user_update, any user an be updated.
+    This endpoint requires admin privileges.
+    :param event: User Update JSON as a dict.
+    """
+
+    # Deserializes user from event
+    session_token = event['sessionToken']
+    roleId = event['roleId']
+    role = Role(roleId)
+    user = deserialize_user(event)
+    user.id = event["userId"]
+    if user.id is None:
+        raise BadRequestError("id must be specified.")
+
+    # Creates user and assigns it a role
+    user_service.update_any(user, session)
+    application_role_service.update_for(user.id, role, session)
+
+    # Creates response and returns it
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully updated.",
+        "apidataset": "User successfully updated."
     }
 
 
@@ -338,6 +371,9 @@ def user_access(event, context, session):
             "nameLast": user.name_last,
             "username": user.username,
             "email": user.email,
+            "phone": user.phone,
+            "address": user.address,
+            "isEnabled": user.is_enabled,
             "role": role.role_name,
             "roleId": role.id
         }
