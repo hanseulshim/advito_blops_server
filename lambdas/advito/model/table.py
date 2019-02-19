@@ -87,6 +87,118 @@ class Client(Base):
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
 
+t_edm_airport = Table(
+    'edm_airport', metadata,
+    Column('loc', String(255)),
+    Column('multicty', String(255)),
+    Column('apt', String(255)),
+    Column('type', String(255)),
+    Column('subtype', String(255)),
+    Column('name', String(255)),
+    Column('ctry', String(255)),
+    Column('subctry', String(255)),
+    Column('ctryname', String(255)),
+    Column('state', String(255)),
+    Column('substate', String(255)),
+    Column('statename', String(255)),
+    Column('timediv', String(255)),
+    Column('lat', String(255)),
+    Column('long', String(255)),
+    Column('inactive', String(255)),
+    Column('gmt', String(255)),
+    Column('dst', String(255)),
+    Column('dststttime', String(255)),
+    Column('sttdate', String(255)),
+    Column('dststtstts', String(255)),
+    Column('dstendtime', String(255)),
+    Column('enddate', String(255)),
+    Column('dstendstts', String(255)),
+    Column('dstno', String(255)),
+    Column('gmt02', String(255)),
+    Column('time02', String(255)),
+    Column('date02', String(255)),
+    Column('kind02', String(255)),
+    Column('time03', String(255)),
+    Column('date03', String(255)),
+    Column('k_ind03', String(255)),
+    Column('num03', String(255)),
+    Column('gmt03', String(255)),
+    Column('time04', String(255)),
+    Column('date04', String(255)),
+    Column('k_ind04', String(255)),
+    Column('time05', String(255)),
+    Column('date05', String(255)),
+    Column('rest', String(255))
+)
+
+
+t_edm_hotel = Table(
+    'edm_hotel', metadata,
+    Column('BCDPropertyId', String(255)),
+    Column('BrandName', String(255)),
+    Column('BrandCode', String(255)),
+    Column('MasterChainName', String(255)),
+    Column('MasterChainCode', String(255)),
+    Column('ActualPropertyName', String(255)),
+    Column('BCDPropertyName', String(255)),
+    Column('StreetAddress1', String(255)),
+    Column('StreetAddress2', String(255)),
+    Column('City', String(255)),
+    Column('StateProvinceName', String(255)),
+    Column('StateProvinceCode', String(255)),
+    Column('PostalCode', String(255)),
+    Column('PostalCodeLast4', String(255)),
+    Column('CountryName', String(255)),
+    Column('CountryCode2Char', String(255)),
+    Column('CountryCode3Char', String(255)),
+    Column('CountryCodeDigit', String(255)),
+    Column('PropertyLatitude', String(255)),
+    Column('PropertyLongitude', String(255)),
+    Column('GeoResolutionCode', String(255)),
+    Column('GeoResolution', String(255)),
+    Column('AirportCode', String(255)),
+    Column('BCDMultAptCityCode', String(255)),
+    Column('BCDMultAptCityName', String(255)),
+    Column('MutiAptCityCode', String(255)),
+    Column('AirportLatitude', String(255)),
+    Column('AirportLongitude', String(255)),
+    Column('DstMiles', String(255)),
+    Column('DstKm', String(255)),
+    Column('PropApTyp', String(255)),
+    Column('Phone', String(255)),
+    Column('PhoneCountrycode', String(255)),
+    Column('PhoneCityCode', String(255)),
+    Column('PhoneExchange', String(255)),
+    Column('Fax', String(255)),
+    Column('FaxCountryCode', String(255)),
+    Column('FaxCityCode', String(255)),
+    Column('FaxExchange', String(255)),
+    Column('AmadeusID', String(255)),
+    Column('AmadeusBrandCode', String(255)),
+    Column('WorldSpanID', String(255)),
+    Column('WorldSpanBrandCode', String(255)),
+    Column('SabreID', String(255)),
+    Column('SabreBrandCode', String(255)),
+    Column('ApolloID', String(255)),
+    Column('ApolloBrandCode', String(255)),
+    Column('MarketTier', String(255)),
+    Column('ServiceLevel', String(255))
+)
+
+
+t_edm_locations = Table(
+    'edm_locations', metadata,
+    Column('HierId', String(255)),
+    Column('ContinentName', String(255)),
+    Column('ContinentCode', String(255)),
+    Column('Country', String(255)),
+    Column('CountryCode2Letter', String(255)),
+    Column('CountryCode3Letter', String(255)),
+    Column('State', String(255)),
+    Column('CityName', String(255))
+)
+
+
 class GeoCountry(Base):
     __tablename__ = 'geo_country'
 
@@ -550,6 +662,8 @@ class AdvitoUser(Base):
     default_timezone = Column(String(128))
     default_language = Column(String(16))
     user_salt = Column(String(64))
+    default_date_format = Column(String(32))
+    address = Column(String(255))
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 

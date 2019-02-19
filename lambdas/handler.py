@@ -10,10 +10,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 import advito.util
-from advito.service.user import UserService, serialize_user, deserialize_user_create
+from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.error import AdvitoError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
+from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
 
@@ -52,7 +52,7 @@ def handler_decorator(func):
             session.commit()
             status_code = 200
 
-        except (LoginError, LogoutError) as e:
+        except (NotFoundError, LoginError, LogoutError) as e:
             session.rollback()
             body = {
                 "success": False,
@@ -159,6 +159,7 @@ def authenticate_decorator(roles=[]):
 ###################### Handlers ###########################
 
 @handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):
 
     """
@@ -168,18 +169,27 @@ def user_create(event, context, session):
     :param session: Session used for database connectivity.
     """
 
-    # Deserializes user from json, inserts and commits
+    # Deserializes user from event
+
+    print(event)
     user = deserialize_user_create(event)
+    print(user.__dict__)
+
+    # Acquires role from event
+    roleId = event['roleId']
+    role = Role(roleId)
+
+    # Creates user and assigns it a role
     user_service.create(user, session)
+    session.flush()
+    application_role_service.create_for(user.id, role, session)
 
     # Creates response and returns it
     return {
         "success": True,
         "apicode": "OK",
         "apimessage": "User successfully created.",
-        "apidataset": {
-            "message": "User successfully created!"
-        }
+        "apidataset": "User successfully created."
     }
 
 
@@ -214,8 +224,10 @@ def user_login(event, context, session):
         }
     }
 
+
 @handler_decorator
-def user_get_by_session_token(event, context, session):
+@authenticate_decorator()
+def user_get(event, context, session):
 
     """
     Acquires a user by their session token.
@@ -229,7 +241,7 @@ def user_get_by_session_token(event, context, session):
 
     # Acquires session token
     session_token = event['sessionToken']
-    user = user_service.get_by_session_token(session_token, session)
+    user = user_service.get(session_token, session)
     user_json = serialize_user(user)
 
     # Done
@@ -240,23 +252,17 @@ def user_get_by_session_token(event, context, session):
         "apidataset": user_json
     }
 
-@handler_decorator
-def user_set_by_session_token(event, context, session):
-
-    """
-    Sets information about a user with a given session token.
-    :param event: Login JSON as a dict.
-    :param context: AWS context.
-    :param session: Session used for database connectivity.
-    """
-    pass
 
 @handler_decorator
+@authenticate_decorator()
 def user_logout(event, context, session):
 
     """
     Logs out a user.
-    :param event: Login JSON as a dict.
+    :param event: Logout JSON as a dict. Example:
+    {
+        "sessionToken": "abc123"
+    }
     :param context: AWS context.
     :param session: Session used for database connectivity.
     """
@@ -275,21 +281,86 @@ def user_logout(event, context, session):
         "apidataset": None
     }
 
+
 @handler_decorator
-@authenticate_decorator([Role.ADMINISTRATOR])
-def application_role_get_all(event, context, session):
+@authenticate_decorator()
+def user_update(event, context, session):
 
     """
-    Gets all application roles given a sessionToken.
+    Updates an existing users data.
+    :param event: User Update JSON as a dict.
+    """
+
+    # Deserializes user from event
+    session_token = event['sessionToken']
+    user = deserialize_user(event)
+    current_user = user_service.get(session_token, session)
+    user.id = current_user.id
+
+    # Creates user and assigns it a role
+    user_service.update(user, session)
+
+    # Creates response and returns it
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully updated.",
+        "apidataset": "User successfully updated."
+    }
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def user_update_any(event, context, session):
+
+    """
+    Updates an existing users data.
+    Unlike user_update, any user an be updated.
+    This endpoint requires admin privileges.
+    :param event: User Update JSON as a dict.
+    """
+
+    # Deserializes user from event
+    session_token = event['sessionToken']
+    roleId = event['roleId']
+    role = Role(roleId)
+    user = deserialize_user(event)
+    user.id = event["userId"]
+    if user.id is None:
+        raise BadRequestError("id must be specified.")
+
+    # Creates user and assigns it a role
+    user_service.update_any(user, session)
+    application_role_service.update_for(user.id, role, session)
+
+    # Creates response and returns it
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully updated.",
+        "apidataset": "User successfully updated."
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def user_access(event, context, session):
+
+    """
+    Gets user access information for a given client.
     :param event: Login JSON as a dict. Example:
     {
-        "sessionToken": "abc123"
+        "sessionToken": "abc123",
+        "clientId": 1
     }
     :param context: AWS context.
     :param session: Session used for database connectivity.
     """
-    session_token = event['sessionToken']
-    results = application_role_service.get_all_for(session_token, session)
+
+    # Gets users that belong to specified client
+    client_id = event['clientId']
+    results = application_role_service.get_user_access_by_client(client_id, session)
+
+    # Serializes each user/role pair as json objects
     serialized = []
     for result in results:
         user = result[0]
@@ -300,11 +371,22 @@ def application_role_get_all(event, context, session):
             "nameLast": user.name_last,
             "username": user.username,
             "email": user.email,
+            "phone": user.phone,
+            "address": user.address,
+            "isEnabled": user.is_enabled,
             "role": role.role_name,
             "roleId": role.id
         }
         serialized.append(entry)
-    return serialized
+
+    # Returns response
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Data successfully fetched.",
+        "apidataset": serialized
+    }
+
 
 @handler_decorator
 @authenticate_decorator()

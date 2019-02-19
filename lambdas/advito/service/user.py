@@ -18,19 +18,46 @@ def deserialize_user_create(user_create_json):
     """
 
     # Deserializes user and returns it
-    user =  AdvitoUser (
-        client_id = user_create_json['clientId'],
-        username = user_create_json['username'],
-        pwd = user_create_json['pwd'],
-        name_last = user_create_json['nameLast'],
-        name_first = user_create_json['nameFirst'],
-        email = user_create_json['email'],
-        phone = user_create_json['phone'],
-        profile_picture_path = user_create_json.get('profilePicturePath', None),
-        default_timezone = user_create_json.get('timezoneDefault', None),
-        default_language = user_create_json.get('languageDefault', None)
+    user = AdvitoUser (
+        client_id = user_create_json.get('clientId'),
+        username = user_create_json.get('username'),
+        is_enabled = user_create_json.get('isEnabled'),
+        address = user_create_json.get('address'),
+        pwd = user_create_json.get('pwd'),
+        name_last = user_create_json.get('nameLast'),
+        name_first = user_create_json.get('nameFirst'),
+        email = user_create_json.get('username'),
+        phone = user_create_json.get('phone'),
     )
     return user
+
+
+def deserialize_user(user_json):
+
+    """
+    Utility function that parses a user_create json object and returns an AdvitoUser object
+    :param user_create_json: Serialized user as a python dict.
+    """
+
+    # Deserializes user and returns it
+    user = AdvitoUser (
+        id = user_json.get('id'),
+        client_id = user_json.get('clientId'),
+        address = user_json.get('address'),
+        username = user_json.get('username'),
+        is_enabled = user_json.get('isEnabled'),
+        pwd = user_json.get('pwd'),
+        name_last = user_json.get('nameLast'),
+        name_first = user_json.get('nameFirst'),
+        email = user_json.get('email'),
+        phone = user_json.get('phone'),
+        profile_picture_path = user_json.get('profilePicturePath', None),
+        default_timezone = user_json.get('timezoneDefault', None),
+        default_language = user_json.get('languageDefault', None),
+        default_date_format = user_json.get('dateFormatDefault', None)
+    )
+    return user
+
 
 
 def serialize_user(user):
@@ -51,9 +78,9 @@ def serialize_user(user):
         'phone': user.phone,
         'profilePicturePath': user.profile_picture_path,
         'timezoneDefault': user.default_timezone,
-        'languageDefault': user.default_language
+        'languageDefault': user.default_language,
+        'dateFormatDefault': user.default_date_format
     }
-
 
 
 class UserService:
@@ -92,7 +119,68 @@ class UserService:
         session.add(user)
 
 
-    def get_by_session_token(self, session_token, session):
+    def update(self, user, session):
+
+        """
+        Updates an AdvitoUser in the database.
+        :param user: AdvitoUser object to update in the db. Assumes ID is present.
+        :param session: SQLAlchemy session used for db operations.
+        """
+
+        user_serialized = {
+            "username": user.username,
+            "email": user.username,
+            "name_last": user.name_last,
+            "name_first": user.name_first,
+            "profile_picture_path": user.profile_picture_path,
+            "default_timezone": user.default_timezone,
+            "default_date_format": user.default_date_format
+        }
+
+        # Updates user in db
+        row_count = session \
+            .query(AdvitoUser) \
+            .filter(AdvitoUser.id == user.id) \
+            .update(user_serialized)
+
+        # Validates that a change occurred
+        if row_count == 0:
+            raise NotFoundError("Could not find user with specified id " + str(user.id))
+
+
+    def update_any(self, user, session):
+
+        """
+        Updates an AdvitoUser in the database.
+        :param user: AdvitoUser object to update in the db. Assumes ID is present.
+        :param session: SQLAlchemy session used for db operations.
+        """
+
+        user_serialized = {
+            "username": user.username,
+            "email": user.username,
+            "name_last": user.name_last,
+            "name_first": user.name_first,
+            "phone": user.phone,
+            "address": user.address,
+            "profile_picture_path": user.profile_picture_path,
+            "is_enabled": user.is_enabled
+        }
+
+        print(user_serialized)
+
+        # Updates user in db
+        row_count = session \
+            .query(AdvitoUser) \
+            .filter(AdvitoUser.id == user.id) \
+            .update(user_serialized)
+
+        # Validates that a change occurred
+        if row_count == 0:
+            raise NotFoundError("Could not find user with specified id " + str(user.id))
+
+
+    def get(self, session_token, session):
 
         """
         Gets an AdvitoUser by session_token.
@@ -242,7 +330,7 @@ class UserService:
                 .join(AdvitoUserRoleLink) \
                 .join(AdvitoUser) \
                 .join(AdvitoUserSession) \
-                .filter(AdvitoUser.id == AdvitoUserSession.advito_user_id)
+                .filter(AdvitoUserSession.session_token == session_token)
             user_roles = user_roles_query.all()
             user_roles = [Role(user_role.id) for user_role in user_roles]
             if not set(roles).issubset(user_roles):

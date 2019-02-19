@@ -23,9 +23,7 @@ class ApplicationRoleService:
 
     """
     Represents a service that performs operations on instances of `AdvitoApplicationRole`.
-    Can insert users into database and select them.
-    Operations utilize an SQLAlchemy session object, but never commit/rollback.
-    That is the responsibility of the caller.
+    Can add and remove roles to and from users.
     """
 
     def __init__(self, user_service):
@@ -37,22 +35,62 @@ class ApplicationRoleService:
         self.user_service = user_service
 
 
-    def get_all_for(self, session_token, session):
+    def create_for(self, user_id, role, session):
 
         """
-        Gets all ApplicationRoleServices for a given AdvitoUser
-        :param session_token: Session token for an AdvitoUser. Used for determining of that user has the right privileges to query this function.
+        Creates a role for an AdvitoUser.
+        :param user_id: Id of AdvitoUser to create role for.
+        :param role: Name of AdvitoApplicationRole to give AdvitoUser.
         :param session: SQLAlchemy session used for db operations.
         """
 
-        # Gets user of token
-        user = self \
-            .user_service \
-            .get_by_session_token(session_token, session)
+        link = AdvitoUserRoleLink (
+            advito_user_id = user_id,
+            advito_role_id = role.value
+        )
+        session.add(link)
+
+
+    def update_for(self, user_id, role, session):
+
+        """
+        Updates a role for an AdvitoUser.
+        :param user_id: Id of AdvitoUser to create role for.
+        :param role: Name of AdvitoApplicationRole to give AdvitoUser.
+        :param session: SQLAlchemy session used for db operations.
+        """
+        session \
+            .query(AdvitoUserRoleLink) \
+            .filter(AdvitoUserRoleLink.advito_user_id == user_id) \
+            .update({ "advito_user_id": user_id, "advito_role_id": role.value })
+
+
+    def get_for(self, user_id, session):
+
+        """
+        Gets all roles for an AdvitoUser
+        :param user_id: Id of AdvitoUser to get roles for.
+        :param session: SQLAlchemy session used for db operations.
+        """
+        session \
+            .query(AdvitoUserRoleLink) \
+            .filter(AdvitoUserRoleLink.advito_user_id == user_id) \
+            .all()
+
+
+
+    def get_user_access_by_client(self, client_id, session):
+
+        """
+        Gets all ApplicationRoleServices for a given AdvitoUser
+        :param client_id: ID of client users belong underneath.
+        :param session: SQLAlchemy session used for db operations.
+        """
 
         # Returns tuple of users and their roles
         return session \
             .query(AdvitoUser, AdvitoApplicationRole) \
             .join(AdvitoUserRoleLink) \
             .join(AdvitoApplicationRole) \
+            .filter(AdvitoUser.client_id == client_id) \
             .all()
