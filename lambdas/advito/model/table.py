@@ -563,14 +563,14 @@ class AdvitoUser(Base):
     client = relationship('Client')
 
 
-class ClientUnit(Base):
-    __tablename__ = 'client_unit'
+class ClientDivision(Base):
+    __tablename__ = 'client_division'
 
     id = Column(BigInteger, primary_key=True)
     client_id = Column(ForeignKey('client.id'), nullable=False)
-    unit_name = Column(String(32), nullable=False)
-    unit_name_full = Column(String(64), nullable=False)
-    unit_tag = Column(String(8), nullable=False)
+    division_name = Column(String(32), nullable=False)
+    division_name_full = Column(String(64), nullable=False)
+    division_tag = Column(String(8), nullable=False)
     gcn = Column(String(16))
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     description = Column(Text)
@@ -612,12 +612,12 @@ class AdvitoUserClientunitLink(Base):
 
     id = Column(BigInteger, primary_key=True)
     advito_user_id = Column(ForeignKey('advito_user.id'), nullable=False)
-    client_unit_id = Column(ForeignKey('client_unit.id'), nullable=False)
+    client_unit_id = Column(ForeignKey('client_division.id'), nullable=False)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
     advito_user = relationship('AdvitoUser')
-    client_unit = relationship('ClientUnit')
+    client_unit = relationship('ClientDivision')
 
 
 class AdvitoUserGroupLink(Base):

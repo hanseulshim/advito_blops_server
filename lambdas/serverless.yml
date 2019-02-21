@@ -9,6 +9,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${opt:stage} }
   region: us-east-2
+  iamRoleStatements:
+    - Resource: '*'
+      Effect: Allow
+      Action: 'ses:*'
   vpc:
     securityGroupIds:
       - sg-04c1f7c6dc6b2be33
@@ -40,6 +44,10 @@ package:
 
 # All lambdas (functions) to package.
 functions:
+
+  test_email:
+    warmup: true
+    handler: handler.test_email
 
   # Creates a new user
   user_create:
@@ -76,6 +84,11 @@ functions:
     warmup: true
     handler: handler.user_get
 
+  # Creates a client
+  client_create:
+    warmup: true
+    handler: handler.client_create
+
   # Gets all clients
   client_get_all:
     warmup: true
@@ -85,6 +98,10 @@ functions:
   client_update:
     warmup: true
     handler: handler.client_update
+
+  client_division_get_all:
+    warmup: true
+    handler: handler.client_division_get_all
 
   # Endpoint for udf_story_air
   udf_story_air:

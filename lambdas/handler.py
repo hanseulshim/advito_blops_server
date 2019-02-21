@@ -5,6 +5,8 @@ import secrets
 import hashlib
 import os
 import traceback
+import boto3
+from botocore.exceptions import ClientError
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -13,7 +15,7 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.service.client import ClientService, serialize_client, deserialize_client
+from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create#, serialize_client_division
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
@@ -21,6 +23,10 @@ from advito.role import Role
 # Unpacks environment variables to build DB client and services
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
 db_connection = os.environ['DB_CONNECTION']
+email_sender = os.environ['EMAIL_SENDER']
+email_region_name = os.environ['EMAIL_REGION_NAME']
+email_charset = os.environ['EMAIL_CHARSET']
+email_client = boto3.client('ses', region_name=email_region_name)
 
 # Creates SQLAlchemy DB client
 engine = create_engine(db_connection)
@@ -160,6 +166,42 @@ def authenticate_decorator(roles=[]):
 
 ###################### Handlers ###########################
 
+
+def test_email(event, context):
+
+    """
+    Tests sending an email
+    """
+
+    try:
+        response = email_client.send_email(
+            Destination = {
+                "ToAddresses": [ "Jhuebner@guruconsult.com" ],
+            },
+            Message = {
+                "Body": {
+                    "Text": {
+                        "Charset": email_charset,
+                        "Data": "Congratulations! You have been randomly selected to receive this email! You just wasted 10 seconds of your life!"
+                    }
+                },
+                "Subject": {
+                    "Charset": email_charset,
+                    "Data": "Congratulations!"
+                }
+            },
+            Source = email_sender
+        )
+    except ClientError as e:
+        print(e.response['Error']['Message'])
+    else:
+        print("Email sent! Message ID:")
+        print(response['MessageId'])
+
+
+
+
+
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):
@@ -173,9 +215,7 @@ def user_create(event, context, session):
 
     # Deserializes user from event
 
-    print(event)
     user = deserialize_user_create(event)
-    print(user.__dict__)
 
     # Acquires role from event
     roleId = event['roleId']
@@ -396,7 +436,7 @@ def client_get_all(event, context, session):
 
     """
     Gets information about a client given a user's session tokenself.
-    Only administrators may access this endpoint.
+    Only administrators may invoke this endpoint.
     """
 
     # Gets clients and deserializes them as json
@@ -418,19 +458,64 @@ def client_update(event, context, session):
 
     """
     Updates a clients info.
-    Only administrators may access this endpoint.
+    Only administrators may invoke this endpoint.
     """
 
     client = deserialize_client(event)
-    client_service.update(client)
+    client_service.update(client, session)
 
     # Done
     return {
         "success": True,
         "apicode": "OK",
         "apimessage": "Client successfully updated",
-        "apidataset": "Clients successfully updated"
+        "apidataset": "Client successfully updated"
     }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_create(event, context, session):
+
+    """
+    Creates a new client
+    Only administrators may invoke this endpoint.
+    """
+
+    client = deserialize_client_create(event)
+    client_service.create(client, session)
+    session.flush()
+    new_client_serialized = serialize_client(client)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Client successfully created",
+        "apidataset": new_client_serialized
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_division_get_all(event, context, session):
+
+    """
+    Gets client divisions of a given client
+    """
+
+    client_id = event['clientId']
+    client_division = client_service.get_divisions(client_id, session)
+    serialized_division = serialize_client_division(client_division)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Client successfully created",
+        "apidataset": serialized_division
+    }
+
 
 
 
