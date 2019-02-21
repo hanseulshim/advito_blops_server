@@ -8,6 +8,8 @@ ${generateTypeList(
     clientName: String,
     clientNameFull: String,
     clientTag: String,
+    gcn: String,
+    lanyonClientCode: String,
     isActive: Boolean,
     industry: String,
     defaultCurrencyCode: String,
