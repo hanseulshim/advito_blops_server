@@ -40,6 +40,18 @@ def serialize_client_division(client_division):
         "description": client_division.description
     }
 
+def deserialize_client_division(client_division_json):
+
+    return ClientDivision (
+        id = client_division_json["clientDivisionId"],
+        division_name = client_division_json["divisionName"],
+        division_name_full = client_division_json["divisionNameFull"],
+        division_tag = client_division_json["divisionTag"],
+        gcn = client_division_json["gcn"],
+        is_active = client_division_json["is_active"],
+        description = client_division_json["description"],
+    )
+
 
 def deserialize_client(client_json):
 
@@ -113,6 +125,26 @@ class ClientService:
             .filter(ClientDivision.client_id == client_id) \
             .all()
 
+
+    def update_division(self, client_division, session):
+
+        """
+        Updates a client division
+        """
+
+        serialized = {
+            "division_name": client_division.division_name,
+            "division_name_full": client_division.division_name_full,
+            "is_active": client_division.is_active,
+            "division_tag": client_division.division_tag,
+            "gcn": client_division.gcn,
+            "description": client_division.description
+        }
+
+        return session \
+            .query(ClientDivision) \
+            .filter(ClientDivision.id == client_division.id) \
+            .update(serialized)
 
 
     def create(self, client, session):

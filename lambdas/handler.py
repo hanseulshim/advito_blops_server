@@ -15,7 +15,7 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division
+from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division, deserialize_client_division
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
@@ -508,13 +508,28 @@ def client_division_get_all(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Client successfully created",
+        "apimessage": "Divisions succesfully fetched",
         "apidataset": divisions_serialized
     }
 
 
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_division_update(event, context, session):
 
+    """
+    Updates a single ClientDivision in the database
+    """
+    client_division = deserialize_client_division
+    client_service.update_division(event)
 
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Division successfully updated",
+        "apidataset": "Division successfully updated"
+    }
 
 @handler_decorator
 @authenticate_decorator()
