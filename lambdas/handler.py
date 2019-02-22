@@ -453,7 +453,7 @@ def client_create(event, context, session):
         "success": True,
         "apicode": "OK",
         "apimessage": "Client successfully created",
-        "apidataset": new_client_serialized
+        "apidataset": "Client successfully created"
     }
 
 
