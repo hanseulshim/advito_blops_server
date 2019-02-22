@@ -34,21 +34,6 @@ class AdvitoGroup(Base):
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
 
-class Agency(Base):
-    __tablename__ = 'agency'
-
-    id = Column(BigInteger, primary_key=True)
-    agency_name = Column(String(32), nullable=False, index=True)
-    agency_name_full = Column(String(64), nullable=False)
-    agency_tag = Column(String(8), nullable=False)
-    agency_identifier = Column(String(32), index=True)
-    agency_code = Column(String(32), index=True)
-    is_active = Column(Boolean, nullable=False, server_default=text("true"))
-    note = Column(Text)
-    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
-    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
-
-
 class Alert(Base):
     __tablename__ = 'alert'
 
@@ -83,133 +68,33 @@ class Client(Base):
     logo_path = Column(String(128))
     description = Column(Text)
     industry = Column(String(64))
+    default_currency_code = Column(String(8))
+    default_distance_units = Column(String(32))
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
 
-t_edm_airport = Table(
-    'edm_airport', metadata,
-    Column('loc', String(255)),
-    Column('multicty', String(255)),
-    Column('apt', String(255)),
-    Column('type', String(255)),
-    Column('subtype', String(255)),
-    Column('name', String(255)),
-    Column('ctry', String(255)),
-    Column('subctry', String(255)),
-    Column('ctryname', String(255)),
-    Column('state', String(255)),
-    Column('substate', String(255)),
-    Column('statename', String(255)),
-    Column('timediv', String(255)),
-    Column('lat', String(255)),
-    Column('long', String(255)),
-    Column('inactive', String(255)),
-    Column('gmt', String(255)),
-    Column('dst', String(255)),
-    Column('dststttime', String(255)),
-    Column('sttdate', String(255)),
-    Column('dststtstts', String(255)),
-    Column('dstendtime', String(255)),
-    Column('enddate', String(255)),
-    Column('dstendstts', String(255)),
-    Column('dstno', String(255)),
-    Column('gmt02', String(255)),
-    Column('time02', String(255)),
-    Column('date02', String(255)),
-    Column('kind02', String(255)),
-    Column('time03', String(255)),
-    Column('date03', String(255)),
-    Column('k_ind03', String(255)),
-    Column('num03', String(255)),
-    Column('gmt03', String(255)),
-    Column('time04', String(255)),
-    Column('date04', String(255)),
-    Column('k_ind04', String(255)),
-    Column('time05', String(255)),
-    Column('date05', String(255)),
-    Column('rest', String(255))
-)
-
-
-t_edm_hotel = Table(
-    'edm_hotel', metadata,
-    Column('BCDPropertyId', String(255)),
-    Column('BrandName', String(255)),
-    Column('BrandCode', String(255)),
-    Column('MasterChainName', String(255)),
-    Column('MasterChainCode', String(255)),
-    Column('ActualPropertyName', String(255)),
-    Column('BCDPropertyName', String(255)),
-    Column('StreetAddress1', String(255)),
-    Column('StreetAddress2', String(255)),
-    Column('City', String(255)),
-    Column('StateProvinceName', String(255)),
-    Column('StateProvinceCode', String(255)),
-    Column('PostalCode', String(255)),
-    Column('PostalCodeLast4', String(255)),
-    Column('CountryName', String(255)),
-    Column('CountryCode2Char', String(255)),
-    Column('CountryCode3Char', String(255)),
-    Column('CountryCodeDigit', String(255)),
-    Column('PropertyLatitude', String(255)),
-    Column('PropertyLongitude', String(255)),
-    Column('GeoResolutionCode', String(255)),
-    Column('GeoResolution', String(255)),
-    Column('AirportCode', String(255)),
-    Column('BCDMultAptCityCode', String(255)),
-    Column('BCDMultAptCityName', String(255)),
-    Column('MutiAptCityCode', String(255)),
-    Column('AirportLatitude', String(255)),
-    Column('AirportLongitude', String(255)),
-    Column('DstMiles', String(255)),
-    Column('DstKm', String(255)),
-    Column('PropApTyp', String(255)),
-    Column('Phone', String(255)),
-    Column('PhoneCountrycode', String(255)),
-    Column('PhoneCityCode', String(255)),
-    Column('PhoneExchange', String(255)),
-    Column('Fax', String(255)),
-    Column('FaxCountryCode', String(255)),
-    Column('FaxCityCode', String(255)),
-    Column('FaxExchange', String(255)),
-    Column('AmadeusID', String(255)),
-    Column('AmadeusBrandCode', String(255)),
-    Column('WorldSpanID', String(255)),
-    Column('WorldSpanBrandCode', String(255)),
-    Column('SabreID', String(255)),
-    Column('SabreBrandCode', String(255)),
-    Column('ApolloID', String(255)),
-    Column('ApolloBrandCode', String(255)),
-    Column('MarketTier', String(255)),
-    Column('ServiceLevel', String(255))
-)
-
-
-t_edm_locations = Table(
-    'edm_locations', metadata,
-    Column('HierId', String(255)),
-    Column('ContinentName', String(255)),
-    Column('ContinentCode', String(255)),
-    Column('Country', String(255)),
-    Column('CountryCode2Letter', String(255)),
-    Column('CountryCode3Letter', String(255)),
-    Column('State', String(255)),
-    Column('CityName', String(255))
-)
-
-
-class GeoCountry(Base):
-    __tablename__ = 'geo_country'
+class GeoContinent(Base):
+    __tablename__ = 'geo_continent'
 
     id = Column(BigInteger, primary_key=True)
-    country_name = Column(String(32), nullable=False)
-    country_name_full = Column(String(64), nullable=False)
-    country_code = Column(String(8), nullable=False, unique=True)
+    continent_name = Column(String(32), nullable=False, unique=True)
+    continent_tag = Column(String(8), nullable=False)
+    continent_code = Column(String(4), nullable=False, unique=True)
     note = Column(Text)
-    subdivision_label = Column(String(32))
     latitude = Column(Numeric(10, 7))
     longitude = Column(Numeric(10, 7))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+
+class GeoRegionGroup(Base):
+    __tablename__ = 'geo_region_group'
+
+    id = Column(BigInteger, primary_key=True)
+    region_group_name = Column(String(32), nullable=False)
+    is_active = Column(Boolean, nullable=False, server_default=text("true"))
+    note = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
@@ -583,18 +468,26 @@ class TempStoryStatic(Base):
     section_json = Column(JSON)
 
 
-t_v_city = Table(
-    'v_city', metadata,
-    Column('geo_city_id', BigInteger),
-    Column('geo_country_id', BigInteger),
-    Column('country_name', String(32)),
-    Column('geo_state_id', BigInteger),
-    Column('state_name', String(64)),
-    Column('city_name', String(128)),
-    Column('city_code', String(8)),
-    Column('latitude', Numeric(10, 7)),
-    Column('longitude', Numeric(10, 7))
-)
+class ZImportEDMCity01(Base):
+    __tablename__ = 'z_import_EDM_City01'
+
+    HierID = Column(BigInteger, primary_key=True)
+    Region = Column(String(255))
+    ShortRegion = Column(String(255))
+    Continent = Column(String(255))
+    ContinentCode = Column(String(255))
+    Country = Column(String(255))
+    CountryCode2Char = Column(String(255))
+    CountryCode3Char = Column(String(255))
+    CountryNumericCode = Column(String(255))
+    State = Column(String(255))
+    StateCode = Column(String(255))
+    CityName = Column(String(255))
+    CityCode = Column(String(255))
+    CreateDate = Column(String(255))
+    Updatedate = Column(String(255))
+    Latitude = Column(Numeric(10, 7))
+    Longitude = Column(Numeric(10, 7))
 
 
 class AdvitoApplicationFeature(Base):
@@ -670,14 +563,14 @@ class AdvitoUser(Base):
     client = relationship('Client')
 
 
-class ClientUnit(Base):
-    __tablename__ = 'client_unit'
+class ClientDivision(Base):
+    __tablename__ = 'client_division'
 
     id = Column(BigInteger, primary_key=True)
     client_id = Column(ForeignKey('client.id'), nullable=False)
-    unit_name = Column(String(32), nullable=False)
-    unit_name_full = Column(String(64), nullable=False)
-    unit_tag = Column(String(8), nullable=False)
+    division_name = Column(String(32), nullable=False)
+    division_name_full = Column(String(64), nullable=False)
+    division_tag = Column(String(8), nullable=False)
     gcn = Column(String(16))
     is_active = Column(Boolean, nullable=False, server_default=text("true"))
     description = Column(Text)
@@ -687,19 +580,18 @@ class ClientUnit(Base):
     client = relationship('Client')
 
 
-class GeoState(Base):
-    __tablename__ = 'geo_state'
+class GeoRegion(Base):
+    __tablename__ = 'geo_region'
 
     id = Column(BigInteger, primary_key=True)
-    geo_country_id = Column(ForeignKey('geo_country.id'), nullable=False)
-    state_name = Column(String(64), nullable=False)
-    state_code = Column(String(8), nullable=False)
-    latitude = Column(Numeric(10, 7))
-    longitude = Column(Numeric(10, 7))
+    geo_region_group_id = Column(ForeignKey('geo_region_group.id'), nullable=False)
+    region_name = Column(String(64), nullable=False)
+    region_code = Column(String(4))
+    region_note = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
-    geo_country = relationship('GeoCountry')
+    geo_region_group = relationship('GeoRegionGroup')
 
 
 class AdvitoApplicationRoleGroupLink(Base):
@@ -720,12 +612,12 @@ class AdvitoUserClientunitLink(Base):
 
     id = Column(BigInteger, primary_key=True)
     advito_user_id = Column(ForeignKey('advito_user.id'), nullable=False)
-    client_unit_id = Column(ForeignKey('client_unit.id'), nullable=False)
+    client_unit_id = Column(ForeignKey('client_division.id'), nullable=False)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
     advito_user = relationship('AdvitoUser')
-    client_unit = relationship('ClientUnit')
+    client_unit = relationship('ClientDivision')
 
 
 class AdvitoUserGroupLink(Base):
@@ -798,21 +690,18 @@ class ClientFeatureLink(Base):
     client = relationship('Client')
 
 
-class GeoCity(Base):
-    __tablename__ = 'geo_city'
+class GeoSubregion(Base):
+    __tablename__ = 'geo_subregion'
 
     id = Column(BigInteger, primary_key=True)
-    geo_country_id = Column(ForeignKey('geo_country.id'))
-    geo_state_id = Column(ForeignKey('geo_state.id'))
-    city_name = Column(String(128), nullable=False, index=True)
-    city_code = Column(String(8))
-    latitude = Column(Numeric(10, 7))
-    longitude = Column(Numeric(10, 7))
+    geo_region_id = Column(ForeignKey('geo_region.id'), nullable=False)
+    subregion_name = Column(String(64), nullable=False)
+    subregion_code = Column(String(4))
+    subregion_note = Column(Text)
     created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
-    geo_country = relationship('GeoCountry')
-    geo_state = relationship('GeoState')
+    geo_region = relationship('GeoRegion')
 
 
 class AdvitoUserSessionLog(Base):
@@ -833,29 +722,3 @@ class AdvitoUserSessionLog(Base):
 
     advito_application = relationship('AdvitoApplication')
     advito_user_session = relationship('AdvitoUserSession')
-
-
-class Airport(Base):
-    __tablename__ = 'airport'
-
-    id = Column(BigInteger, primary_key=True)
-    airport_name = Column(String(64), nullable=False)
-    airport_code = Column(String(8), nullable=False, unique=True)
-    is_active = Column(Boolean, nullable=False, server_default=text("true"))
-    airport_type = Column(String(32))
-    note = Column(Text)
-    address1 = Column(String(64))
-    address2 = Column(String(64))
-    geo_city_id = Column(ForeignKey('geo_city.id'), nullable=False)
-    geo_state_id = Column(ForeignKey('geo_state.id'))
-    geo_country_id = Column(ForeignKey('geo_country.id'), nullable=False)
-    latitude = Column(Numeric(10, 7))
-    longitude = Column(Numeric(10, 7))
-    region_code = Column(String(8))
-    subregion_code = Column(String(8))
-    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
-    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
-
-    geo_city = relationship('GeoCity')
-    geo_country = relationship('GeoCountry')
-    geo_state = relationship('GeoState')

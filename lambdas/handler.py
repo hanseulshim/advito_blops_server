@@ -501,15 +501,15 @@ def client_division_get_all(event, context, session):
     """
 
     client_id = event['clientId']
-    client_division = client_service.get_divisions(client_id, session)
-    serialized_division = serialize_client_division(client_division)
+    client_divisions = client_service.get_divisions(client_id, session)
+    divisions_serialized = [serialize_client_division(div) for div in client_divisions]
 
     # Done
     return {
         "success": True,
         "apicode": "OK",
         "apimessage": "Client successfully created",
-        "apidataset": serialized_division
+        "apidataset": divisions_serialized
     }
 
 

@@ -22,6 +22,24 @@ def serialize_client(client):
         "description": client.description
     }
 
+def serialize_client_division(client_division):
+
+    """
+    Deserializes a ClientDivision object into a json dict.
+    """
+
+    return {
+        "id": client_division.id,
+        "clientId": client_division.client_id,
+        "clientId": client_division.client_id,
+        "divisionName": client_division.division_name,
+        "divisionNameFull": client_division.division_name_full,
+        "divisionTag": client_division.division_tag,
+        "gcn": client_division.gcn,
+        "isActive": client_division.is_active,
+        "description": client_division.description
+    }
+
 
 def deserialize_client(client_json):
 
@@ -90,7 +108,7 @@ class ClientService:
         :return: ClientDivision instance.
         """
 
-        session \
+        return session \
             .query(ClientDivision) \
             .filter(ClientDivision.client_id == client_id) \
             .all()
