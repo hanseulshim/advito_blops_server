@@ -1,7 +1,7 @@
 const { consoleResolvers } = require('./consoleResolvers');
 const { storyResolvers } = require('./storyResolvers');
 const { userResolvers, userResolversMutation } = require('./userResolvers');
-const { clientResolvers  } = require('./clientResolvers');
+const { clientResolvers, clientResolversMutation  } = require('./clientResolvers');
 const { generateResponse, lambdaInvoke } = require('../helper');
 
 exports.resolvers = {
@@ -24,5 +24,6 @@ exports.resolvers = {
   },
   Mutation: {
     ...userResolversMutation,
+    ...clientResolversMutation,
   },
 };

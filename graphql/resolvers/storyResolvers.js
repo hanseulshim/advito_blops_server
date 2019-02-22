@@ -1,20 +1,3 @@
-// TODO: delete these eventually
-// const {
-//   airSummary,
-//   trafficLaneOverview,
-//   topAirlines,
-//   cabinUse,
-//   routes,
-// } = require('../../data/airData');
-
-// const {
-//   hotelSummary,
-//   hotelSpend,
-//   topHotelChains,
-//   topHotelTiers,
-//   roomNights,
-// } = require('../../data/hotelData');
-
 const { lambdaInvoke } = require('../helper');
 
 exports.storyResolvers = {
