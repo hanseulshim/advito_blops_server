@@ -2,6 +2,7 @@ const { consoleResolvers } = require('./consoleResolvers');
 const { storyResolvers } = require('./storyResolvers');
 const { userResolvers, userResolversMutation } = require('./userResolvers');
 const { clientResolvers, clientResolversMutation  } = require('./clientResolvers');
+const { divisionResolvers, divisionResolversMutation  } = require('./divisionResolvers');
 const { generateResponse, lambdaInvoke } = require('../helper');
 
 exports.resolvers = {
@@ -10,6 +11,7 @@ exports.resolvers = {
     ...storyResolvers,
     ...userResolvers,
     ...clientResolvers,
+    ...divisionResolvers,
     login: (_, payload) => {
       return lambdaInvoke('python-lambdas-dev-user_login', {
         username: payload.username,
@@ -25,5 +27,6 @@ exports.resolvers = {
   Mutation: {
     ...userResolversMutation,
     ...clientResolversMutation,
+    ...divisionResolversMutation
   },
 };
