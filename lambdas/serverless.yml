@@ -45,10 +45,6 @@ package:
 # All lambdas (functions) to package.
 functions:
 
-  test_email:
-    warmup: true
-    handler: handler.test_email
-
   # Creates a new user
   user_create:
     warmup: true

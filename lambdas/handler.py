@@ -23,10 +23,6 @@ from advito.role import Role
 # Unpacks environment variables to build DB client and services
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
 db_connection = os.environ['DB_CONNECTION']
-email_sender = os.environ['EMAIL_SENDER']
-email_region_name = os.environ['EMAIL_REGION_NAME']
-email_charset = os.environ['EMAIL_CHARSET']
-email_client = boto3.client('ses', region_name=email_region_name)
 
 # Creates SQLAlchemy DB client
 engine = create_engine(db_connection)
@@ -165,41 +161,6 @@ def authenticate_decorator(roles=[]):
 
 
 ###################### Handlers ###########################
-
-
-def test_email(event, context):
-
-    """
-    Tests sending an email
-    """
-
-    try:
-        response = email_client.send_email(
-            Destination = {
-                "ToAddresses": [ "Jhuebner@guruconsult.com" ],
-            },
-            Message = {
-                "Body": {
-                    "Text": {
-                        "Charset": email_charset,
-                        "Data": "Congratulations! You have been randomly selected to receive this email! You just wasted 10 seconds of your life!"
-                    }
-                },
-                "Subject": {
-                    "Charset": email_charset,
-                    "Data": "Congratulations!"
-                }
-            },
-            Source = email_sender
-        )
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:")
-        print(response['MessageId'])
-
-
-
 
 
 @handler_decorator
