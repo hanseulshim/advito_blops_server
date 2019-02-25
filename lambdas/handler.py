@@ -5,8 +5,6 @@ import secrets
 import hashlib
 import os
 import traceback
-import boto3
-from botocore.exceptions import ClientError
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
