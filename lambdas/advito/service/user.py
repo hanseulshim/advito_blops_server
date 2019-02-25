@@ -167,8 +167,6 @@ class UserService:
             "is_enabled": user.is_enabled
         }
 
-        print(user_serialized)
-
         # Updates user in db
         row_count = session \
             .query(AdvitoUser) \
