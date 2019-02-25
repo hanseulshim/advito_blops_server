@@ -15,7 +15,7 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
-from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division, deserialize_client_division
+from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division, deserialize_client_division, deserialize_client_division_create
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
@@ -488,7 +488,26 @@ def client_create(event, context, session):
         "success": True,
         "apicode": "OK",
         "apimessage": "Client successfully created",
-        "apidataset": new_client_serialized
+        "apidataset": "Client successfully created"
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_division_create(event, context, session):
+
+    """
+    Updates a single ClientDivision in the database
+    """
+    client_division = deserialize_client_division_create(event)
+    client_service.create_division(client_division, session)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Division successfully created",
+        "apidataset": "Division successfully created"
     }
 
 
@@ -520,8 +539,8 @@ def client_division_update(event, context, session):
     """
     Updates a single ClientDivision in the database
     """
-    client_division = deserialize_client_division
-    client_service.update_division(event)
+    client_division = deserialize_client_division(event)
+    client_service.update_division(client_division, session)
 
     # Done
     return {

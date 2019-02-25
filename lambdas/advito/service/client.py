@@ -1,4 +1,5 @@
 from advito.model.table import Client, ClientDivision
+from advito.error import NotFoundError
 
 
 def serialize_client(client):
@@ -31,7 +32,6 @@ def serialize_client_division(client_division):
     return {
         "id": client_division.id,
         "clientId": client_division.client_id,
-        "clientId": client_division.client_id,
         "divisionName": client_division.division_name,
         "divisionNameFull": client_division.division_name_full,
         "divisionTag": client_division.division_tag,
@@ -39,6 +39,17 @@ def serialize_client_division(client_division):
         "isActive": client_division.is_active,
         "description": client_division.description
     }
+
+def deserialize_client_division_create(client_division_json):
+    return ClientDivision (
+        client_id = client_division_json["clientId"],
+        division_name = client_division_json["divisionName"],
+        division_name_full = client_division_json["divisionNameFull"],
+        division_tag = client_division_json["divisionTag"],
+        gcn = client_division_json["gcn"],
+        is_active = client_division_json["isActive"],
+        description = client_division_json["description"],
+    )
 
 def deserialize_client_division(client_division_json):
 
@@ -48,10 +59,9 @@ def deserialize_client_division(client_division_json):
         division_name_full = client_division_json["divisionNameFull"],
         division_tag = client_division_json["divisionTag"],
         gcn = client_division_json["gcn"],
-        is_active = client_division_json["is_active"],
+        is_active = client_division_json["isActive"],
         description = client_division_json["description"],
     )
-
 
 def deserialize_client(client_json):
 
@@ -125,13 +135,25 @@ class ClientService:
             .filter(ClientDivision.client_id == client_id) \
             .all()
 
+    def create_division(self, client_division, session):
+
+        """
+        Creates a new a ClientDivision
+        :param client_division: ClientDivision to create.
+        :param session: SQLAlchemy session used for db operations.
+        """
+        session.add(client_division)
+
 
     def update_division(self, client_division, session):
 
         """
-        Updates a client division
+        Updates a ClientDivision
+        :param client_division: ClientDivision to update.
+        :param session: SQLAlchemy session used for db operations.
         """
 
+        # Serializes division for updating purposes
         serialized = {
             "division_name": client_division.division_name,
             "division_name_full": client_division.division_name_full,
@@ -141,10 +163,15 @@ class ClientService:
             "description": client_division.description
         }
 
-        return session \
+        # Updates in database
+        rowcount = session \
             .query(ClientDivision) \
             .filter(ClientDivision.id == client_division.id) \
             .update(serialized)
+
+        # Validates that a change occurred
+        if rowcount == 0:
+            raise NotFoundError("Could not find division with id " + str(client_division.id))
 
 
     def create(self, client, session):
@@ -155,7 +182,6 @@ class ClientService:
         :param session: SQLAlchemy session used for db operations.
         :return: Client created.
         """
-
         session.add(client)
 
 
@@ -183,7 +209,11 @@ class ClientService:
         }
 
         # Updates in database
-        session \
+        rowcount = session \
             .query(Client) \
             .filter(Client.id == client.id) \
             .update(client_serialized)
+
+        # Validates that a change occurred
+        if rowcount == 0:
+            raise NotFoundError("Could not find client specified with id " + str(client.id))
