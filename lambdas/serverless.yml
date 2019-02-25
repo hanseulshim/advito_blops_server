@@ -9,10 +9,6 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${opt:stage} }
   region: us-east-2
-  iamRoleStatements:
-    - Resource: '*'
-      Effect: Allow
-      Action: 'ses:*'
   vpc:
     securityGroupIds:
       - sg-04c1f7c6dc6b2be33
