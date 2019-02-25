@@ -161,43 +161,6 @@ def authenticate_decorator(roles=[]):
 
 
 ###################### Handlers ###########################
-
-
-def test_email(event, context):
-
-    """
-    Tests sending an email
-    """
-
-    try:
-        response = email_client.send_email(
-            Destination = {
-                "ToAddresses": [ "Jhuebner@guruconsult.com" ],
-            },
-            Message = {
-                "Body": {
-                    "Text": {
-                        "Charset": email_charset,
-                        "Data": "Congratulations! You have been randomly selected to receive this email! You just wasted 10 seconds of your life!"
-                    }
-                },
-                "Subject": {
-                    "Charset": email_charset,
-                    "Data": "Congratulations!"
-                }
-            },
-            Source = email_sender
-        )
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:")
-        print(response['MessageId'])
-
-
-
-
-
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):

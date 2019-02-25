@@ -29,7 +29,7 @@ exports.userDefs = `
     `{
       userId: Int,
       username: String,
-      active: Boolean,
+      isEnabled: Boolean,
       nameFirst: String,
       nameLast: String,
       phone: String,
