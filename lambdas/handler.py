@@ -22,6 +22,12 @@ from advito.role import Role
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
 db_connection = os.environ['DB_CONNECTION']
 
+# Sets up email
+email_sender = os.environ['EMAIL_SENDER']
+email_region_name = os.environ['EMAIL_REGION_NAME']
+email_charset = os.environ['EMAIL_CHARSET']
+email_client = boto3.client('ses', region_name=email_region_name)
+
 # Creates SQLAlchemy DB client
 engine = create_engine(db_connection)
 
