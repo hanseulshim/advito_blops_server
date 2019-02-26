@@ -38,6 +38,7 @@ type Division {
 }
 
 type Opportunity {
+  id: Int
   title: String
   value: String
   unit: String

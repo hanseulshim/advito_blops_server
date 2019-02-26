@@ -86,31 +86,35 @@ exports.marketList = [
 
 exports.opportunitiesTravel = [
   {
+    id: 1,
     title: 'Expenses approved above rate caps / per diems',
     value: '27%',
     secondaryValue: '$375K',
     secondaryUnit: 'impact',
   },
   {
+    id: 2,
     title: 'ABR higher than ANR',
     value: '30%',
     secondaryValue: '$500k',
     secondaryUnit: 'impact',
   },
   {
+    id: 3,
     title: 'NRT Utilization/Loss',
     value: '83%',
     secondaryValue: '$23k',
     secondaryUnit: 'expired',
   },
   {
+    id: 4,
     title: 'ANR higher than ABR',
     value: '25% / $100K',
     unit: 'expired',
   },
-  { title: 'New item', value: 'XX% / $XX', unit: 'impact' },
-  { title: 'New item', value: 'XX% / $XX', unit: 'expired' },
-  { title: 'New item', value: 'XX% / $XX', unit: '' },
+  { id: 5, title: 'New item', value: 'XX% / $XX', unit: 'impact' },
+  { id: 6, title: 'New item', value: 'XX% / $XX', unit: 'expired' },
+  { id: 7, title: 'New item', value: 'XX% / $XX', unit: '' },
 ];
 
 exports.opportunitiesExecutive = [
