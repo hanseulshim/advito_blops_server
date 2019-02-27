@@ -74,7 +74,6 @@ def handler_decorator(func):
             }
             status_code = 400
 
-
         except IntegrityError as e:
             session.rollback()
             body = {
