@@ -13,6 +13,7 @@ import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
+from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
 from advito.role import Role
 
@@ -28,6 +29,7 @@ engine = create_engine(db_connection)
 user_service = UserService(session_duration_sec)
 application_role_service = ApplicationRoleService(user_service)
 amorphous_service = AmorphousService()
+client_service = ClientService()
 
 ################ Decorators ##################
 def handler_decorator(func):
@@ -78,7 +80,7 @@ def handler_decorator(func):
             body = {
                 "success": False,
                 "apicode": "INVALID",
-                "apimessage": "Database rejected update/insert.",
+                "apimessage": "Database rejected update/insert",
                 "apidataset": None
             }
             status_code = 400
@@ -108,7 +110,7 @@ def handler_decorator(func):
             body = {
                 "success": False,
                 "apicode": "ERROR",
-                "apimessage": "Unexpected exception occurred.",
+                "apimessage": "Unexpected exception occurred",
                 "apidataset": None
             }
             status_code = 500
@@ -158,6 +160,7 @@ def authenticate_decorator(roles=[]):
 
 ###################### Handlers ###########################
 
+
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):
@@ -171,9 +174,7 @@ def user_create(event, context, session):
 
     # Deserializes user from event
 
-    print(event)
     user = deserialize_user_create(event)
-    print(user.__dict__)
 
     # Acquires role from event
     roleId = event['roleId']
@@ -188,8 +189,8 @@ def user_create(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "User successfully created.",
-        "apidataset": "User successfully created."
+        "apimessage": "User successfully created",
+        "apidataset": "User successfully created"
     }
 
 
@@ -215,7 +216,7 @@ def user_login(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "User successfully logged in.",
+        "apimessage": "User successfully logged in",
         "apidataset": {
             "displayName": user.name_first + " " + user.name_last,
             "clientId": user.client_id,
@@ -248,7 +249,7 @@ def user_get(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "User successfully fetched",
         "apidataset": user_json
     }
 
@@ -277,8 +278,8 @@ def user_logout(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "User successfully logged out.",
-        "apidataset": None
+        "apimessage": "User successfully logged out",
+        "apidataset": "User successfully logged out"
     }
 
 
@@ -304,8 +305,8 @@ def user_update(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "User successfully updated.",
-        "apidataset": "User successfully updated."
+        "apimessage": "User successfully updated",
+        "apidataset": "User successfully updated"
     }
 
 @handler_decorator
@@ -336,8 +337,8 @@ def user_update_any(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "User successfully updated.",
-        "apidataset": "User successfully updated."
+        "apimessage": "User successfully updated",
+        "apidataset": "User successfully updated"
     }
 
 
@@ -383,9 +384,99 @@ def user_access(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": serialized
     }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_get_all(event, context, session):
+
+    """
+    Gets information about a client given a user's session tokenself.
+    Only administrators may invoke this endpoint.
+    """
+
+    # Gets clients and deserializes them as json
+    clients = client_service.get_all(session)
+    clients = [serialize_client(client) for client in clients]
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Clients successfully fetched",
+        "apidataset": clients
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_update(event, context, session):
+
+    """
+    Updates a clients info.
+    Only administrators may invoke this endpoint.
+    """
+
+    client = deserialize_client(event)
+    client_service.update(client, session)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Client successfully updated",
+        "apidataset": "Client successfully updated"
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_create(event, context, session):
+
+    """
+    Creates a new client
+    Only administrators may invoke this endpoint.
+    """
+
+    client = deserialize_client_create(event)
+    client_service.create(client, session)
+    session.flush()
+    new_client_serialized = serialize_client(client)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Client successfully created",
+        "apidataset": "Client successfully created"
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_division_get_all(event, context, session):
+
+    """
+    Gets client divisions of a given client
+    """
+
+    client_id = event['clientId']
+    client_division = client_service.get_divisions(client_id, session)
+    serialized_division = serialize_client_division(client_division)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Client successfully created",
+        "apidataset": serialized_division
+    }
+
+
+
 
 
 @handler_decorator
@@ -396,7 +487,7 @@ def udf_story_air(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -408,7 +499,7 @@ def udf_story_air_airlines(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -420,7 +511,7 @@ def udf_story_air_cabins(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -432,7 +523,7 @@ def udf_story_air_routes(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -445,7 +536,7 @@ def udf_story_air_traffic(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -457,7 +548,7 @@ def udf_story_hotel(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -469,7 +560,7 @@ def udf_story_hotel_1(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -481,7 +572,7 @@ def udf_story_hotel_2(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -493,7 +584,7 @@ def udf_story_hotel_3(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }
 
@@ -505,6 +596,6 @@ def udf_story_hotel_4(event, context, session):
     return {
         "success": True,
         "apicode": "OK",
-        "apimessage": "Data successfully fetched.",
+        "apimessage": "Data successfully fetched",
         "apidataset": result
     }

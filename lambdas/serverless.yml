@@ -76,6 +76,25 @@ functions:
     warmup: true
     handler: handler.user_get
 
+  # Creates a client
+  client_create:
+    warmup: true
+    handler: handler.client_create
+
+  # Gets all clients
+  client_get_all:
+    warmup: true
+    handler: handler.client_get_all
+
+  # Sets a single client
+  client_update:
+    warmup: true
+    handler: handler.client_update
+
+  client_division_get_all:
+    warmup: true
+    handler: handler.client_division_get_all
+
   # Endpoint for udf_story_air
   udf_story_air:
     warmup: true
