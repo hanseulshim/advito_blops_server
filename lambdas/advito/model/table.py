@@ -490,6 +490,64 @@ class ZImportEDMCity01(Base):
     Longitude = Column(Numeric(10, 7))
 
 
+class ZImportEdmHotel(Base):
+    __tablename__ = 'z_import_edm_hotel'
+
+    BCDPropertyID = Column(String(255), primary_key=True)
+    BrandName = Column(String(255))
+    BrandCode = Column(String(255))
+    MasterChainName = Column(String(255))
+    MasterChainCode = Column(String(255))
+    ActualPropertyName = Column(String(255))
+    BCDPropertyName = Column(String(255))
+    StreetAddress1 = Column(String(255))
+    StreetAddress2 = Column(String(255))
+    City = Column(String(255))
+    StateProvinceName = Column(String(255))
+    StateProvinceCode = Column(String(255))
+    PostalCode = Column(String(255))
+    PostalCodeLast4 = Column(String(255))
+    CountryName = Column(String(255))
+    CountryCode2Char = Column(String(255))
+    CountryCode3Char = Column(String(255))
+    CountryCodeDigit = Column(String(255))
+    PropertyLatitude = Column(String(255))
+    PropertyLongitude = Column(String(255))
+    GeoResolutionCode = Column(String(255))
+    GeoResolution = Column(String(255))
+    AirportCode = Column(String(255))
+    BCDMultiAirportCityCode = Column(String(255))
+    BCDMultiAirportCityName = Column(String(255))
+    MultiAirportCityCode = Column(String(255))
+    AirportLatitude = Column(String(255))
+    AirportLongitude = Column(String(255))
+    DistanceMiles = Column(String(255))
+    DistanceKM = Column(String(255))
+    PropertyType = Column(String(255))
+    Phone = Column(String(255))
+    PhoneCountrycode = Column(String(255))
+    PhoneCityCode = Column(String(255))
+    PhoneExchange = Column(String(255))
+    Fax = Column(String(255))
+    FaxCountryCode = Column(String(255))
+    FaxCityCode = Column(String(255))
+    FaxExchange = Column(String(255))
+    AmadeusID = Column(String(255))
+    AmadeusBrandCode = Column(String(255))
+    WorldSpanID = Column(String(255))
+    WorldSpanBrandCode = Column(String(255))
+    SabreID = Column(String(255))
+    SabreBrandCode = Column(String(255))
+    ApolloID = Column(String(255))
+    ApolloBrandCode = Column(String(255))
+    MarketTier = Column(String(255))
+    ServiceLevel = Column(String(255))
+    CreateDate = Column(String(255))
+    UpdateDate = Column(String(255))
+    AlternateBrandName = Column(String(255))
+    RecordType = Column(String(255))
+
+
 class AdvitoApplicationFeature(Base):
     __tablename__ = 'advito_application_feature'
 
@@ -592,6 +650,21 @@ class GeoRegion(Base):
     modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
 
     geo_region_group = relationship('GeoRegionGroup')
+
+
+class AccessToken(Base):
+    __tablename__ = 'access_token'
+
+    id = Column(BigInteger, primary_key=True)
+    advito_user_id = Column(ForeignKey('advito_user.id'), nullable=False)
+    token_type = Column(String(32), nullable=False)
+    token = Column(String(128), nullable=False, index=True)
+    token_expiration = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    is_active = Column(Boolean, nullable=False, server_default=text("true"))
+    created = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+    modified = Column(TIMESTAMP(precision=6), nullable=False, server_default=text("now()"))
+
+    advito_user = relationship('AdvitoUser')
 
 
 class AdvitoApplicationRoleGroupLink(Base):

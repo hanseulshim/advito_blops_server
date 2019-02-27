@@ -7,6 +7,9 @@ class LoginError(AdvitoError):
 class LogoutError(AdvitoError):
     pass
 
+class TokenExpirationError(AdvitoError):
+    pass
+
 class BadRequestError(AdvitoError):
     pass
 

@@ -5,6 +5,8 @@ import secrets
 import hashlib
 import os
 import traceback
+import boto3
+from botocore.exceptions import ClientError
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -14,12 +16,13 @@ from advito.service.user import UserService, serialize_user, deserialize_user, d
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.amorphous import AmorphousService
 from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create
-from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError
+from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError, TokenExpirationError
 from advito.role import Role
 
 
 # Unpacks environment variables to build DB client and services
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
+reset_password_duration_hours = int(os.environ['RESET_PASSWORD_DURATION_HOURS'])
 db_connection = os.environ['DB_CONNECTION']
 
 # Sets up email
@@ -32,7 +35,7 @@ email_client = boto3.client('ses', region_name=email_region_name)
 engine = create_engine(db_connection)
 
 # Creates services that control business logic
-user_service = UserService(session_duration_sec)
+user_service = UserService(session_duration_sec, reset_password_duration_hours)
 application_role_service = ApplicationRoleService(user_service)
 amorphous_service = AmorphousService()
 client_service = ClientService()
@@ -60,7 +63,7 @@ def handler_decorator(func):
             session.commit()
             status_code = 200
 
-        except (NotFoundError, LoginError, LogoutError) as e:
+        except (NotFoundError, LoginError, LogoutError, TokenExpirationError) as e:
             session.rollback()
             body = {
                 "success": False,
@@ -396,6 +399,67 @@ def user_access(event, context, session):
 
 
 @handler_decorator
+def user_reset_password_start(event, context, session):
+
+    """
+    Starts the process of resetting a users password
+    """
+
+    email = event["email"]
+    access_token = user_service.reset_password_start(email, session)
+    url = "http://fakeurl.com/" + access_token
+    response = email_client.send_email (
+        Destination = {
+            "ToAddresses": [ email ],
+        },
+        Message = {
+            "Body": {
+                "Text": {
+                    "Charset": email_charset,
+                    "Data": "Please visit the following URL to reset your password: " + url
+                }
+            },
+            "Subject": {
+                "Charset": email_charset,
+                "Data": "Password Reset"
+            }
+        },
+        Source = email_sender
+    )
+
+    # Returns response
+    message = "Email with url " + url + " sent to email " + email
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": message,
+        "apidataset": message
+    }
+
+
+@handler_decorator
+def user_reset_password_end(event, context, session):
+
+    """
+    Finalizes password reset for a given user
+    """
+
+    # Acquires credentials and new password
+    access_token = event['accessToken']
+    new_password = event['pwd']
+
+    # Resets password
+    user_service.reset_password_end(access_token, new_password, session)
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Password successfully updated",
+        "apidataset": "Password successfully updated"
+    }
+
+
+
+@handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def client_get_all(event, context, session):
 
@@ -605,35 +669,3 @@ def udf_story_hotel_4(event, context, session):
         "apimessage": "Data successfully fetched",
         "apidataset": result
     }
-
-
-def test_email(event, context):
-
-    """
-    Tests sending an email
-    """
-
-    try:
-        response = email_client.send_email(
-            Destination = {
-                "ToAddresses": [ "Jhuebner@guruconsult.com" ],
-            },
-            Message = {
-                "Body": {
-                    "Text": {
-                        "Charset": email_charset,
-                        "Data": "Congratulations! You have been randomly selected to receive this email! You just wasted 10 seconds of your life!"
-                    }
-                },
-                "Subject": {
-                    "Charset": email_charset,
-                    "Data": "Congratulations!"
-                }
-            },
-            Source = email_sender
-        )
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        print("Email sent! Message ID:")
-        print(response['MessageId'])
