@@ -28,7 +28,7 @@ type SavingsOpportunityHover {
 
 type SavingsOpportunityField {
   name: String,
-  value: Float
+  value: String
 }
 `
 

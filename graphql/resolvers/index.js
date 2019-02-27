@@ -12,6 +12,7 @@ const {
 const {
   savingsOpportunityDetailResolvers,
 } = require('./savingsOpportunityDetailResolvers')
+const { riskAreaDetailResolvers } = require('./riskAreaDetailResolvers')
 const { generateResponse, lambdaInvoke } = require('../helper')
 
 exports.resolvers = {
@@ -22,6 +23,7 @@ exports.resolvers = {
     ...clientResolvers,
     ...divisionResolvers,
     ...savingsOpportunityDetailResolvers,
+    ...riskAreaDetailResolvers,
     login: (_, payload) => {
       return lambdaInvoke('python-lambdas-dev-user_login', {
         username: payload.username,

@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-lambda')
 const { consoleDefs, consoleQuery } = require('./consoleDefs')
 const { storyDefs, storyQuery } = require('./storyDefs')
 const { loginDefs, loginQuery } = require('./loginDefs')
+const { riskAreaDefs, riskAreaQuery } = require('./riskAreaDetail')
 const {
   savingsOpportunityDetailDefs,
   savingsOpportunityDetailQuery,
@@ -22,6 +23,7 @@ exports.typeDefs = gql`
   ${userDefs}
   ${divisionDefs}
   ${savingsOpportunityDetailDefs}
+  ${riskAreaDefs}
   type Query {
     ${consoleQuery}
     ${storyQuery}
@@ -30,6 +32,7 @@ exports.typeDefs = gql`
     ${clientQuery}
     ${divisionQuery}
     ${savingsOpportunityDetailQuery}
+    ${riskAreaQuery}
   }
   type Mutation {
     ${userMutation}

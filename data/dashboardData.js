@@ -14,29 +14,29 @@ exports.programPerformanceTravel = [
     value: '23% / $690K',
     unit: 'impact',
   },
-];
+]
 
-const netSpendAnalysisTravel = [];
-const netSpendAnalysisExecutive = [];
+const netSpendAnalysisTravel = []
+const netSpendAnalysisExecutive = []
 for (let i = 1; i <= 15; i++) {
   netSpendAnalysisTravel.push({
     date: `2019-01-${i}`,
     value: Math.floor(Math.random() * 10 + i),
-  });
+  })
   netSpendAnalysisExecutive.push({
     date: `2019-06-${i}`,
     value: Math.floor(Math.random() * 10 + i),
-  });
+  })
 }
 
-exports.netSpendAnalysisTravel = netSpendAnalysisTravel;
-exports.netSpendAnalysisExecutive = netSpendAnalysisExecutive;
+exports.netSpendAnalysisTravel = netSpendAnalysisTravel
+exports.netSpendAnalysisExecutive = netSpendAnalysisExecutive
 
 exports.programPerformanceExecutive = {
   value: 7.1,
-};
+}
 
-exports.noChangeSince = 'July 30';
+exports.noChangeSince = 'July 30'
 
 exports.personaList = [
   {
@@ -59,7 +59,7 @@ exports.personaList = [
     value: '$1,955',
     programShare: 10,
   },
-];
+]
 
 exports.marketList = [
   {
@@ -82,7 +82,7 @@ exports.marketList = [
     value: 7.8,
     programShare: 10,
   },
-];
+]
 
 exports.opportunitiesTravel = [
   {
@@ -115,7 +115,7 @@ exports.opportunitiesTravel = [
   { id: 5, title: 'New item', value: 'XX% / $XX', unit: 'impact' },
   { id: 6, title: 'New item', value: 'XX% / $XX', unit: 'expired' },
   { id: 7, title: 'New item', value: 'XX% / $XX', unit: '' },
-];
+]
 
 exports.opportunitiesExecutive = [
   {
@@ -166,20 +166,25 @@ exports.opportunitiesExecutive = [
       { title: 'retail marketing', value: '$3.7K' },
     ],
   },
-];
+]
 
 exports.riskAreasTravel = [
-  { title: 'Number of markets with ATP change more than 15%', value: '10' },
   {
+    id: 1,
+    title: 'Number of markets with ATP change more than 15%',
+    value: '10',
+  },
+  {
+    id: 2,
     title: 'Number of markets with rate availability lower than 80%',
     value: '14',
   },
-  { title: 'Travelers in HRC/Markets', value: '512' },
-  { title: 'Hosts in TBS/Markets', value: '125' },
-  { title: 'New item', value: 'XXX' },
-  { title: 'New item', value: 'XXX' },
-  { title: 'New item', value: 'XXX' },
-];
+  { id: 3, title: 'Travelers in HRC/Markets', value: '512' },
+  { id: 4, title: 'Hosts in TBS/Markets', value: '125' },
+  { id: 5, title: 'New item', value: 'XXX' },
+  { id: 6, title: 'New item', value: 'XXX' },
+  { id: 7, title: 'New item', value: 'XXX' },
+]
 
 exports.riskAreasExecutive = [
   {
@@ -230,4 +235,4 @@ exports.riskAreasExecutive = [
       { title: 'recruiting', value: '$27K' },
     ],
   },
-];
+]
