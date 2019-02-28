@@ -1,4 +1,4 @@
-const { generateType, generateTypeList, generateQuery } = require('../helper');
+const { generateType, generateTypeList, generateQuery } = require('../helper')
 
 exports.consoleDefs = `
 ${generateTypeList(
@@ -8,7 +8,7 @@ ${generateTypeList(
     secondaryHeader: String
     icon: String
     alert: Boolean
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -19,7 +19,7 @@ ${generateTypeList(
     icon: String
     disabled: Boolean
     button: String
-  }`
+  }`,
 )}
 
 type List {
@@ -38,6 +38,7 @@ type Division {
 }
 
 type Opportunity {
+  id: Int
   title: String
   value: String
   unit: String
@@ -54,7 +55,7 @@ ${generateType(
     totalOpportunities: Int
     hasNext: Boolean
     opportunities: [Opportunity]
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -63,14 +64,14 @@ ${generateTypeList(
     title: String
     value: String
     unit: String
-  }`
+  }`,
 )}
 
 ${generateType(
   'ProgramPerformanceExecutive',
   `{
     value: Float
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -78,7 +79,7 @@ ${generateTypeList(
   `{
     date: String
     value: Float
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -86,7 +87,7 @@ ${generateTypeList(
   `{
     date: String
     value: Float
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -95,7 +96,7 @@ ${generateTypeList(
     title: String
     value: String
     programShare: Int
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -104,10 +105,11 @@ ${generateTypeList(
     title: String
     value: Float
     programShare: Int
-  }`
+  }`,
 )}
 
 type RiskArea {
+  id: Int
   title: String
   value: String
   unit: String
@@ -124,7 +126,7 @@ ${generateType(
     totalRiskAreas: Int
     hasNext: Boolean
     riskAreas: [RiskArea]
-  }`
+  }`,
 )}
 
 ${generateTypeList(
@@ -134,7 +136,7 @@ ${generateTypeList(
     icon: String
     list: [List]
     disabled: Boolean
-  }`
+  }`,
 )}
 
 type NoChangeSinceBody {
@@ -148,7 +150,7 @@ type NoChangeSince {
   statusCode: Int,
   body: NoChangeSinceBody
 }
-`;
+`
 
 exports.consoleQuery = `
 ${generateQuery('activeAlerts', 'Action')}
@@ -165,4 +167,4 @@ ${generateQuery('marketList', 'Market')}
 opportunitiesTravel(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
 opportunitiesExecutive(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): OpportunityFeed
 riskAreasTravel(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed
-riskAreasExecutive(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`;
+riskAreasExecutive(clientId: Int!, sessionToken: String!, limit: Int, cursor: Int): RiskAreaFeed`

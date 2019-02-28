@@ -277,7 +277,7 @@ class UserService:
 
         # Checks that user exists
         if user is None:
-            raise LoginError("User did not exist")
+            raise LoginError("User does not exist")
 
         # Checks that user is enabled
         if not user.is_enabled:

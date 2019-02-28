@@ -105,9 +105,17 @@ functions:
     warmup: true
     handler: handler.client_update
 
+  client_division_create:
+    warmup: true
+    handler: handler.client_division_create
+
   client_division_get_all:
     warmup: true
     handler: handler.client_division_get_all
+
+  client_division_update:
+    warmup: true
+    handler: handler.client_division_update
 
   # Endpoint for udf_story_air
   udf_story_air:
