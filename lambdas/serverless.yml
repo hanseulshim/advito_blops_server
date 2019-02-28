@@ -76,6 +76,10 @@ functions:
     warmup: true
     handler: handler.user_get
 
+  user_authenticate:
+    warmup: true
+    handler: handler.user_authenticate
+
   # Starts process of resetting a user's password
   user_reset_password_start:
     warmup: true

@@ -264,6 +264,21 @@ def user_get(event, context, session):
 
 
 @handler_decorator
+def user_authenticate(event, context, session):
+
+    """
+    Receives a sessionToken and returns user info as well as their roles.
+    """
+
+    session_token = event['sessionToken']
+    user_roles = user_service.get_authentication_info(session_token)
+    user = user_roles[0]
+    roles = user_roles[1]
+    print(user)
+    print(roles)
+
+
+@handler_decorator
 @authenticate_decorator()
 def user_logout(event, context, session):
 
