@@ -76,6 +76,7 @@ functions:
     warmup: true
     handler: handler.user_get
 
+  # Gets user authentication info 
   user_authenticate:
     warmup: true
     handler: handler.user_authenticate

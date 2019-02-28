@@ -267,12 +267,30 @@ def user_authenticate(event, context, session):
     Receives a sessionToken and returns user info as well as their roles.
     """
 
+    # Gets session token
     session_token = event['sessionToken']
-    user_roles = user_service.get_authentication_info(session_token)
+
+    # Gets user with that token and their roles
+    user_roles = user_service.get_authentication_info(session_token, session)
     user = user_roles[0]
     roles = user_roles[1]
-    print(user)
-    print(roles)
+    role_names = [role.role_name for role in roles]
+
+    apidataset = {
+        "id": user.id,
+        "email": user.email,
+        "nameFirst": user.name_first,
+        "nameLast": user.name_first,
+        "roles": role_names
+    }
+
+    # Result
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "User successfully fetched",
+        "apidataset": apidataset
+    }
 
 
 @handler_decorator
