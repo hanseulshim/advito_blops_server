@@ -386,7 +386,7 @@ def user_update_any(event, context, session):
 def user_access(event, context, session):
 
     """
-    Gets user access information for a given client.
+    Gets user access information for the Advito client.
     :param event: Login JSON as a dict. Example:
     {
         "sessionToken": "abc123",
@@ -397,8 +397,7 @@ def user_access(event, context, session):
     """
 
     # Gets users that belong to specified client
-    client_id = event['clientId']
-    results = application_role_service.get_user_access_by_client(client_id, session)
+    results = application_role_service.get_advito_user_access(session)
 
     # Serializes each user/role pair as json objects
     serialized = []
