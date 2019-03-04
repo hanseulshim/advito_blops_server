@@ -513,8 +513,8 @@ def client_division_update(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_air(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_air(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_air(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -525,8 +525,8 @@ def udf_story_air(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_air_airlines(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_air_airlines(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_air_airlines(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -537,8 +537,8 @@ def udf_story_air_airlines(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_air_cabins(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_air_cabins(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_air_cabins(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -549,8 +549,8 @@ def udf_story_air_cabins(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_air_routes(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_air_routes(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_air_routes(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -562,8 +562,8 @@ def udf_story_air_routes(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_air_traffic(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_air_traffic(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_air_traffic(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -574,8 +574,8 @@ def udf_story_air_traffic(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_hotel(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_hotel(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_hotel(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -586,8 +586,8 @@ def udf_story_hotel(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_hotel_1(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_hotel_1(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_hotel_1(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -598,8 +598,8 @@ def udf_story_hotel_1(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_hotel_2(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_hotel_2(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_hotel_2(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -610,8 +610,8 @@ def udf_story_hotel_2(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_hotel_3(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_hotel_3(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_hotel_3(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
@@ -622,8 +622,8 @@ def udf_story_hotel_3(event, context, session):
 @handler_decorator
 @authenticate_decorator()
 def udf_story_hotel_4(event, context, session):
-    client_id = event['clientId']
-    result = amorphous_service.udf_story_hotel_4(client_id, session)
+    session_token = event['sessionToken']
+    result = amorphous_service.udf_story_hotel_4(session_token, session)
     return {
         "success": True,
         "apicode": "OK",
