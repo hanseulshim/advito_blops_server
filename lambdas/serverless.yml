@@ -76,6 +76,21 @@ functions:
     warmup: true
     handler: handler.user_get
 
+  # Gets user authentication info 
+  user_authenticate:
+    warmup: true
+    handler: handler.user_authenticate
+
+  # Starts process of resetting a user's password
+  user_reset_password_start:
+    warmup: true
+    handler: handler.user_reset_password_start
+
+  # Finishes process of resetting a user's password
+  user_reset_password_end:
+    warmup: true
+    handler: handler.user_reset_password_end
+
   # Creates a client
   client_create:
     warmup: true

@@ -4,9 +4,9 @@ import hashlib
 import json
 from datetime import datetime
 from datetime import timedelta
-from advito.model.table import AdvitoUser, AdvitoUserSession, AdvitoApplicationRole, AdvitoUserRoleLink
+from advito.model.table import AdvitoUser, AdvitoUserSession, AdvitoApplicationRole, AdvitoUserRoleLink, AccessToken
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError
+from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError, TokenExpirationError
 from advito.role import Role
 
 
@@ -92,13 +92,14 @@ class UserService:
     That is the responsibility of the caller.
     """
 
-    def __init__(self, session_duration_sec):
+    def __init__(self, session_duration_sec, reset_password_duration_hours):
 
         """
         Constructs a UserService instance.
         :param expiration_minutes: Real number representing the number of minutes a session lasts for.
         """
         self.session_duration_sec = session_duration_sec
+        self.reset_password_duration_hours = reset_password_duration_hours
 
 
     def create(self, user, session):
@@ -184,6 +185,7 @@ class UserService:
         Gets an AdvitoUser by session_token.
         :param session_token: Token given by user to query by.
         :param session: Database session. Not to be confused with session_token.
+        :return: AdvitoUser instance
         """
 
         # Gets id of user with given session token
@@ -230,8 +232,8 @@ class UserService:
 
         # Gets users alongside their roles
         user_role_pairs = session \
-            .query(AdvitoUser) \
-            .join(AdvitoUserSession) \
+            .query(AdvitoApplicationRole, AdvitoUser) \
+            .join(AdvitoUserRoleLink) \
             .join(AdvitoUser) \
             .filter(AdvitoUser.id == db_token.advito_user_id) \
             .all()
@@ -336,6 +338,76 @@ class UserService:
             .update({"session_end" : datetime.now()}, synchronize_session=False)
 
 
+    def reset_password_start(self, email, session):
+
+        """
+        Begins process of resetting the user's password
+        :param email: Email of user to reset password for.
+        :return: Access token that should be sent in email.
+        """
+
+        # Gets user with email
+        user = session \
+            .query(AdvitoUser) \
+            .filter(AdvitoUser.email == email) \
+            .first()
+        if user is None:
+            raise NotFoundError("User with email '" + email + "' not found'")
+
+        # Gets existing access token associated with user. Normally, it won't exist
+        old_access_token = session \
+            .query(AccessToken) \
+            .filter(AccessToken.advito_user_id == user.id) \
+            .filter(AccessToken.is_active == True) \
+            .first()
+        if old_access_token is not None:
+            old_access_token.is_active = False
+
+        # Creates access token
+        token_str = base64.b64encode(secrets.token_bytes(16)).decode(encoding='UTF-8')
+        expiration = datetime.now() + timedelta(hours = self.reset_password_duration_hours)
+        token = AccessToken (
+            advito_user_id = user.id,
+            token_type = "FLYING/NORMAL",
+            token = token_str,
+            token_expiration = expiration
+        )
+
+        # Inserts into db and returns string
+        session.add(token)
+        return token_str
+
+
+    def reset_password_end(self, access_token, new_password, session):
+
+        """
+        Finishes process of resetting the user's password
+        :param access_token: Access token sent to the user.
+        :param new_password: New password to set for user
+        """
+
+        # Gets user with email
+        user_and_token = session \
+            .query(AccessToken, AdvitoUser) \
+            .join(AdvitoUser) \
+            .filter(AccessToken.token == access_token) \
+            .first()
+        if user_and_token is None:
+            raise NotFoundError("Access token not found")
+
+        # Gets token and validates it
+        token = user_and_token[0]
+        if not token.is_active or datetime.now() > token.token_expiration:
+            raise TokenExpirationError("Access token expired")
+
+        # Gets user, hashes/salts new password and stores it alongside the salt that was used
+        user = user_and_token[1]
+        salt_and_hash = salt_hash(new_password)
+        user.pwd = salt_and_hash[0]
+        user.user_salt = salt_and_hash[1]
+
+        # Expires token
+        token.is_active = False
 
 
     def validate_logged_in(self, session_token, session, roles=[]):
