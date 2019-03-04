@@ -207,6 +207,48 @@ class UserService:
         return user
 
 
+    def get_authentication_info(self, session_token, session):
+
+        """
+        Gets an AdvitoUser.
+        :param session_token: Token given by user to query by.
+        :param session: Database session. Not to be confused with session_token.
+        """
+
+        # Gets token from db
+        db_token = session \
+            .query(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_end == None) \
+            .filter(AdvitoUserSession.session_token == session_token) \
+            .first()
+
+        # Checks that there was a session that was not expired that matches given token
+        if db_token is None:
+            raise InvalidSessionError("No session found")
+        if datetime.now() >= db_token.session_expiration:
+            raise ExpiredSessionError("Session expired")
+
+        # Gets users alongside their roles
+        user_role_pairs = session \
+            .query(AdvitoUser) \
+            .join(AdvitoUserSession) \
+            .join(AdvitoUser) \
+            .filter(AdvitoUser.id == db_token.advito_user_id) \
+            .all()
+        if len(user_role_pairs) == 0:
+            raise NotFoundError("User not found for session token")
+
+        # Formats user info
+        user = None
+        roles = []
+        for pair in user_role_pairs:
+            if user is None:
+                user = pair[1]
+            roles.append(pair[0])
+
+        # Returns as a tuple
+        return (user, roles)
+
 
     def get_by_username(self, username, session):
 

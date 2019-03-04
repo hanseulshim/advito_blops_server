@@ -1,4 +1,6 @@
 from sqlalchemy import text
+from advito.table import AdvitoUser, AdvitoUserSession
+
 
 class AmorphousService:
 
@@ -13,15 +15,25 @@ class AmorphousService:
         pass
 
 
-    def udf_story_air(self, client_id, session):
+    def udf_story_air(self, session_token, session):
 
         """
         Passthrough function that invokes the postgres function 'udf_story_air'
         and simply returns the results.
-        :param client_id: Integer representing the client id.
-        :param session: SQLAlchemy session used for DB operations.
+        :param session_token: Token given by user to query by.
+        :param session: Database session. Not to be confused with session_token.
         :return: JSON dictionaory.
         """
+
+        # Gets user that holds this session token
+        user = session \
+            .query(AdvitoUser) \
+            .join(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_token == session_token) \
+            .first()
+
+        # Gets client id
+        client_id = user.client_id
 
         # Executes funciton and gets row proxy.
         rowproxy = session.execute (
