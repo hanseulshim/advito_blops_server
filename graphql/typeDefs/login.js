@@ -1,7 +1,4 @@
-const { generateType } = require('../helper');
-
 exports.loginDefs = `
-
 type Login {
   displayName: String,
   clientId: Int,

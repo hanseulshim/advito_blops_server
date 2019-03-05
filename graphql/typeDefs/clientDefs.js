@@ -1,5 +1,3 @@
-const { generateTypeList, generateMutationType } = require('../helper');
-
 exports.clientDefs = `
 type Client {
   id: Int,

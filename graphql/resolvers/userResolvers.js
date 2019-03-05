@@ -1,4 +1,4 @@
-const { lambdaInvoke, lambdaFakeInvoke } = require('../helper');
+const { lambdaInvoke } = require('../helper');
 const { userProfileOverview } = require('../../data/userProfileData');
 exports.userResolvers = {
   userProfile: (_, __, { sessionToken }) =>

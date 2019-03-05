@@ -1,10 +1,3 @@
-const {
-  generateType,
-  generateTypeList,
-  generateQuery,
-  generateMutationType,
-} = require('../helper');
-
 exports.userDefs = `
   type UserProfile {
     nameFirst: String,

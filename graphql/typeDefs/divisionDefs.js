@@ -1,5 +1,3 @@
-const { generateTypeList, generateMutationType } = require('../helper');
-
 exports.divisionDefs = `
 type ClientDivision {
   id: Int!,
