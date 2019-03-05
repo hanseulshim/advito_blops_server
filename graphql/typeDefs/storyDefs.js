@@ -1,5 +1,3 @@
-const { generateType } = require('../helper');
-
 exports.storyDefs = `
   type ArcMap {
     thickness: Float,
@@ -79,56 +77,44 @@ exports.storyDefs = `
     tooltip: Tooltip
   }
 
-  ${generateType(
-    'AirMap',
-    `{
-      title: String
-      summary: String
-      kpis: [Kpi]
-      barchart: [Barchart]
-      locations: [ArcMap]
-    }`
-  )}
+  type AirMap {
+    title: String
+    summary: String
+    kpis: [Kpi]
+    barchart: [Barchart]
+    locations: [ArcMap]
+  }
 
-  ${generateType(
-    'HotelMap',
-    `{
-      title: String
-      summary: String
-      kpis: [Kpi]
-      barchart: [Barchart]
-      locations: [PointMap]
-    }`
-  )}
+  type HotelMap {
+    title: String
+    summary: String
+    kpis: [Kpi]
+    barchart: [Barchart]
+    locations: [PointMap]
+  }
 
-  ${generateType(
-    'Visual',
-    `{
-      title: String
-      summary: String
-      categories: [Visualization]
-      barchart: [Barchart]
-    }`
-  )}
+  type Visual {
+    title: String
+    summary: String
+    categories: [Visualization]
+    barchart: [Barchart]
+  }
 
-  ${generateType(
-    'DonutList',
-    `{
-      title: String,
-      last: Boolean,
-      summary: String,
-      label: String,
-      context: String,
-      total: Float,
-      colors: [String]
-      donutData: [Donut]
-    }`
-  )}
+  type DonutList {
+    title: String,
+    last: Boolean,
+    summary: String,
+    label: String,
+    context: String,
+    total: Float,
+    colors: [String]
+    donutData: [Donut]
+  }
 `;
 
 exports.storyQuery = `
-  airMap(clientId: Int!, sessionToken: String!, title: String!): AirMap
-  hotelMap(clientId: Int!, sessionToken: String!, title: String!): HotelMap
-  visual(clientId: Int!, sessionToken: String!, title: String!): Visual
-  donut(clientId: Int!, sessionToken: String!, title: String!): DonutList
+  airMap(title: String!): AirMap @auth
+  hotelMap(title: String!): HotelMap @auth
+  visual(title: String!): Visual @auth
+  donut(title: String!): DonutList @auth
 `;

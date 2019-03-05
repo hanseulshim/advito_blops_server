@@ -1,89 +1,98 @@
 const { lambdaInvoke } = require('../helper');
-
+// TODO: DELETE HARD-CODED CLIENTID
+// Either the call doesn't need it or the user verify call needs to return one
 exports.storyResolvers = {
-  airMap: (_, { title, ...payload }) => {
+  airMap: (_, { title, ...payload }, { sessionToken, user }) => {
     switch (title) {
       case 'airSummary':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_air',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_air'
+          'udf_story_air',
         );
       case 'trafficLaneOverview':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_air_traffic',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_air_traffic'
+          'udf_story_air_traffic',
         );
       default:
         return null;
     }
   },
-  hotelMap: (_, { title, ...payload }) => {
+  hotelMap: (_, { title, ...payload }, { sessionToken, user }) => {
     switch (title) {
       case 'hotelSummary':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_hotel',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_hotel'
+          'udf_story_hotel',
         );
       case 'hotelSpend':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_hotel_1',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_hotel_1'
+          'udf_story_hotel_1',
         );
       default:
         return null;
     }
   },
-  visual: (_, { title, ...payload }) => {
+  visual: (_, { title, ...payload }, { sessionToken, user }) => {
     switch (title) {
       case 'topAirlines':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_air_airlines',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_air_airlines'
+          'udf_story_air_airlines',
         );
       case 'cabinUse':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_air_cabins',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_air_cabins'
+          'udf_story_air_cabins',
         );
       case 'topHotelChains':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_hotel_2',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_hotel_2'
+          'udf_story_hotel_2',
         );
       case 'topHotelTiers':
         return lambdaInvoke(
           'python-lambdas-dev-udf_story_hotel_3',
           {
             ...payload,
+            sessionToken,
           },
-          'udf_story_hotel_3'
+          'udf_story_hotel_3',
         );
       default:
         return null;
     }
   },
-  donut: async (_, { title, ...payload }) => {
+  donut: async (_, { title, ...payload }, { sessionToken, user }) => {
     switch (title) {
       case 'airRoot':
       case 'transatlantic':
@@ -92,22 +101,23 @@ exports.storyResolvers = {
           'python-lambdas-dev-udf_story_air_routes',
           {
             ...payload,
+            sessionToken,
           },
           'udf_story_air_routes',
-          title
+          title,
         );
       case 'jfk':
         const airResponse = await lambdaInvoke(
           'python-lambdas-dev-udf_story_air_routes',
           {
             ...payload,
+            sessionToken,
           },
           'udf_story_air_routes',
-          title
+          title,
         );
-        const dataset = airResponse.body.apidataset;
-        dataset.last = true;
-        dataset.donutData = dataset.donutData.map(v => ({
+        airResponse.last = true;
+        airResponse.donutData = airResponse.donutData.map(v => ({
           ...v,
           tooltip: {
             title: 'TOP AIRLINES',
@@ -143,9 +153,10 @@ exports.storyResolvers = {
           'python-lambdas-dev-udf_story_hotel_4',
           {
             ...payload,
+            sessionToken,
           },
           'udf_story_hotel_4',
-          title
+          title,
         );
       default:
         null;

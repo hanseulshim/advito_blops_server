@@ -20,11 +20,21 @@ functions:
       - http:
           path: graphql
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - sessiontoken
+              - Content-Type
+            allowCredentials: false
       - http:
           path: graphql
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - sessiontoken
+              - Content-Type
+            allowCredentials: false
 
 custom:
   serverless-offline:

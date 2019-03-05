@@ -1,24 +1,32 @@
-const { lambdaInvoke, lambdaFakeInvoke } = require('../helper');
+const { lambdaInvoke } = require('../helper');
 const { userProfileOverview } = require('../../data/userProfileData');
 exports.userResolvers = {
-  userProfile: (_, payload) =>
+  userProfile: (_, __, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-user_get', {
-      ...payload,
+      sessionToken,
     }),
-  getUsers: (_, payload) =>
+  userList: (_, __, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-user_access', {
-      ...payload,
+      sessionToken,
     }),
-  userProfileOverview: (_, payload) =>
-    lambdaFakeInvoke(payload, userProfileOverview),
+  userProfileOverview: () => userProfileOverview,
 };
 
 exports.userResolversMutation = {
-  updatePassword: (_, payload) => lambdaFakeInvoke(payload),
-  updateUserProfile: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-user_update', { ...payload }),
-  createUser: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-user_create', { ...payload }),
-  editUser: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-user_update_any', { ...payload }),
+  updatePassword: () => 'Password Updated',
+  updateUserProfile: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-user_update', {
+      ...payload,
+      sessionToken,
+    }),
+  createUser: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-user_create', {
+      ...payload,
+      sessionToken,
+    }),
+  editUser: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-user_update_any', {
+      ...payload,
+      sessionToken,
+    }),
 };
