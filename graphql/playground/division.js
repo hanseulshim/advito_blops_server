@@ -24,14 +24,22 @@ exports.divisionMutations = {
   query: `
   mutation {
     updateDivision(
-      clientDivisionId: 1,
+      id: 1,
       divisionName: "division name",
       divisionNameFull: "divisionn",
       isActive: true,
       divisionTag: "tag",
       gcn: "gcn",
       description: "description"
-    )
+    ) {
+      id
+      divisionName
+      divisionNameFull
+      isActive
+      divisionTag
+      gcn
+      description
+    }
     createDivision(
       clientId: 1,
       divisionName: "division name",

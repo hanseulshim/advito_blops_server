@@ -17,14 +17,14 @@ divisionList(clientId: Int!): [ClientDivision] @auth
 
 exports.divisionMutation = `
 updateDivision(
-  clientDivisionId: Int!,
+  id: Int!,
   divisionName: String!,
   divisionNameFull: String,
   isActive: Boolean!,
   divisionTag: String,
   gcn: String,
   description: String
-): String @auth
+): ClientDivision @auth
 createDivision(
   clientId: Int!,
   divisionName: String!,

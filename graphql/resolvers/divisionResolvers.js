@@ -9,11 +9,13 @@ exports.divisionResolvers = {
 };
 
 exports.divisionResolversMutation = {
-  updateDivision: (_, payload, { sessionToken }) =>
-    lambdaInvoke('python-lambdas-dev-client_division_update', {
+  updateDivision: async (_, payload, { sessionToken }) => {
+    await lambdaInvoke('python-lambdas-dev-client_division_update', {
       ...payload,
       sessionToken,
-    }),
+    });
+    return payload;
+  },
   createDivision: (_, payload, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-client_division_create', {
       ...payload,
