@@ -40,6 +40,29 @@ application_role_service = ApplicationRoleService(user_service)
 amorphous_service = AmorphousService()
 client_service = ClientService()
 
+################# Helpers #################
+def send_email(recipient, subject, message):
+    response = email_client.send_email (
+        Destination = {
+            "ToAddresses": [ email ],
+        },
+        Message = {
+            "Body": {
+                "Text": {
+                    "Charset": email_charset,
+                    "Data": message
+                }
+            },
+            "Subject": {
+                "Charset": email_charset,
+                "Data": subject
+            }
+        },
+        Source = email_sender
+    )
+    return response
+
+
 ################ Decorators ##################
 def handler_decorator(func):
 
@@ -179,7 +202,6 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from event
-
     user = deserialize_user_create(event)
 
     # Acquires role from event
@@ -364,7 +386,7 @@ def user_update_any(event, context, session):
     roleId = event['roleId']
     role = Role(roleId)
     user = deserialize_user(event)
-    user.id = event["userId"]
+    user.id = event["id"]
     if user.id is None:
         raise BadRequestError("id must be specified.")
 
@@ -406,7 +428,7 @@ def user_access(event, context, session):
         user = result[0]
         role = result[1]
         entry = {
-            "userId": user.id,
+            "id": user.id,
             "nameFirst": user.name_first,
             "nameLast": user.name_last,
             "username": user.username,
@@ -435,27 +457,16 @@ def user_reset_password_start(event, context, session):
     Starts the process of resetting a users password
     """
 
-    email = event["email"]
+    # Gets recipient email
+    recipient = event["email"]
+
+    # Generates access token for password reset
     access_token = user_service.reset_password_start(email, session)
+
+    # Sends email
     url = "http://fakeurl.com/" + access_token
-    response = email_client.send_email (
-        Destination = {
-            "ToAddresses": [ email ],
-        },
-        Message = {
-            "Body": {
-                "Text": {
-                    "Charset": email_charset,
-                    "Data": "Please visit the following URL to reset your password: " + url
-                }
-            },
-            "Subject": {
-                "Charset": email_charset,
-                "Data": "Password Reset"
-            }
-        },
-        Source = email_sender
-    )
+    emailMessage = "Please visit the following URL to reset your password: " + url
+    response = send_email(recipient, emailMessage)
 
     # Returns response
     message = "Email with url " + url + " sent to email " + email
@@ -486,6 +497,8 @@ def user_reset_password_end(event, context, session):
         "apimessage": "Password successfully updated",
         "apidataset": "Password successfully updated"
     }
+
+
 
 
 
