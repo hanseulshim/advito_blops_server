@@ -459,7 +459,7 @@ def user_reset_password_start(event, context, session):
     recipient = event["email"]
 
     # Generates access token for password reset
-    access_token = user_service.reset_password_start(email, session)
+    access_token = user_service.reset_password_start(recipient, session)
 
     # Sends email
     url = "http://fakeurl.com/" + access_token
