@@ -24,9 +24,12 @@ exports.userResolversMutation = {
       ...payload,
       sessionToken,
     }),
-  editUser: (_, payload, { sessionToken }) =>
-    lambdaInvoke('python-lambdas-dev-user_update_any', {
+  editUser: async (_, payload, { sessionToken }) => {
+    await lambdaInvoke('python-lambdas-dev-user_update_any', {
       ...payload,
       sessionToken,
-    }),
+    });
+    return payload
+  }
+
 };

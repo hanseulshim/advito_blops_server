@@ -21,7 +21,7 @@ exports.userDefs = `
   }
 
   type UserInfo {
-    userId: Int,
+    id: Int,
     username: String,
     isEnabled: Boolean,
     nameFirst: String,
@@ -50,7 +50,7 @@ exports.userMutation = `
     timezoneDefault: String!,
     emailNotifications: Boolean!
   ): String @auth
-  editUser(userId: Int!,
+  editUser(id: Int!,
     username: String!,
     isEnabled: Boolean!,
     nameFirst: String!,
@@ -58,7 +58,7 @@ exports.userMutation = `
     phone: String,
     address: String,
     roleId: Int,
-  ): String @auth
+  ): UserInfo @auth
   createUser(
     clientId: Int!
     username: String!,

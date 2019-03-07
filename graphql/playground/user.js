@@ -22,7 +22,7 @@ exports.userQueries = {
       }
     }
     userList {
-      userId
+      id
       username
       isEnabled
       nameFirst
@@ -52,7 +52,7 @@ exports.userMutations = {
       emailNotifications: false,
     )
     editUser(
-      userId: 765,
+      id: 765,
       username: "admin@boostlabs.com",
       isEnabled: true,
       nameFirst: "First name",
@@ -60,7 +60,16 @@ exports.userMutations = {
       phone: "phone",
       address: "address",
       roleId: 1,
-    )
+    ) {
+      id
+      username
+      isEnabled
+      nameFirst
+      nameLast
+      phone
+      address
+      roleId
+    }
     createUser(
       clientId: 1,
       username: "testuser@advito.com",
