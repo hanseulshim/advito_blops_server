@@ -1,31 +1,22 @@
-const { generateTypeList, generateMutationType } = require('../helper')
-
 exports.divisionDefs = `
-${generateTypeList(
-  'ClientDivision',
-  `{
-      id: Int!,
-      clientId: Int!,
-      divisionName: String!,
-      divisionNameFull: String,
-      divisionTag: String,
-      gcn: String,
-      isActive: Boolean!,
-      description: String
-  }`,
-)}
-
-${generateMutationType('UpdateDivisionResponse')}
-${generateMutationType('CreateDivisionResponse')}
-`
+type ClientDivision {
+  id: Int!,
+  clientId: Int!,
+  divisionName: String!,
+  divisionNameFull: String,
+  divisionTag: String,
+  gcn: String,
+  isActive: Boolean!,
+  description: String
+}
+`;
 
 exports.divisionQuery = `
-getDivisions(sessionToken: String!, clientId: Int!): ClientDivision
-`
+divisionList(clientId: Int!): [ClientDivision] @auth
+`;
 
 exports.divisionMutation = `
 updateDivision(
-  sessionToken: String!,
   clientDivisionId: Int!,
   divisionName: String!,
   divisionNameFull: String,
@@ -33,9 +24,8 @@ updateDivision(
   divisionTag: String,
   gcn: String,
   description: String
-): UpdateDivisionResponse
+): String @auth
 createDivision(
-  sessionToken: String!,
   clientId: Int!,
   divisionName: String!,
   divisionNameFull: String,
@@ -43,5 +33,5 @@ createDivision(
   divisionTag: String,
   gcn: String,
   description: String
-): CreateDivisionResponse
-`
+): String @auth
+`;

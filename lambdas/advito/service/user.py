@@ -252,8 +252,6 @@ class UserService:
         return (user, roles)
 
 
-
-
     def get_by_username(self, username, session):
 
         """

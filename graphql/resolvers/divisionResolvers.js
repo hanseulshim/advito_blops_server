@@ -1,15 +1,22 @@
 const { lambdaInvoke } = require('../helper');
 
 exports.divisionResolvers = {
-  getDivisions: (_, payload) =>
+  divisionList: (_, payload, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-client_division_get_all', {
       ...payload,
+      sessionToken,
     }),
 };
 
 exports.divisionResolversMutation = {
-  updateDivision: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-client_division_update', { ...payload }),
-  createDivision: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-client_division_create', { ...payload }),
+  updateDivision: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-client_division_update', {
+      ...payload,
+      sessionToken,
+    }),
+  createDivision: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-client_division_create', {
+      ...payload,
+      sessionToken,
+    }),
 };

@@ -1,33 +1,24 @@
-const { generateTypeList, generateMutationType } = require('../helper')
-
 exports.clientDefs = `
-${generateTypeList(
-  'Client',
-  `{
-    id: Int,
-    clientName: String,
-    clientNameFull: String,
-    clientTag: String,
-    gcn: String,
-    lanyonClientCode: String,
-    isActive: Boolean,
-    industry: String,
-    defaultCurrencyCode: String,
-    defaultDistanceUnits: String,
-    description: String
-}`,
-)}
-
-${generateMutationType('UpdateClientResponse')}
-${generateMutationType('CreateClientResponse')}
-`
+type Client {
+  id: Int,
+  clientName: String,
+  clientNameFull: String,
+  clientTag: String,
+  gcn: String,
+  lanyonClientCode: String,
+  isActive: Boolean,
+  industry: String,
+  defaultCurrencyCode: String,
+  defaultDistanceUnits: String,
+  description: String
+}
+`;
 
 exports.clientQuery = `
-getClients(sessionToken: String!): Client
-`
+clientList: [Client] @auth
+`;
 exports.clientMutation = `
 updateClient(
-  sessionToken: String!,
   clientId: Int!,
   clientName: String!,
   clientNameFull: String,
@@ -40,9 +31,8 @@ updateClient(
   defaultCurrencyCode: String,
   defaultDistanceUnits: String,
   description: String
-): UpdateClientResponse
+): String @auth
 createClient(
-  sessionToken: String!,
   clientName: String!,
   clientNameFull: String,
   clientTag: String,
@@ -54,5 +44,5 @@ createClient(
   defaultCurrencyCode: String,
   defaultDistanceUnits: String,
   description: String
-): CreateClientResponse
-`
+): String @auth
+`;

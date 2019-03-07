@@ -1,15 +1,22 @@
 const { lambdaInvoke } = require('../helper');
 
 exports.clientResolvers = {
-  getClients: (_, payload) =>
+  clientList: (_, payload, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-client_get_all', {
       ...payload,
+      sessionToken,
     }),
 };
 
 exports.clientResolversMutation = {
-  updateClient: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-client_update', { ...payload }),
-  createClient: (_, payload) =>
-    lambdaInvoke('python-lambdas-dev-client_create', { ...payload }),
+  updateClient: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-client_update', {
+      ...payload,
+      sessionToken,
+    }),
+  createClient: (_, payload, { sessionToken }) =>
+    lambdaInvoke('python-lambdas-dev-client_create', {
+      ...payload,
+      sessionToken,
+    }),
 };

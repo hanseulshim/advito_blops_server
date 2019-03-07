@@ -21,6 +21,8 @@ def serialize_application_role(role):
 
 class ApplicationRoleService:
 
+    advito_client_id = 1
+
     """
     Represents a service that performs operations on instances of `AdvitoApplicationRole`.
     Can add and remove roles to and from users.
@@ -79,7 +81,7 @@ class ApplicationRoleService:
 
 
 
-    def get_user_access_by_client(self, client_id, session):
+    def get_advito_user_access(self, session):
 
         """
         Gets all ApplicationRoleServices for a given AdvitoUser
@@ -93,5 +95,5 @@ class ApplicationRoleService:
             .query(AdvitoUser, AdvitoApplicationRole) \
             .join(AdvitoUserRoleLink) \
             .join(AdvitoApplicationRole) \
-            .filter(AdvitoUser.client_id == client_id) \
+            .filter(AdvitoUser.client_id == self.advito_client_id) \
             .all()
