@@ -412,7 +412,6 @@ def user_access(event, context, session):
     :param event: Login JSON as a dict. Example:
     {
         "sessionToken": "abc123",
-        "clientId": 1
     }
     :param context: AWS context.
     :param session: Session used for database connectivity.
@@ -624,6 +623,15 @@ def client_division_update(event, context, session):
         "apimessage": "Division successfully updated",
         "apidataset": "Division successfully updated"
     }
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def application_get_all(event, context, session):
+
+    """
+    Updates all applications
+    """
+
 
 @handler_decorator
 @authenticate_decorator()

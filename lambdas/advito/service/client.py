@@ -54,7 +54,7 @@ def deserialize_client_division_create(client_division_json):
 def deserialize_client_division(client_division_json):
 
     return ClientDivision (
-        id = client_division_json["clientDivisionId"],
+        id = client_division_json["id"],
         division_name = client_division_json["divisionName"],
         division_name_full = client_division_json["divisionNameFull"],
         division_tag = client_division_json["divisionTag"],
