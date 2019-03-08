@@ -1,4 +1,4 @@
-from advito.model.table import Client, ClientDivision
+from advito.model.table import Client, ClientDivision, ClientFeatureLink
 from advito.error import NotFoundError
 
 
@@ -172,6 +172,28 @@ class ClientService:
         # Validates that a change occurred
         if rowcount == 0:
             raise NotFoundError("Could not find division with id " + str(client_division.id))
+
+
+
+    def set_features(self, client_id, feature_ids, session):
+
+        """
+        Sets the features of a given client
+        :param client_id: ID of client to set features for
+        :param feature_ids: Ids of features to set for client
+        """
+
+        # Removes all features from existing client
+        count = session \
+            .query(ClientFeatureLink) \
+            .filter(ClientFeatureLink.client_id == client_id) \
+            .delete()
+
+        # Seats features for this client
+        for feature_id in feature_ids:
+            link = ClientFeatureLink (client_id = client_id, advito_application_feature_id = feature_id)
+            session.add(link)
+
 
 
     def create(self, client, session):

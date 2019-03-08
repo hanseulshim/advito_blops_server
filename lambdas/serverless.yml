@@ -106,21 +106,36 @@ functions:
     warmup: true
     handler: handler.client_update
 
+  # Creates a clietn division
   client_division_create:
     warmup: true
     handler: handler.client_division_create
 
+  # Gets all client divisions
   client_division_get_all:
     warmup: true
     handler: handler.client_division_get_all
 
+  # Updates a client division
   client_division_update:
     warmup: true
     handler: handler.client_division_update
 
-  client_application_create:
+
+  # Sets features of a given client
+  client_set_features:
     warmup: true
-    handler: handler.client_application_create
+    handler: handler.client_set_features
+
+  # Gets all applications
+  application_get_all:
+    warmup: true
+    handler: handler.application_get_all
+    
+  # Gets applications of a given client
+  application_get_by_client:
+    warmup: true
+    handler: handler.application_get_by_client
 
   # Endpoint for udf_story_air
   udf_story_air:
