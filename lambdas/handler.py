@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 import advito.util
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
+from advito.service.application import ApplicationService, serialize_application_with_features, serialize_feature
 from advito.service.amorphous import AmorphousService
 from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division, deserialize_client_division, deserialize_client_division_create
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError, TokenExpirationError
@@ -37,8 +38,32 @@ engine = create_engine(db_connection)
 # Creates services that control business logic
 user_service = UserService(session_duration_sec, reset_password_duration_hours)
 application_role_service = ApplicationRoleService(user_service)
+application_service = ApplicationService()
 amorphous_service = AmorphousService()
 client_service = ClientService()
+
+################# Helpers #################
+def send_email(recipient, subject, message):
+    response = email_client.send_email (
+        Destination = {
+            "ToAddresses": [ email ],
+        },
+        Message = {
+            "Body": {
+                "Text": {
+                    "Charset": email_charset,
+                    "Data": message
+                }
+            },
+            "Subject": {
+                "Charset": email_charset,
+                "Data": subject
+            }
+        },
+        Source = email_sender
+    )
+    return response
+
 
 ################ Decorators ##################
 def handler_decorator(func):
@@ -179,7 +204,6 @@ def user_create(event, context, session):
     """
 
     # Deserializes user from event
-
     user = deserialize_user_create(event)
 
     # Acquires role from event
@@ -364,7 +388,7 @@ def user_update_any(event, context, session):
     roleId = event['roleId']
     role = Role(roleId)
     user = deserialize_user(event)
-    user.id = event["userId"]
+    user.id = event["id"]
     if user.id is None:
         raise BadRequestError("id must be specified.")
 
@@ -390,7 +414,6 @@ def user_access(event, context, session):
     :param event: Login JSON as a dict. Example:
     {
         "sessionToken": "abc123",
-        "clientId": 1
     }
     :param context: AWS context.
     :param session: Session used for database connectivity.
@@ -405,7 +428,7 @@ def user_access(event, context, session):
         user = result[0]
         role = result[1]
         entry = {
-            "userId": user.id,
+            "id": user.id,
             "nameFirst": user.name_first,
             "nameLast": user.name_last,
             "username": user.username,
@@ -434,27 +457,16 @@ def user_reset_password_start(event, context, session):
     Starts the process of resetting a users password
     """
 
-    email = event["email"]
-    access_token = user_service.reset_password_start(email, session)
+    # Gets recipient email
+    recipient = event["email"]
+
+    # Generates access token for password reset
+    access_token = user_service.reset_password_start(recipient, session)
+
+    # Sends email
     url = "http://fakeurl.com/" + access_token
-    response = email_client.send_email (
-        Destination = {
-            "ToAddresses": [ email ],
-        },
-        Message = {
-            "Body": {
-                "Text": {
-                    "Charset": email_charset,
-                    "Data": "Please visit the following URL to reset your password: " + url
-                }
-            },
-            "Subject": {
-                "Charset": email_charset,
-                "Data": "Password Reset"
-            }
-        },
-        Source = email_sender
-    )
+    emailMessage = "Please visit the following URL to reset your password: " + url
+    response = send_email(recipient, emailMessage)
 
     # Returns response
     message = "Email with url " + url + " sent to email " + email
@@ -485,6 +497,8 @@ def user_reset_password_end(event, context, session):
         "apimessage": "Password successfully updated",
         "apidataset": "Password successfully updated"
     }
+
+
 
 
 
@@ -611,6 +625,66 @@ def client_division_update(event, context, session):
         "apimessage": "Division successfully updated",
         "apidataset": "Division successfully updated"
     }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def client_set_features(event, context, session):
+
+    """
+    Sets client feature features by ids
+    """
+
+    client_id = event["clientId"]
+    feature_ids = event["featureIds"]
+    client_service.set_features(client_id, feature_ids, session)
+
+    # Done
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Features successfully set",
+        "apidataset": "Features successfully set"
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def application_get_all(event, context, session):
+
+    """
+    Gets list of all applications
+    """
+
+    applications_with_features = application_service.get_all(session)
+    applications_with_features_serialized = [serialize_application_with_features(app) for app in applications_with_features]
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Applications successfully fetched",
+        "apidataset": applications_with_features_serialized
+    }
+
+
+@handler_decorator
+@authenticate_decorator([Role.ADMINISTRATOR])
+def application_get_by_client(event, context, session):
+
+    """
+    Gets all applications that a client belongs to.
+    Determines this by getting all features of the user and getting the applications those features belong to.
+    """
+
+    client_id = event["clientId"]
+    applications_with_features = application_service.get_by_client(client_id, session)
+    applications_with_features_serialized = [serialize_application_with_features(app) for app in applications_with_features]
+    return {
+        "success": True,
+        "apicode": "OK",
+        "apimessage": "Applications successfully fetched",
+        "apidataset": applications_with_features_serialized
+    }
+
 
 @handler_decorator
 @authenticate_decorator()

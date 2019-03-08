@@ -87,6 +87,7 @@ class ApplicationRoleService:
         Gets all ApplicationRoleServices for a given AdvitoUser
         :param client_id: ID of client users belong underneath.
         :param session: SQLAlchemy session used for db operations.
+        :return List of tuples of (AdvitoUser, AdvitoApplicationRole) that fall under the specified client.
         """
 
         # Returns tuple of users and their roles
