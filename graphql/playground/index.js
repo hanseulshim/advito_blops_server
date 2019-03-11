@@ -7,7 +7,7 @@ const { userQueries, userMutations } = require('./user');
 const { clientQueries, clientMutations } = require('./client');
 const { divisionQueries, divisionMutations } = require('./division');
 const { applicationQueries, applicationMutations } = require('./application');
-// const { quarterFilter } = require('./quarterFilter');
+const { quarterFilter } = require('./quarterFilter');
 exports.playground = {
   tabs: [
     login,
@@ -23,6 +23,6 @@ exports.playground = {
     divisionMutations,
     applicationQueries,
     applicationMutations,
-    // quarterFilter
+    quarterFilter
   ],
 };

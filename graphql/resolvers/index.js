@@ -17,7 +17,7 @@ const { lambdaInvoke } = require('../helper');
 const { portalQueries } = require('./portal');
 const { travelManagerQueries } = require('./travelManager');
 const { executiveQueries } = require('./executive');
-// const { quarterFilterQueries } = require('./quarterFilterResolvers');
+const { quarterFilterQueries } = require('./quarterFilterResolvers');
 
 exports.resolvers = {
   Query: {
@@ -30,7 +30,7 @@ exports.resolvers = {
     ...clientResolvers,
     ...divisionResolvers,
     ...applicationResolvers,
-    // ...quarterFilterQueries,
+    ...quarterFilterQueries,
     login: (_, payload) =>
       lambdaInvoke('python-lambdas-dev-user_login', payload),
     logout: (_, payload) => {
