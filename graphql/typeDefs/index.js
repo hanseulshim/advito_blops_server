@@ -17,6 +17,7 @@ const { loginDefs, loginQuery } = require('./login');
 const { portalDefs, portalQueries } = require('./portal');
 const { travelManagerDefs, travelManagerQueries } = require('./travelManager');
 const { executiveDefs, executiveQueries } = require('./executive');
+const { quarterFilterDefs, quarterFilterQueries } = require('./quarterFilterDefs');
 
 exports.typeDefs = gql`
 directive @auth on FIELD_DEFINITION
@@ -30,18 +31,19 @@ directive @auth on FIELD_DEFINITION
   ${userDefs}
   ${divisionDefs}
   ${applicationDefs}
+  ${quarterFilterDefs}
   type Query {
     ${loginQuery}
     ${portalQueries}
     ${travelManagerQueries}
     ${executiveQueries}
 
-
     ${storyQuery}
     ${userQuery}
     ${clientQuery}
     ${divisionQuery}
     ${applicationQuery}
+    ${quarterFilterQueries}
   }
   type Mutation {
     ${userMutation}
