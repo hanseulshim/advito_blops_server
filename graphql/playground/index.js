@@ -6,6 +6,7 @@ const { story } = require('./story');
 const { userQueries, userMutations } = require('./user');
 const { clientQueries, clientMutations } = require('./client');
 const { divisionQueries, divisionMutations } = require('./division');
+const { applicationQueries, applicationMutations } = require('./application');
 exports.playground = {
   tabs: [
     login,
@@ -19,5 +20,7 @@ exports.playground = {
     clientMutations,
     divisionQueries,
     divisionMutations,
+    applicationQueries,
+    applicationMutations
   ],
 };

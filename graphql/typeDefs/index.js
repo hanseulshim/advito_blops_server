@@ -7,6 +7,11 @@ const {
   divisionQuery,
   divisionMutation,
 } = require('./divisionDefs');
+const {
+  applicationDefs,
+  applicationQuery,
+  applicationMutation,
+} = require('./applicationDefs');
 
 const { loginDefs, loginQuery } = require('./login');
 const { portalDefs, portalQueries } = require('./portal');
@@ -24,6 +29,7 @@ directive @auth on FIELD_DEFINITION
   ${clientDefs}
   ${userDefs}
   ${divisionDefs}
+  ${applicationDefs}
   type Query {
     ${loginQuery}
     ${portalQueries}
@@ -35,10 +41,12 @@ directive @auth on FIELD_DEFINITION
     ${userQuery}
     ${clientQuery}
     ${divisionQuery}
+    ${applicationQuery}
   }
   type Mutation {
     ${userMutation}
     ${clientMutation}
     ${divisionMutation}
+    ${applicationMutation}
   }
 `;

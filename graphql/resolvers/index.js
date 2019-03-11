@@ -8,6 +8,10 @@ const {
   divisionResolvers,
   divisionResolversMutation,
 } = require('./divisionResolvers');
+const {
+  applicationResolvers,
+  applicationResolversMutation,
+} = require('./applicationResolvers');
 const { lambdaInvoke } = require('../helper');
 
 const { portalQueries } = require('./portal');
@@ -24,6 +28,7 @@ exports.resolvers = {
     ...userResolvers,
     ...clientResolvers,
     ...divisionResolvers,
+    ...applicationResolvers,
     login: (_, payload) =>
       lambdaInvoke('python-lambdas-dev-user_login', payload),
     logout: (_, payload) => {
@@ -36,5 +41,6 @@ exports.resolvers = {
     ...userResolversMutation,
     ...clientResolversMutation,
     ...divisionResolversMutation,
+    ...applicationResolversMutation
   },
 };
