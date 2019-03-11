@@ -499,9 +499,6 @@ def user_reset_password_end(event, context, session):
     }
 
 
-
-
-
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def client_get_all(event, context, session):
@@ -650,33 +647,18 @@ def client_set_features(event, context, session):
 
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
-def application_get_all(event, context, session):
-
-    """
-    Gets list of all applications
-    """
-
-    applications_with_features = application_service.get_all(session)
-    applications_with_features_serialized = [serialize_application_with_features(app) for app in applications_with_features]
-    return {
-        "success": True,
-        "apicode": "OK",
-        "apimessage": "Applications successfully fetched",
-        "apidataset": applications_with_features_serialized
-    }
-
-
-@handler_decorator
-@authenticate_decorator([Role.ADMINISTRATOR])
-def application_get_by_client(event, context, session):
+def application_get(event, context, session):
 
     """
     Gets all applications that a client belongs to.
     Determines this by getting all features of the user and getting the applications those features belong to.
     """
 
-    client_id = event["clientId"]
-    applications_with_features = application_service.get_by_client(client_id, session)
+    client_id = event.get("clientId")
+    if client_id is None:
+        applications_with_features = application_service.get_all(session)
+    else:
+        applications_with_features = application_service.get_by_client(client_id, session)
     applications_with_features_serialized = [serialize_application_with_features(app) for app in applications_with_features]
     return {
         "success": True,

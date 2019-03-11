@@ -121,21 +121,15 @@ functions:
     warmup: true
     handler: handler.client_division_update
 
-
   # Sets features of a given client
   client_set_features:
     warmup: true
     handler: handler.client_set_features
 
   # Gets all applications
-  application_get_all:
+  application_get:
     warmup: true
-    handler: handler.application_get_all
-    
-  # Gets applications of a given client
-  application_get_by_client:
-    warmup: true
-    handler: handler.application_get_by_client
+    handler: handler.application_get
 
   # Endpoint for udf_story_air
   udf_story_air:
