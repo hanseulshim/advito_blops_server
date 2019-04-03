@@ -1,5 +1,6 @@
 exports.dashboardDefs = `
 type ProgramPerformanceTravel {
+  id: Int
   title: String
   value: String
   unit: String
@@ -62,10 +63,10 @@ type RiskAreaDivision {
 `;
 
 exports.dashboardQueries = `
-  programPerformanceListTravel: [ProgramPerformanceTravel] @auth
-  netSpendAnalysisListTravel: [NetSpendAnalysisTravel] @auth
-  personaList: [Persona] @auth
-  savingsOpportunityFeedTravel(limit: Int, cursor: Int): SavingsOpportunityFeed @auth
-  riskAreaFeedTravel(limit: Int, cursor: Int): RiskAreaFeed @auth
-  noChangeSince: String @auth
+  programPerformanceListTravel(filterId: Int): [ProgramPerformanceTravel] @auth
+  netSpendAnalysisListTravel(filterId: Int): [NetSpendAnalysisTravel] @auth
+  personaList(filterId: Int): [Persona] @auth
+  savingsOpportunityFeedTravel(limit: Int, cursor: Int, filterId: Int): SavingsOpportunityFeed @auth
+  riskAreaFeedTravel(limit: Int, cursor: Int, filterId: Int): RiskAreaFeed @auth
+  noChangeSince(filterId: Int): String @auth
 `;
