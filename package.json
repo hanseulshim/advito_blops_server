@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sls offline"
+    "start": "sls offline",
+    "test": "sls deploy -s test",
+    "alpha": "sls deploy -s alpha",
+    "beta": "sls deploy -s beta"
   },
   "author": "",
   "license": "ISC",
