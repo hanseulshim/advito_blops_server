@@ -16,3 +16,4 @@ lambdas/env.yml
 
 # MAC generated files
 *.DS_Store
+.vscode/settings.json
