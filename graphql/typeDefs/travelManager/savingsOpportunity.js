@@ -28,5 +28,5 @@ type SavingsOpportunityField {
 `;
 
 exports.savingsOpportunityQueries = `
-savingsOpportunityDetail(id: Int!): SavingsOpportunityDetail @auth
+savingsOpportunityDetail(id: Int!, filterId: Int): SavingsOpportunityDetail @auth
 `;

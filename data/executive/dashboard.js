@@ -36,6 +36,7 @@ exports.marketList = [
 
 exports.savingsOpportunityList = [
   {
+    id: 1,
     title: 'Amount to incentive/Rebate (personal card)',
     value: '$150K',
     divisionList: [
@@ -45,6 +46,7 @@ exports.savingsOpportunityList = [
     ],
   },
   {
+    id: 2,
     title: 'Breakfast & Wifi Expensed',
     value: '$200K',
     divisionList: [
@@ -54,6 +56,7 @@ exports.savingsOpportunityList = [
     ],
   },
   {
+    id: 3,
     title: 'Actual vs negotiated save rate',
     value: '10%',
     secondaryValue: '8%',
@@ -66,6 +69,7 @@ exports.savingsOpportunityList = [
     ],
   },
   {
+    id: 4,
     title: 'Volume of ancillary spend',
     value: '$800K',
     divisionList: [
@@ -75,6 +79,7 @@ exports.savingsOpportunityList = [
     ],
   },
   {
+    id: 5,
     title: 'Contracted savings lost',
     value: '$200K',
     divisionList: [
@@ -87,6 +92,7 @@ exports.savingsOpportunityList = [
 
 exports.riskAreaList = [
   {
+    id: 1,
     title: 'T&E spend to forecasted budget value',
     value: '$3.2M',
     secondaryValue: '$3.5M',
@@ -97,6 +103,7 @@ exports.riskAreaList = [
     ],
   },
   {
+    id: 2,
     title: 'Non-expensed trips (days since trip)',
     value: '21',
     secondaryValue: '$150K',
@@ -107,6 +114,7 @@ exports.riskAreaList = [
     ],
   },
   {
+    id: 3,
     title: 'Past due corporate cards',
     value: '21%',
     secondaryValue: '$98K',
@@ -117,6 +125,7 @@ exports.riskAreaList = [
     ],
   },
   {
+    id: 4,
     title: 'Time away/employee burn out',
     value: '34%',
     divisionList: [
@@ -126,6 +135,7 @@ exports.riskAreaList = [
     ],
   },
   {
+    id: 5,
     title: 'Approved out of policy spend',
     value: '$472K',
     divisionList: [
