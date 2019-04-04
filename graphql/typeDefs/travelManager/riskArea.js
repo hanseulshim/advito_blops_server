@@ -26,5 +26,5 @@ type RiskAreaField {
 `;
 
 exports.riskAreaQueries = `
-  riskAreaDetail(id: Int!): RiskAreaDetail @auth
+  riskAreaDetail(id: Int!, filterId: Int): RiskAreaDetail @auth
 `;

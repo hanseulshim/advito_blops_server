@@ -14,9 +14,9 @@ type Market {
 `;
 
 exports.dashboardQueries = `
-  programPerformanceExecutive: ProgramPerformanceExecutive @auth
-  netSpendAnalysisListExecutive: [NetSpendAnalysisExecutive] @auth
-  marketList: [Market] @auth
-  savingsOpportunityFeedExecutive(limit: Int, cursor: Int): SavingsOpportunityFeed @auth
-  riskAreaFeedExecutive(limit: Int, cursor: Int): RiskAreaFeed @auth
+  programPerformanceExecutive(filterId: Int): ProgramPerformanceExecutive @auth
+  netSpendAnalysisListExecutive(filterId: Int): [NetSpendAnalysisExecutive] @auth
+  marketList(filterId: Int): [Market] @auth
+  savingsOpportunityFeedExecutive(limit: Int, cursor: Int, filterId: Int): SavingsOpportunityFeed @auth
+  riskAreaFeedExecutive(limit: Int, cursor: Int, filterId: Int): RiskAreaFeed @auth
 `;

@@ -4,7 +4,14 @@ exports.dashboard = {
   headers: { sessiontoken: 'advitoValidToken' },
   query: `
   {
-    programPerformanceListTravel {
+    noFilterprogramPerformanceListTravel: programPerformanceListTravel {
+      id
+      title
+      value
+      unit
+    }
+    filterprogramPerformanceListTravel: programPerformanceListTravel(filterId: 1) {
+      id
       title
       value
       unit

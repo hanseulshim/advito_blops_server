@@ -1,15 +1,18 @@
 exports.programPerformanceListTravel = [
   {
+    id: 1,
     title: 'Average Total Trip Cost',
     value: '$2,754',
     unit: '',
   },
   {
+    id: 2,
     title: 'Booking Outside of Agency',
     value: '12% / $360K',
     unit: 'impact',
   },
   {
+    id: 3,
     title: 'Expenses Out of Policy',
     value: '23% / $690K',
     unit: 'impact',
