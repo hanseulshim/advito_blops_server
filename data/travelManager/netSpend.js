@@ -25,114 +25,74 @@ exports.netSpend = {
       diff: 0.3,
     },
   ],
-  projectedSpend: [
+  spend: [
     {
       date: 'Jan 15',
-      spend: 2300,
+      projSpend: 2300,
+      actualSpend: 2100,
     },
     {
       date: 'Feb 15',
-      spend: 2100,
+      projSpend: 2100,
+      actualSpend: 1100,
     },
     {
       date: 'March 15',
-      spend: 2600,
+      projSpend: 2600,
+      actualSpend: 2400,
     },
     {
       date: 'April 15',
-      spend: 1900,
+      projSpend: 1900,
+      actualSpend: 1800,
     },
     {
       date: 'May 15',
-      spend: 2100,
+      projSpend: 2100,
+      actualSpend: 1900,
     },
     {
       date: 'June 15',
-      spend: 2900,
+      projSpend: 2900,
+      actualSpend: 2500,
     },
     {
       date: 'July 15',
-      spend: 1800,
+      projSpend: 1800,
+      actualSpend: 1700,
     },
     {
       date: 'August 15',
-      spend: 2100,
+      projSpend: 2100,
+      actualSpend: 1900,
     },
     {
       date: 'September 15',
-      spend: 2200,
+      projSpend: 2200,
+      actualSpend: 1500,
     },
     {
       date: 'October 15',
-      spend: 2500,
+      projSpend: 2500,
+      actualSpend: 2700,
     },
     {
       date: 'November 15',
-      spend: 2300,
+      projSpend: 2300,
+      actualSpend: 2500,
     },
     {
       date: 'December 15',
-      spend: 2200,
+      projSpend: 2200,
+      actualSpend: 2600,
     },
     {
       date: 'January 15',
-      spend: 2000,
+      projSpend: 2000,
+      actualSpend: 2500,
     },
   ],
-  actualSpend: [
-    {
-      date: 'Jan 15',
-      spend: 2100,
-    },
-    {
-      date: 'Feb 15',
-      spend: 1100,
-    },
-    {
-      date: 'March 15',
-      spend: 2400,
-    },
-    {
-      date: 'April 15',
-      spend: 1800,
-    },
-    {
-      date: 'May 15',
-      spend: 1900,
-    },
-    {
-      date: 'June 15',
-      spend: 2500,
-    },
-    {
-      date: 'July 15',
-      spend: 1700,
-    },
-    {
-      date: 'August 15',
-      spend: 1900,
-    },
-    {
-      date: 'September 15',
-      spend: 1500,
-    },
-    {
-      date: 'October 15',
-      spend: 2700,
-    },
-    {
-      date: 'November 15',
-      spend: 2500,
-    },
-    {
-      date: 'December 15',
-      spend: 2600,
-    },
-    {
-      date: 'January 15',
-      spend: 2500,
-    },
-  ],
+
   summary: {
     title: 'Lodging',
     info:

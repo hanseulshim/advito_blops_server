@@ -1,8 +1,7 @@
 exports.netSpendDefs = `
 type NetSpendDetail {
     spendCategories: [SpendCategory]
-    projectedSpend: [ProjectedField]
-    actualSpend: [ActualField]
+    spend: [Spend]
     summary: Summary
 }
 
@@ -13,14 +12,10 @@ type SpendCategory {
     diff: Float
 }
 
-type ProjectedField { 
+type Spend { 
     date: String,
-    spend: Float
-}
-
-type ActualField {
-    date: String,
-    spend:Float
+    projSpend: Float,
+    actualSpend: Float
 }
 
 type Summary {
