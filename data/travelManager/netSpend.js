@@ -1,3 +1,75 @@
+const spend = [
+  {
+    date: '2018-01-15',
+    projSpend: 2300,
+    actualSpend: 2100,
+  },
+  {
+    date: '2018-02-15',
+    projSpend: 2100,
+    actualSpend: 1100,
+  },
+  {
+    date: '2018-03-15',
+    projSpend: 2600,
+    actualSpend: 2400,
+  },
+  {
+    date: '2018-04-15',
+    projSpend: 1900,
+    actualSpend: 1800,
+  },
+  {
+    date: '2018-05-15',
+    projSpend: 2100,
+    actualSpend: 1900,
+  },
+  {
+    date: '2018-06-15',
+    projSpend: 2900,
+    actualSpend: 2500,
+  },
+  {
+    date: '2018-07-15',
+    projSpend: 1800,
+    actualSpend: 1700,
+  },
+  {
+    date: '2018-08-15',
+    projSpend: 2100,
+    actualSpend: 1900,
+  },
+  {
+    date: '2018-09-15',
+    projSpend: 2200,
+    actualSpend: 1500,
+  },
+  {
+    date: '2018-10-15',
+    projSpend: 2500,
+    actualSpend: 2700,
+  },
+  {
+    date: '2018-11-15',
+    projSpend: 2300,
+    actualSpend: 2500,
+  },
+  {
+    date: '2018-12-15',
+    projSpend: 2200,
+    actualSpend: 2600,
+  },
+  {
+    date: '2019-01-15',
+    projSpend: 2000,
+    actualSpend: 2500,
+  },
+].map(v => ({
+  ...v,
+  delta: Math.floor(((v.projSpend - v.actualSpend) / v.projSpend) * 100),
+  color: v.projSpend > v.actualSpend ? '#4baaa3' : '#EB707F',
+}));
+
 exports.netSpend = {
   spendCategories: [
     {
@@ -25,74 +97,7 @@ exports.netSpend = {
       diff: 0.3,
     },
   ],
-  spend: [
-    {
-      date: '2018-01-15',
-      projSpend: 2300,
-      actualSpend: 2100,
-    },
-    {
-      date: '2018-02-15',
-      projSpend: 2100,
-      actualSpend: 1100,
-    },
-    {
-      date: '2018-03-15',
-      projSpend: 2600,
-      actualSpend: 2400,
-    },
-    {
-      date: '2018-04-15',
-      projSpend: 1900,
-      actualSpend: 1800,
-    },
-    {
-      date: '2018-05-15',
-      projSpend: 2100,
-      actualSpend: 1900,
-    },
-    {
-      date: '2018-06-15',
-      projSpend: 2900,
-      actualSpend: 2500,
-    },
-    {
-      date: '2018-07-15',
-      projSpend: 1800,
-      actualSpend: 1700,
-    },
-    {
-      date: '2018-08-15',
-      projSpend: 2100,
-      actualSpend: 1900,
-    },
-    {
-      date: '2018-09-15',
-      projSpend: 2200,
-      actualSpend: 1500,
-    },
-    {
-      date: '2018-10-15',
-      projSpend: 2500,
-      actualSpend: 2700,
-    },
-    {
-      date: '2018-11-15',
-      projSpend: 2300,
-      actualSpend: 2500,
-    },
-    {
-      date: '2018-12-15',
-      projSpend: 2200,
-      actualSpend: 2600,
-    },
-    {
-      date: '2019-01-15',
-      projSpend: 2000,
-      actualSpend: 2500,
-    },
-  ],
-
+  spend,
   summary: {
     title: 'Lodging',
     info:

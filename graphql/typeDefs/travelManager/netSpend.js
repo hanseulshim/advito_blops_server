@@ -15,7 +15,9 @@ type SpendCategory {
 type Spend { 
     date: String,
     projSpend: Float,
-    actualSpend: Float
+    actualSpend: Float,
+    delta: Float
+    color: String
 }
 
 type Summary {
