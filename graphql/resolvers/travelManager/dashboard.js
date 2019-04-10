@@ -48,7 +48,7 @@ exports.dashboardQueries = {
   },
   savingsOpportunityFeedTravel: (
     _,
-    { limit = savingsOpportunityList.length, cursor = 0, filterId },
+    { limit = savingsOpportunityList.length, cursor = 0, filterId }
   ) => {
     const totalSavingsOpportunities = savingsOpportunityList.length;
     const newCursor = cursor + limit;
@@ -59,13 +59,11 @@ exports.dashboardQueries = {
         cursor: newCursor,
         totalSavingsOpportunities,
         hasNext: newCursor < totalSavingsOpportunities,
-        savingsOpportunityList: savingsOpportunityList
-          .slice(cursor, newCursor)
-          .map(v => ({
-            ...v,
-            value: `${Math.floor(Math.random() * 100)}%`,
-            secondaryValue: `$${Math.floor(Math.random() * 900)}K`,
-          })),
+        savingsOpportunityList: savingsOpportunityList.slice(cursor, newCursor).map(v => ({
+          ...v,
+          value: `${Math.floor(Math.random() * 100)}%`,
+          secondaryValue: `$${Math.floor(Math.random() * 900)}K`,
+        })),
       };
     }
     return {
@@ -76,10 +74,7 @@ exports.dashboardQueries = {
       savingsOpportunityList: savingsOpportunityList.slice(cursor, newCursor),
     };
   },
-  riskAreaFeedTravel: (
-    _,
-    { limit = riskAreaList.length, cursor = 0, filterId },
-  ) => {
+  riskAreaFeedTravel: (_, { limit = riskAreaList.length, cursor = 0, filterId }) => {
     const totalRiskAreas = riskAreaList.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
