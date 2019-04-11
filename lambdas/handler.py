@@ -1,4 +1,5 @@
 import json
+import requests
 import urllib.parse
 import base64
 import secrets
@@ -46,7 +47,7 @@ client_service = ClientService()
 def send_email(recipient, subject, message):
     response = email_client.send_email (
         Destination = {
-            "ToAddresses": [ email ],
+            "ToAddresses": [ recipient ],
         },
         Message = {
             "Body": {
@@ -192,6 +193,14 @@ def authenticate_decorator(roles=[]):
 
 
 ###################### Handlers ###########################
+
+def test_send_email(event, context):
+    print("Sending http request")
+    response = requests.get('https://github.com/timeline.json')
+    print(response.json())
+    print("Sending email")
+    send_email('wcahill@boostlabs.com', 'Chicken Dinner', 'This is a message')
+
 @handler_decorator
 @authenticate_decorator([Role.ADMINISTRATOR])
 def user_create(event, context, session):
@@ -239,8 +248,10 @@ def user_login(event, context, session):
     password = event['pwd']
 
     # Tries to login
+    print('Before')
     (user, user_session) = user_service.login(username, password, session)
     session.commit()
+    print('After')
 
     # Creates response and returns it
     return {

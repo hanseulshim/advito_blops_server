@@ -9,11 +9,19 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment: ${file(env.yml):${opt:stage} }
   region: us-east-2
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ses:SendEmail"
+        - "rds:*"
+      Resource: "*"
   vpc:
     securityGroupIds:
       - sg-04c1f7c6dc6b2be33
     subnetIds:
       - subnet-12305468
+      - subnet-4b2de107
+      - subnet-e789a68f
 
 
 # Plugins to enhance the application
@@ -40,6 +48,10 @@ package:
 
 # All lambdas (functions) to package.
 functions:
+
+  test_send_email:
+    warmup: true
+    handler: handler.test_send_email
 
   # Creates a new user
   user_create:
