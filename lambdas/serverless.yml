@@ -23,7 +23,7 @@ provider:
       Resource: "*"
     - Effect: "Allow"
       Action:
-        - "rds-db:connect"
+        - "rds:*"
       Resource: "*"
 
 
