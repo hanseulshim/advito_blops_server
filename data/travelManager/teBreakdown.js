@@ -6,7 +6,8 @@ exports.teBreakdown = {
   personas: [
     {
       title: 'Road Warrior',
-      description: 'Lorem Ipsum',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
       programShare: 0.25,
       totalTripCost: 3350,
       totalTripCostDelta: 300,
@@ -17,6 +18,7 @@ exports.teBreakdown = {
           delta: 122,
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_wifi.png',
         },
         {
           name: 'meals',
@@ -24,6 +26,7 @@ exports.teBreakdown = {
           delta: 219,
           title: 'Meals Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_meals.png',
         },
         {
           name: 'travel',
@@ -31,6 +34,7 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Travel Title',
           description: 'Lorem Ipsum',
+          icon: 'tickets_icon.png',
         },
         {
           name: 'lodging',
@@ -38,12 +42,14 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
+          icon: 'rooms_icon.png',
         },
       ],
     },
     {
       title: 'Executive',
-      description: 'Lorem Ipsum',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
       programShare: 0.4,
       totalTripCost: 3150,
       totalTripCostDelta: 150,
@@ -54,6 +60,7 @@ exports.teBreakdown = {
           delta: 122,
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_wifi.png',
         },
         {
           name: 'meals',
@@ -61,6 +68,7 @@ exports.teBreakdown = {
           delta: 219,
           title: 'Meals Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_meals.png',
         },
         {
           name: 'travel',
@@ -68,6 +76,7 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Travel Title',
           description: 'Lorem Ipsum',
+          icon: 'tickets_icon.png',
         },
         {
           name: 'lodging',
@@ -75,12 +84,14 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
+          icon: 'rooms_icon.png',
         },
       ],
     },
     {
       title: 'On Demand',
-      description: 'Lorem Ipsum',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
       programShare: 0.15,
       totalTripCost: 2561,
       totalTripCostDelta: 215,
@@ -91,6 +102,7 @@ exports.teBreakdown = {
           delta: 170,
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_wifi.png',
         },
         {
           name: 'meals',
@@ -98,6 +110,7 @@ exports.teBreakdown = {
           delta: 250,
           title: 'Meals Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_meals.png',
         },
         {
           name: 'travel',
@@ -105,6 +118,7 @@ exports.teBreakdown = {
           delta: 275,
           title: 'Travel Title',
           description: 'Lorem Ipsum',
+          icon: 'tickets_icon.png',
         },
         {
           name: 'lodging',
@@ -112,12 +126,14 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
+          icon: 'rooms_icon.png',
         },
       ],
     },
     {
       title: 'Novice',
-      description: 'Lorem Ipsum',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
       programShare: 0.1,
       totalTripCost: 1955,
       totalTripCostDelta: 170,
@@ -128,6 +144,7 @@ exports.teBreakdown = {
           delta: 222,
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_wifi.png',
         },
         {
           name: 'meals',
@@ -135,6 +152,7 @@ exports.teBreakdown = {
           delta: 119,
           title: 'Meals Title',
           description: 'Lorem Ipsum',
+          icon: 'icon_meals.png',
         },
         {
           name: 'travel',
@@ -142,6 +160,7 @@ exports.teBreakdown = {
           delta: 404,
           title: 'Travel Title',
           description: 'Lorem Ipsum',
+          icon: 'tickets_icon.png',
         },
         {
           name: 'lodging',
@@ -149,6 +168,7 @@ exports.teBreakdown = {
           delta: 304,
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
+          icon: 'rooms_icon.png',
         },
       ],
     },

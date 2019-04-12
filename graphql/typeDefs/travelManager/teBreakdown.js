@@ -22,7 +22,8 @@ type PersonaSpend {
     value: Float,
     delta: Float,
     title: String,
-    description: String
+    description: String,
+    icon: String
 }
 
 `;
