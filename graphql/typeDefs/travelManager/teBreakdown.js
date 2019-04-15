@@ -1,10 +1,6 @@
 exports.teBreakdownDefs = `
 
 type teBreakdownDetail {
-  wifiBenchmark:Float,
-  mealsBenchmark:Float,
-  travelBenchmark:Float,
-  lodgingBenchmark:Float,
   personas: [TePersona]
 }
 
@@ -23,7 +19,8 @@ type PersonaSpend {
     delta: Float,
     title: String,
     description: String,
-    icon: String
+    icon: String,
+    benchmark: Float
 }
 
 `;

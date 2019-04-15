@@ -1,8 +1,4 @@
 exports.teBreakdown = {
-  wifiBenchmark: 500,
-  mealsBenchmark: 800,
-  travelBenchmark: 700,
-  lodgingBenchmark: 800,
   personas: [
     {
       title: 'Road Warrior',
@@ -19,6 +15,7 @@ exports.teBreakdown = {
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
           icon: 'icon_wifi.png',
+          benchmark: 500,
         },
         {
           name: 'meals',
@@ -27,6 +24,7 @@ exports.teBreakdown = {
           title: 'Meals Title',
           description: 'Lorem Ipsum',
           icon: 'icon_meals.png',
+          benchmark: 800,
         },
         {
           name: 'travel',
@@ -35,6 +33,7 @@ exports.teBreakdown = {
           title: 'Travel Title',
           description: 'Lorem Ipsum',
           icon: 'tickets_icon.png',
+          benchmark: 700,
         },
         {
           name: 'lodging',
@@ -43,6 +42,7 @@ exports.teBreakdown = {
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
           icon: 'rooms_icon.png',
+          benchmark: 800,
         },
       ],
     },
@@ -61,6 +61,7 @@ exports.teBreakdown = {
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
           icon: 'icon_wifi.png',
+          benchmark: 500,
         },
         {
           name: 'meals',
@@ -69,6 +70,7 @@ exports.teBreakdown = {
           title: 'Meals Title',
           description: 'Lorem Ipsum',
           icon: 'icon_meals.png',
+          benchmark: 800,
         },
         {
           name: 'travel',
@@ -77,6 +79,7 @@ exports.teBreakdown = {
           title: 'Travel Title',
           description: 'Lorem Ipsum',
           icon: 'tickets_icon.png',
+          benchmark: 700,
         },
         {
           name: 'lodging',
@@ -85,6 +88,7 @@ exports.teBreakdown = {
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
           icon: 'rooms_icon.png',
+          benchmark: 800,
         },
       ],
     },
@@ -103,6 +107,7 @@ exports.teBreakdown = {
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
           icon: 'icon_wifi.png',
+          benchmark: 500,
         },
         {
           name: 'meals',
@@ -111,6 +116,7 @@ exports.teBreakdown = {
           title: 'Meals Title',
           description: 'Lorem Ipsum',
           icon: 'icon_meals.png',
+          benchmark: 800,
         },
         {
           name: 'travel',
@@ -119,6 +125,7 @@ exports.teBreakdown = {
           title: 'Travel Title',
           description: 'Lorem Ipsum',
           icon: 'tickets_icon.png',
+          benchmark: 700,
         },
         {
           name: 'lodging',
@@ -127,6 +134,7 @@ exports.teBreakdown = {
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
           icon: 'rooms_icon.png',
+          benchmark: 800,
         },
       ],
     },
@@ -145,6 +153,7 @@ exports.teBreakdown = {
           title: 'Wifi Title',
           description: 'Lorem Ipsum',
           icon: 'icon_wifi.png',
+          benchmark: 500,
         },
         {
           name: 'meals',
@@ -153,6 +162,7 @@ exports.teBreakdown = {
           title: 'Meals Title',
           description: 'Lorem Ipsum',
           icon: 'icon_meals.png',
+          benchmark: 800,
         },
         {
           name: 'travel',
@@ -161,6 +171,7 @@ exports.teBreakdown = {
           title: 'Travel Title',
           description: 'Lorem Ipsum',
           icon: 'tickets_icon.png',
+          benchmark: 650,
         },
         {
           name: 'lodging',
@@ -169,6 +180,7 @@ exports.teBreakdown = {
           title: 'Lodging Title',
           description: 'Lorem Ipsum',
           icon: 'rooms_icon.png',
+          benchmark: 950,
         },
       ],
     },
