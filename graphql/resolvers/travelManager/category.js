@@ -7,5 +7,7 @@ exports.categoryQueries = {
   savingsOpportunityDetail: (_, payload) => savingsOpportunities[payload.id - 1],
   riskAreaDetail: (_, payload) => riskAreas[payload.id - 1],
   netSpendDetail: (_, payload) => netSpend,
-  teBreakdownDetail: (_, payload) => teBreakdown,
+  teBreakdownDetail: (_, payload) => {
+    return teBreakdown[payload.view];
+  },
 };

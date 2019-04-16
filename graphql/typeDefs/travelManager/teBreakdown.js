@@ -1,9 +1,5 @@
 exports.teBreakdownDefs = `
 
-type teBreakdownDetail {
-  personas: [TePersona]
-}
-
 type TePersona {
     title: String,
     description: String,
@@ -26,4 +22,4 @@ type PersonaSpend {
 `;
 
 exports.teBreakdownQueries = `
-teBreakdownDetail( filterId: Int): teBreakdownDetail @auth`;
+teBreakdownDetail( filterId: Int, view: String): [TePersona] @auth`;

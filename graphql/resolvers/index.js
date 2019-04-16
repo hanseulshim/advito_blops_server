@@ -1,17 +1,8 @@
 const { storyResolvers } = require('./storyResolvers');
 const { userResolvers, userResolversMutation } = require('./userResolvers');
-const {
-  clientResolvers,
-  clientResolversMutation,
-} = require('./clientResolvers');
-const {
-  divisionResolvers,
-  divisionResolversMutation,
-} = require('./divisionResolvers');
-const {
-  applicationResolvers,
-  applicationResolversMutation,
-} = require('./applicationResolvers');
+const { clientResolvers, clientResolversMutation } = require('./clientResolvers');
+const { divisionResolvers, divisionResolversMutation } = require('./divisionResolvers');
+const { applicationResolvers, applicationResolversMutation } = require('./applicationResolvers');
 const { lambdaInvoke } = require('../helper');
 
 const { portalQueries } = require('./portal');
@@ -31,8 +22,7 @@ exports.resolvers = {
     ...divisionResolvers,
     ...applicationResolvers,
     ...quarterFilterQueries,
-    login: (_, payload) =>
-      lambdaInvoke('python-lambdas-dev-user_login', payload),
+    login: (_, payload) => lambdaInvoke('python-lambdas-dev-user_login', payload),
     logout: (_, payload) => {
       return lambdaInvoke('python-lambdas-dev-user_logout', {
         ...payload,
@@ -43,6 +33,6 @@ exports.resolvers = {
     ...userResolversMutation,
     ...clientResolversMutation,
     ...divisionResolversMutation,
-    ...applicationResolversMutation
+    ...applicationResolversMutation,
   },
 };
