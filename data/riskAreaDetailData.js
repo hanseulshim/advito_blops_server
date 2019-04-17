@@ -14,7 +14,7 @@ exports.riskAreaDetailData = [
         latitude: 19.2983328,
         longitude: -69.5523252,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -38,7 +38,7 @@ exports.riskAreaDetailData = [
         latitude: -7.5429807,
         longitude: 110.8135688,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -62,7 +62,7 @@ exports.riskAreaDetailData = [
         latitude: 3.7220621,
         longitude: 96.8297403,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -86,7 +86,7 @@ exports.riskAreaDetailData = [
         latitude: 14.5569016,
         longitude: 121.0412323,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -109,7 +109,7 @@ exports.riskAreaDetailData = [
         latitude: 49.5172959,
         longitude: 16.9405351,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -129,7 +129,7 @@ exports.riskAreaDetailData = [
         latitude: 41.5212778,
         longitude: -8.1366948,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -153,7 +153,7 @@ exports.riskAreaDetailData = [
         latitude: -8.1264039,
         longitude: 111.7018452,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -173,7 +173,7 @@ exports.riskAreaDetailData = [
         latitude: 9.0453708,
         longitude: -11.7481137,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -199,7 +199,7 @@ exports.riskAreaDetailData = [
         latitude: 65.3244225,
         longitude: 21.4323137,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -219,7 +219,7 @@ exports.riskAreaDetailData = [
         latitude: 42.8129576,
         longitude: -73.9447994,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -239,7 +239,7 @@ exports.riskAreaDetailData = [
         latitude: 59.1639426,
         longitude: 9.6358001,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -262,7 +262,7 @@ exports.riskAreaDetailData = [
         latitude: -7.3133025,
         longitude: 109.2289681,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -285,7 +285,7 @@ exports.riskAreaDetailData = [
         latitude: 51.3312362,
         longitude: 42.9238906,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -311,7 +311,7 @@ exports.riskAreaDetailData = [
         latitude: -6.987872,
         longitude: 112.1966734,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -335,7 +335,7 @@ exports.riskAreaDetailData = [
         latitude: -6.8744345,
         longitude: 111.5736596,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -359,7 +359,7 @@ exports.riskAreaDetailData = [
         latitude: 33.613239,
         longitude: -4.191742,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -379,7 +379,7 @@ exports.riskAreaDetailData = [
         latitude: 30.940195,
         longitude: 118.75868,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -399,7 +399,7 @@ exports.riskAreaDetailData = [
         latitude: -6.7387737,
         longitude: 106.8768415,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -422,7 +422,7 @@ exports.riskAreaDetailData = [
         latitude: 31.210297,
         longitude: 96.600578,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -446,7 +446,7 @@ exports.riskAreaDetailData = [
         latitude: 3.2443317,
         longitude: 99.4976356,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -466,7 +466,7 @@ exports.riskAreaDetailData = [
         latitude: 23.028301,
         longitude: 115.84573,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -496,7 +496,7 @@ exports.riskAreaDetailData = [
         latitude: 44.6956711,
         longitude: 20.2671882,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -519,7 +519,7 @@ exports.riskAreaDetailData = [
         latitude: 62.4070944,
         longitude: 17.2494041,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -543,7 +543,7 @@ exports.riskAreaDetailData = [
         latitude: 47.5962342,
         longitude: 21.6426843,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -566,7 +566,7 @@ exports.riskAreaDetailData = [
         latitude: 30.274084,
         longitude: 120.15507,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -590,7 +590,7 @@ exports.riskAreaDetailData = [
         latitude: -11.691928,
         longitude: -41.4691745,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -610,7 +610,7 @@ exports.riskAreaDetailData = [
         latitude: -21.6110027,
         longitude: -55.168269,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -630,7 +630,7 @@ exports.riskAreaDetailData = [
         latitude: -40.3313422,
         longitude: -72.9485366,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -650,7 +650,7 @@ exports.riskAreaDetailData = [
         latitude: 21.982137,
         longitude: 112.80173,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -674,7 +674,7 @@ exports.riskAreaDetailData = [
         latitude: '47.49714',
         longitude: '96.80311',
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -704,7 +704,7 @@ exports.riskAreaDetailData = [
         latitude: 34.8856144,
         longitude: 38.8754323,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -728,7 +728,7 @@ exports.riskAreaDetailData = [
         latitude: 52.0463222,
         longitude: 15.100286,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -752,7 +752,7 @@ exports.riskAreaDetailData = [
         latitude: 57.6727414,
         longitude: -2.955445,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -776,7 +776,7 @@ exports.riskAreaDetailData = [
         latitude: 38.6395893,
         longitude: -8.9690651,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -800,7 +800,7 @@ exports.riskAreaDetailData = [
         latitude: 38.700427,
         longitude: 112.117542,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -830,7 +830,7 @@ exports.riskAreaDetailData = [
         latitude: 14.4450355,
         longitude: 121.4022181,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -853,7 +853,7 @@ exports.riskAreaDetailData = [
         latitude: 55.6755324,
         longitude: 12.5366206,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -877,7 +877,7 @@ exports.riskAreaDetailData = [
         latitude: -4.2163479,
         longitude: 104.4694186,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -901,7 +901,7 @@ exports.riskAreaDetailData = [
         latitude: 31.4627186,
         longitude: -7.6080892,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -921,7 +921,7 @@ exports.riskAreaDetailData = [
         latitude: 57.4570045,
         longitude: 48.5429875,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -941,7 +941,7 @@ exports.riskAreaDetailData = [
         latitude: -1.133947,
         longitude: 103.0702646,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -961,7 +961,7 @@ exports.riskAreaDetailData = [
         latitude: 14.3839328,
         longitude: 121.050126,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -984,7 +984,7 @@ exports.riskAreaDetailData = [
         latitude: -28.6454883,
         longitude: -53.605355,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1004,7 +1004,7 @@ exports.riskAreaDetailData = [
         latitude: 10.0600742,
         longitude: -2.5098914,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1028,7 +1028,7 @@ exports.riskAreaDetailData = [
         latitude: 18.3558066,
         longitude: -99.87075,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1058,7 +1058,7 @@ exports.riskAreaDetailData = [
         latitude: 1.3887283,
         longitude: 125.0167866,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1082,7 +1082,7 @@ exports.riskAreaDetailData = [
         latitude: 14.3705235,
         longitude: 120.8168869,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1105,7 +1105,7 @@ exports.riskAreaDetailData = [
         latitude: 16.7670685,
         longitude: 107.1454981,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1129,7 +1129,7 @@ exports.riskAreaDetailData = [
         latitude: 44.1313751,
         longitude: 9.8292338,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1153,7 +1153,7 @@ exports.riskAreaDetailData = [
         latitude: 3.3273599,
         longitude: 117.5785049,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1173,7 +1173,7 @@ exports.riskAreaDetailData = [
         latitude: 51.9309719,
         longitude: 19.190298,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
@@ -1193,7 +1193,7 @@ exports.riskAreaDetailData = [
         latitude: -6.9695439,
         longitude: 112.5155694,
         hover: {
-          fields: [
+          fieldList: [
             { name: 'Hotel Name', value: 'W Lodon' },
             { name: 'Chain', value: 'Marriott' },
             { name: 'TTL RoomNights', value: '500' },
