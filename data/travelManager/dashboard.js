@@ -24,6 +24,7 @@ for (let i = 1; i <= 15; i++) {
   netSpendAnalysisListTravel.push({
     date: `2019-01-${i}`,
     value: Math.floor(Math.random() * 10 + i),
+    projValue: Math.floor(Math.random() * 10 + i),
   });
 }
 

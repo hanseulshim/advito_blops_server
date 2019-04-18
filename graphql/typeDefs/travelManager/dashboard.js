@@ -8,6 +8,7 @@ type ProgramPerformanceTravel {
 type NetSpendAnalysisTravel {
   date: String
   value: Float
+  projValue: Float
 }
 type Persona {
   title: String

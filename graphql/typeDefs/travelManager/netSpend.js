@@ -8,7 +8,7 @@ type NetSpendDetail {
 type SpendCategory {
     title: String,
     icon: String,
-    amount: String,
+    amount: Float,
     diff: Float
 }
 
