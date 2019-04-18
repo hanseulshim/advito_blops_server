@@ -7,6 +7,7 @@ for (let i = 1; i <= 15; i++) {
   netSpendAnalysisListExecutive.push({
     date: `2019-06-${i}`,
     value: Math.floor(Math.random() * 10 + i),
+    projValue: Math.floor(Math.random() * 10 + i),
   });
 }
 exports.netSpendAnalysisListExecutive = netSpendAnalysisListExecutive;

@@ -5,6 +5,7 @@ type ProgramPerformanceExecutive {
 type NetSpendAnalysisExecutive {
   date: String
   value: Float
+  projValue: Float
 }
 type Market {
   title: String
