@@ -10,3 +10,6 @@ class Role(Enum):
     ADMINISTRATOR = 4
     GENERAL = 5
     REPORTS = 6
+    ADMIN = 7
+    ADVITO = 8
+    CLIENT = 9

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "serverless-plugin-warmup": "^4.3.0-rc.1"
+    "serverless-plugin-warmup": "^4.3.0-rc.1",
+    "serverless-python-requirements": "^4.3.0"
   }
 }

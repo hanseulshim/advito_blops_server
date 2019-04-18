@@ -520,8 +520,11 @@ def client_get_all(event, context, session):
     """
 
     # Gets clients and deserializes them as json
+    print('Before get all')
     clients = client_service.get_all(session)
+    print('After get all')
     clients = [serialize_client(client) for client in clients]
+    print('After deserialization')
 
     # Done
     return {

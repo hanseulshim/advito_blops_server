@@ -11,6 +11,11 @@ provider:
         - 'lambda:InvokeFunction'
       Resource:
         - '*'
+  vpc:
+    securityGroupIds:
+      - 'sg-09b7d9888c893594d'
+    subnetIds:
+      - 'subnet-08c1aacead6928c9f'
 
 functions:
   graphql:

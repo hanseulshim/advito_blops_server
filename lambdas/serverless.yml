@@ -11,20 +11,14 @@ provider:
   region: us-east-2
   vpc:
     securityGroupIds:
-      - sg-04c1f7c6dc6b2be33
+      - 'sg-09b7d9888c893594d'
     subnetIds:
-      - subnet-12305468
-      - subnet-4b2de107
-      - subnet-e789a68f
+      - 'subnet-08c1aacead6928c9f'
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: 'Allow'
       Action:
-        - "ses:SendEmail"
-      Resource: "*"
-    - Effect: "Allow"
-      Action:
-        - "rds:*"
-      Resource: "*"
+        - 'ses:*'
+      Resource: '*'
 
 
 # Plugins to enhance the application
