@@ -33,6 +33,7 @@ exports.dashboardQueries = {
       return netSpendAnalysisListTravel.map(v => ({
         ...v,
         value: v.value * Math.floor(Math.random() * 15),
+        projValue: v.projValue * Math.floor(Math.random() * 15),
       }));
     }
     return netSpendAnalysisListTravel;

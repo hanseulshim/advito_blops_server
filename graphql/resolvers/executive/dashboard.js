@@ -18,6 +18,7 @@ exports.dashboardQueries = {
       return netSpendAnalysisListExecutive.map(v => ({
         ...v,
         value: v.value * Math.floor(Math.random() * 15),
+        projValue: v.projValue * Math.floor(Math.random() * 15),
       }));
     }
     return netSpendAnalysisListExecutive;
@@ -34,7 +35,7 @@ exports.dashboardQueries = {
   },
   savingsOpportunityFeedExecutive: (
     _,
-    { limit = savingsOpportunityList.length, cursor = 0, filterId },
+    { limit = savingsOpportunityList.length, cursor = 0, filterId }
   ) => {
     const totalSavingsOpportunities = savingsOpportunityList.length;
     const newCursor = cursor + limit;
@@ -45,12 +46,10 @@ exports.dashboardQueries = {
         cursor: newCursor,
         totalSavingsOpportunities,
         hasNext: newCursor < totalSavingsOpportunities,
-        savingsOpportunityList: savingsOpportunityList
-          .slice(cursor, newCursor)
-          .map(v => ({
-            ...v,
-            value: `${Math.floor(Math.random() * 100)}%`,
-          })),
+        savingsOpportunityList: savingsOpportunityList.slice(cursor, newCursor).map(v => ({
+          ...v,
+          value: `${Math.floor(Math.random() * 100)}%`,
+        })),
       };
     }
     return {
@@ -61,10 +60,7 @@ exports.dashboardQueries = {
       savingsOpportunityList: savingsOpportunityList.slice(cursor, newCursor),
     };
   },
-  riskAreaFeedExecutive: (
-    _,
-    { limit = riskAreaList.length, cursor = 0, filterId },
-  ) => {
+  riskAreaFeedExecutive: (_, { limit = riskAreaList.length, cursor = 0, filterId }) => {
     const totalRiskAreas = riskAreaList.length;
     const newCursor = cursor + limit;
     const prevCursor = cursor - limit < 0 ? 0 : cursor - limit;
