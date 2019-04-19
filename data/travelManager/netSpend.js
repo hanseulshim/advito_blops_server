@@ -73,8 +73,8 @@ const spend = [
 exports.netSpend = {
   spendCategories: [
     {
-      title: 'WiFi',
-      icon: 'icon_wifi.png',
+      title: 'Ancillary',
+      icon: 'icon_ancillary.png',
       amount: 200,
       diff: -0.3,
     },

@@ -12,25 +12,25 @@ for (let i = 1; i <= 15; i++) {
 }
 exports.netSpendAnalysisListExecutive = netSpendAnalysisListExecutive;
 
-exports.marketList = [
+exports.divisionList = [
   {
-    title: 'commercial',
-    value: 5.7,
-    programShare: 40,
-  },
-  {
-    title: 'international',
-    value: 3.8,
+    title: 'Commercial',
+    value: '$3,350',
     programShare: 25,
   },
   {
-    title: 'retail',
-    value: 5.8,
+    title: 'International',
+    value: '$3,150',
+    programShare: 40,
+  },
+  {
+    title: 'Retail',
+    value: '$2,561',
     programShare: 15,
   },
   {
-    title: 'corporate',
-    value: 7.8,
+    title: 'Corporate',
+    value: '$1,955',
     programShare: 10,
   },
 ];

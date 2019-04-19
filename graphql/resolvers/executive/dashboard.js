@@ -1,7 +1,7 @@
 const {
   programPerformanceExecutive,
+  divisionList,
   netSpendAnalysisListExecutive,
-  marketList,
   savingsOpportunityList,
   riskAreaList,
 } = require('../../../data/executive/dashboard');
@@ -23,15 +23,15 @@ exports.dashboardQueries = {
     }
     return netSpendAnalysisListExecutive;
   },
-  marketList: (_, { filterId }) => {
+  divisionListExecutive: (_, { filterId }) => {
     if (filterId) {
-      return marketList.map(v => ({
+      return divisionList.map(v => ({
         ...v,
         value: `${Math.floor(Math.random() * 100) / 10}`,
         programShare: Math.floor(Math.random() * 100),
       }));
     }
-    return marketList;
+    return divisionList;
   },
   savingsOpportunityFeedExecutive: (
     _,

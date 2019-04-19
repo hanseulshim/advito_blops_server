@@ -7,7 +7,7 @@ type NetSpendAnalysisExecutive {
   value: Float
   projValue: Float
 }
-type Market {
+type Division {
   title: String
   value: String
   programShare: Int
@@ -17,7 +17,7 @@ type Market {
 exports.dashboardQueries = `
   programPerformanceExecutive(filterId: Int): ProgramPerformanceExecutive @auth
   netSpendAnalysisListExecutive(filterId: Int): [NetSpendAnalysisExecutive] @auth
-  marketList(filterId: Int): [Market] @auth
+  divisionListExecutive(filterId: Int): [Division] @auth
   savingsOpportunityFeedExecutive(limit: Int, cursor: Int, filterId: Int): SavingsOpportunityFeed @auth
   riskAreaFeedExecutive(limit: Int, cursor: Int, filterId: Int): RiskAreaFeed @auth
 `;

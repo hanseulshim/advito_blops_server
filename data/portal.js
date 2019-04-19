@@ -1,18 +1,18 @@
 exports.upcomingActionList = [
   {
-    header: 'October 31, 2018',
+    header: 'April 31, 2019',
     secondaryHeader: '2nd Round Hotel Negotiations Due',
     icon: 'flag.png',
     alert: false,
   },
   {
-    header: 'January 31, 2018',
+    header: 'May 13, 2019',
     secondaryHeader: 'Hotel Audits Due',
     icon: 'flag.png',
     alert: false,
   },
   {
-    header: 'February 11, 2019',
+    header: 'May 29, 2019',
     secondaryHeader: 'Delta Contract Expires',
     icon: 'contracts.png',
     alert: false,

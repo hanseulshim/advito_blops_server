@@ -9,16 +9,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 300,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 685,
           delta: 122,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 849,
           delta: 219,
           title: 'Meals Title',
@@ -27,7 +27,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 849,
           delta: 304,
           title: 'Travel Title',
@@ -36,7 +36,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 849,
           delta: 304,
           title: 'Lodging Title',
@@ -55,16 +55,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 150,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 585,
           delta: 122,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 1049,
           delta: 219,
           title: 'Meals Title',
@@ -73,7 +73,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 1049,
           delta: 304,
           title: 'Travel Title',
@@ -82,7 +82,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 449,
           delta: 304,
           title: 'Lodging Title',
@@ -101,16 +101,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 215,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 715,
           delta: 170,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 675,
           delta: 250,
           title: 'Meals Title',
@@ -119,7 +119,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 1000,
           delta: 275,
           title: 'Travel Title',
@@ -128,7 +128,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 927,
           delta: 304,
           title: 'Lodging Title',
@@ -147,16 +147,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 170,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 785,
           delta: 222,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 649,
           delta: 119,
           title: 'Meals Title',
@@ -165,7 +165,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 949,
           delta: 404,
           title: 'Travel Title',
@@ -174,7 +174,7 @@ exports.teBreakdown = {
           benchmark: 650,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 1175,
           delta: 304,
           title: 'Lodging Title',
@@ -187,7 +187,7 @@ exports.teBreakdown = {
   ],
   divisions: [
     {
-      title: 'Division 1',
+      title: 'Commercial',
       description:
         'All categories are up YoY. While bookings are in policy when made through the agency, we are seeing a signifcant increase in Out of Policy expenses being approved. By shifting 50% of the leakage to In Policy, the company would save approximately $1.4 million in this program year.',
       programShare: 0.25,
@@ -195,16 +195,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 300,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 685,
           delta: 122,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 849,
           delta: 219,
           title: 'Meals Title',
@@ -213,7 +213,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 849,
           delta: 304,
           title: 'Travel Title',
@@ -222,7 +222,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 849,
           delta: 304,
           title: 'Lodging Title',
@@ -233,7 +233,7 @@ exports.teBreakdown = {
       ],
     },
     {
-      title: 'Division 2',
+      title: 'International',
       description:
         'There has been a significant improvement in Preferred Hotel utilization YoY which is reflected in the decrease in Hotel costs. If this trend continues, you could see approximately $925k in savings in this program year over last year. Keep an eye on Meals as this division does hold 40% of the program share and increased spend in this category considerably YoY. ',
       programShare: 0.4,
@@ -241,16 +241,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 150,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 585,
           delta: 122,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 1049,
           delta: 219,
           title: 'Meals Title',
@@ -259,7 +259,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 1049,
           delta: 304,
           title: 'Travel Title',
@@ -268,7 +268,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 449,
           delta: 304,
           title: 'Lodging Title',
@@ -279,7 +279,7 @@ exports.teBreakdown = {
       ],
     },
     {
-      title: 'Division 3',
+      title: 'Retail',
       description:
         'While the Retail is ranked third for Total Trip Cost, the average length of stay is 2 days compared to 4 days of Commercial. By shifting 30% of these bookings to greater than 7 days in advance, the company would save approximately $750k this program year.',
       programShare: 0.15,
@@ -287,16 +287,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 215,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 715,
           delta: 170,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 675,
           delta: 250,
           title: 'Meals Title',
@@ -305,7 +305,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 1000,
           delta: 275,
           title: 'Travel Title',
@@ -314,7 +314,7 @@ exports.teBreakdown = {
           benchmark: 700,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 927,
           delta: 304,
           title: 'Lodging Title',
@@ -325,7 +325,7 @@ exports.teBreakdown = {
       ],
     },
     {
-      title: 'Division 4',
+      title: 'Corporate',
       description:
         'Overall Out of Policy bookings for Air and Hotel are up YoY. By shifting 30% of these bookings to in policy options, the company would save approximately $500k this program year. ',
       programShare: 0.1,
@@ -333,16 +333,16 @@ exports.teBreakdown = {
       totalTripCostDelta: 170,
       data: [
         {
-          name: 'wifi',
+          name: 'Ancillary',
           value: 785,
           delta: 222,
-          title: 'Wifi Title',
+          title: 'Ancillary Title',
           description: 'Lorem Ipsum',
-          icon: 'icon_wifi.png',
+          icon: 'icon_ancillary.png',
           benchmark: 500,
         },
         {
-          name: 'meals',
+          name: 'Meals',
           value: 649,
           delta: 119,
           title: 'Meals Title',
@@ -351,7 +351,7 @@ exports.teBreakdown = {
           benchmark: 800,
         },
         {
-          name: 'travel',
+          name: 'Travel',
           value: 949,
           delta: 404,
           title: 'Travel Title',
@@ -360,7 +360,7 @@ exports.teBreakdown = {
           benchmark: 650,
         },
         {
-          name: 'lodging',
+          name: 'Lodging',
           value: 1175,
           delta: 304,
           title: 'Lodging Title',
