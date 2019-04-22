@@ -3,7 +3,7 @@ exports.teBreakdown = {
     {
       title: 'Road Warrior',
       description:
-        'All categories are up YoY. While bookings are in policy when made through the agency, we are seeing a signifcant increase in Out of Policy expenses being approved. By shifting 50% of the leakage to In Policy, the company would save approximately $1.4 million in this program year. ',
+        'All categories are up YoY. Agency bookings are in policy, but signifcant increase in Out of Policy expenses approved. Shifting 50% of the leakage to In Policy would save approximately $1.4 million in this program year.',
       programShare: 0.25,
       totalTripCost: 3350,
       totalTripCostDelta: 300,
@@ -49,7 +49,7 @@ exports.teBreakdown = {
     {
       title: 'Executive',
       description:
-        'There has been a significant improvement in Preferred Hotel utilization YoY which is reflected in the decrease in Hotel costs. If this trend continues, you could see approximately $925k in savings in this program year over last year. ',
+        'Preferred Hotel utilization is up YoY which shows in the decrease in Hotel costs. If trending continues, $925k in YoY savings could actualize this program year. ',
       programShare: 0.4,
       totalTripCost: 3150,
       totalTripCostDelta: 150,
@@ -95,7 +95,7 @@ exports.teBreakdown = {
     {
       title: 'On Demand',
       description:
-        'While the On Demand traveler is ranked third for Total Trip Cost, the average length of stay is 2 days compared to 4 days of the Road Warrior. By shifting 30% of these bookings to greater than 7 days in advance, the company would save approximately $750k this program year.',
+        'On Demand is ranked third,but the average trip is 2 days compared to 4 days of the Road Warrior. Shifting 30% of bookings to >7 days in advance would save approximately $750k this program year.',
       programShare: 0.15,
       totalTripCost: 2561,
       totalTripCostDelta: 215,
@@ -141,7 +141,7 @@ exports.teBreakdown = {
     {
       title: 'Novice',
       description:
-        'Overall Out of Policy bookings for Air and Hotel are up YoY. By shifting 30% of these bookings to in policy options, the company would save approximately $500k this program year. ',
+        'Overall Out of Policy bookings for Air and Hotel are up YoY. By shifting 30% of these bookings to in policy options, the company would save approximately $500k this program year.',
       programShare: 0.1,
       totalTripCost: 1955,
       totalTripCostDelta: 170,
@@ -189,7 +189,7 @@ exports.teBreakdown = {
     {
       title: 'Commercial',
       description:
-        'All categories are up YoY. While bookings are in policy when made through the agency, we are seeing a signifcant increase in Out of Policy expenses being approved. By shifting 50% of the leakage to In Policy, the company would save approximately $1.4 million in this program year.',
+        'All categories are up YoY. Agency bookings are in policy, but signifcant increase in Out of Policy expenses approved. Shifting 50% of the leakage to In Policy would save approximately $1.4 million in this program year.',
       programShare: 0.25,
       totalTripCost: 3350,
       totalTripCostDelta: 300,
@@ -235,7 +235,7 @@ exports.teBreakdown = {
     {
       title: 'International',
       description:
-        'There has been a significant improvement in Preferred Hotel utilization YoY which is reflected in the decrease in Hotel costs. If this trend continues, you could see approximately $925k in savings in this program year over last year. Keep an eye on Meals as this division does hold 40% of the program share and increased spend in this category considerably YoY. ',
+        'Preferred Hotel utilization is up YoY which shows in the decrease in Hotel costs. If trending continues, $925k in YoY savings could actualize this program year. Watch Meals: 40% of the program share and increased spend in this category YoY. ',
       programShare: 0.4,
       totalTripCost: 3150,
       totalTripCostDelta: 150,
@@ -281,7 +281,7 @@ exports.teBreakdown = {
     {
       title: 'Retail',
       description:
-        'While the Retail is ranked third for Total Trip Cost, the average length of stay is 2 days compared to 4 days of Commercial. By shifting 30% of these bookings to greater than 7 days in advance, the company would save approximately $750k this program year.',
+        'Retail is ranked third,but the average trip is 2 days compared to 4 days in Commerical. Shifting 30% of bookings to >7 days in advance would save approximately $750k this program year.',
       programShare: 0.15,
       totalTripCost: 2561,
       totalTripCostDelta: 215,
