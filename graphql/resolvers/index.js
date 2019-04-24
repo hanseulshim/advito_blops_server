@@ -22,7 +22,7 @@ exports.resolvers = {
     ...divisionResolvers,
     ...applicationResolvers,
     ...quarterFilterQueries,
-    login: (_, payload) => lambdaInvoke('python-lambdas-dev2-user_login', payload),
+    login: (_, payload) => lambdaInvoke('python-lambdas-dev-user_login', payload),
     logout: (_, payload) => {
       return lambdaInvoke('python-lambdas-dev-user_logout', {
         ...payload,
