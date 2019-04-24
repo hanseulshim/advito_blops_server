@@ -4,6 +4,7 @@ type Login {
   clientId: Int,
   profilePicturePath: String,
   sessionToken: String,
+  roleIds: [Int]
 }
 
 `;
