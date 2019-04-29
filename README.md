@@ -1,13 +1,7 @@
 # Advito Blops Server
 
-This repo is the backend for Black Ops.
-It consists of two parts:
-  - The GraphQL code in the **graphql** directory. When deployed to AWS, creates/updates a single lambda that calls the lambdas in the **lambdas** project.
-  - The resolvers for GraphQL endpoint in the **lambdas** directory. Called by the root lambda from the **graphql** project.
-
-Both projects deploy lambdas to AWS using the serverless framework.
-
-
+This is a serverless GraphQL web service utilizing the serverless framework to deploy
+to AWS Lambda.
 
 ## Software Dependencies for Developers
 1. **Homebrew** (If on Mac): https://brew.sh/
