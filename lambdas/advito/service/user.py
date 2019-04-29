@@ -2,13 +2,15 @@ import secrets
 import base64
 import hashlib
 import json
+import re
 from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession, AdvitoApplicationRole, AdvitoUserRoleLink, AccessToken
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError, TokenExpirationError
+from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError, TokenExpirationError, InvalidParameterError
 from advito.role import Role
 
+EMAIL_REGEX = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
 
 def deserialize_user_create(user_create_json):
 
@@ -57,8 +59,6 @@ def deserialize_user(user_json):
         default_date_format = user_json.get('dateFormatDefault', None)
     )
     return user
-
-
 
 def serialize_user(user):
 
@@ -110,6 +110,11 @@ class UserService:
         :param user: AdvitoUser object to insert into the db.
         :param session: SQLAlchemy session used for db operations.
         """
+        
+        # Validates username is an email
+        username = user.username
+        if not re.match(EMAIL_REGEX, username):
+            raise InvalidParameterError(username + ' is not a valid email')
 
         # Salts and hashes password. Writes result back to object.
         salt_and_hash = salt_hash(user.pwd)
@@ -345,7 +350,7 @@ class UserService:
             .update({"session_end" : datetime.now()}, synchronize_session=False)
 
 
-    def reset_password_start(self, email, session):
+    def reset_password_start(self, session_token, session):
 
         """
         Begins process of resetting the user's password
@@ -353,13 +358,14 @@ class UserService:
         :return: Access token that should be sent in email.
         """
 
-        # Gets user with email
+        # Gets user info
         user = session \
             .query(AdvitoUser) \
-            .filter(AdvitoUser.email == email) \
+            .join(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_token == session_token) \
             .first()
         if user is None:
-            raise NotFoundError("User with email '" + email + "' not found'")
+            raise NotFoundError("User/token not found.")
 
         # Gets existing access token associated with user. Normally, it won't exist
         old_access_token = session \
@@ -380,9 +386,9 @@ class UserService:
             token_expiration = expiration
         )
 
-        # Inserts into db and returns string
+        # Inserts into db and returns tuple of token and email.
         session.add(token)
-        return token_str
+        return (token_str, user.email)
 
 
     def reset_password_end(self, access_token, new_password, session):
