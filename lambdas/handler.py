@@ -249,7 +249,7 @@ def user_login(event, context, session):
 
     # Tries to login
     print('Before')
-    (user, user_session) = user_service.login(username, password, session)
+    (user, role_ids, user_session) = user_service.login(username, password, session)
     session.commit()
     print('After')
 
@@ -261,8 +261,9 @@ def user_login(event, context, session):
         "apidataset": {
             "displayName": user.name_first + " " + user.name_last,
             "clientId": user.client_id,
+            "roleIds": role_ids,
             "profilePicturePath": user.profile_picture_path,
-            "sessionToken": user_session.session_token
+            "sessionToken": user_session.session_token,
         }
     }
 

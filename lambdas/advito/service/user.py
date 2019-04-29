@@ -278,7 +278,7 @@ class UserService:
         :param username: Username of the user
         :param password: Password of the user
         :param session: SQLAlchemy session used for db operations.
-        :return: A tuple of the AdvitoUser and session string.
+        :return: A tuple of the AdvitoUser, their role ids and session string in that order.
         """
 
         # Reads in user where username matches
@@ -306,10 +306,17 @@ class UserService:
         if hashed_password != db_password:
             raise LoginError("Passwords did not match")
 
+        # Gets roles of that user
+        role_ids = session \
+            .query(AdvitoUserRoleLink.advito_role_id) \
+            .filter(AdvitoUserRoleLink.advito_user_id == user.id) \
+            .all()
+        role_ids = [role_id[0] for role_id in role_ids]
+
         # Creates user session in db and returns it.
         # Discards existing user session if there was one.
         user_session = self._create_session(user, session)
-        return (user, user_session)
+        return (user, role_ids, user_session)
 
 
     def logout(self, session_token, session):
