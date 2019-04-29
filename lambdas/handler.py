@@ -12,7 +12,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-import advito.util
+from advito.util.string_util import random_password
 from advito.service.user import UserService, serialize_user, deserialize_user, deserialize_user_create
 from advito.service.application_role import ApplicationRoleService, serialize_application_role
 from advito.service.application import ApplicationService, serialize_application_with_features, serialize_feature
@@ -20,7 +20,6 @@ from advito.service.amorphous import AmorphousService
 from advito.service.client import ClientService, serialize_client, deserialize_client, deserialize_client_create, serialize_client_division, deserialize_client_division, deserialize_client_division_create
 from advito.error import AdvitoError, NotFoundError, LogoutError, LoginError, BadRequestError, InvalidSessionError, ExpiredSessionError, UnauthorizedError, TokenExpirationError
 from advito.role import Role
-
 
 # Unpacks environment variables to build DB client and services
 session_duration_sec = int(os.environ['SESSION_DURATION_SEC'])
@@ -212,6 +211,15 @@ def user_create(event, context, session):
     :param session: Session used for database connectivity.
     """
 
+    # Acquires or generates password if one is not provided
+    optional_message = ''
+    password = event.get('pwd')
+    if password is None:
+        password = random_password()
+        event['pwd'] = password
+        event['confirmPwd'] = password
+        optional_message = ' Your auto-generated password is ' + password
+
     # Deserializes user from event
     user = deserialize_user_create(event)
 
@@ -223,6 +231,13 @@ def user_create(event, context, session):
     user_service.create(user, session)
     session.flush()
     application_role_service.create_for(user.id, role, session)
+
+    # Sends confirmation email
+    send_email (
+        recipient = event['username'],
+        subject = 'Welcome!',
+        message = 'Welcome to Black Ops!' + optional_message
+    )
 
     # Creates response and returns it
     return {
@@ -468,10 +483,8 @@ def user_reset_password_start(event, context, session):
     Starts the process of resetting a users password
     """
 
-    # Gets recipient email
+    # Gets recipient email and begins password reset process.
     recipient = event["email"]
-
-    # Generates access token for password reset
     access_token = user_service.reset_password_start(recipient, session)
 
     # Sends email

@@ -2,13 +2,15 @@ import secrets
 import base64
 import hashlib
 import json
+import re
 from datetime import datetime
 from datetime import timedelta
 from advito.model.table import AdvitoUser, AdvitoUserSession, AdvitoApplicationRole, AdvitoUserRoleLink, AccessToken
 from advito.util.string_util import salt_hash
-from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError, TokenExpirationError
+from advito.error import LoginError, LogoutError, InvalidSessionError, ExpiredSessionError, NotFoundError, UnauthorizedError, TokenExpirationError, InvalidParameterError
 from advito.role import Role
 
+EMAIL_REGEX = re.compile(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$")
 
 def deserialize_user_create(user_create_json):
 
@@ -57,8 +59,6 @@ def deserialize_user(user_json):
         default_date_format = user_json.get('dateFormatDefault', None)
     )
     return user
-
-
 
 def serialize_user(user):
 
@@ -110,6 +110,11 @@ class UserService:
         :param user: AdvitoUser object to insert into the db.
         :param session: SQLAlchemy session used for db operations.
         """
+        
+        # Validates username is an email
+        username = user.username
+        if not re.match(EMAIL_REGEX, username):
+            raise InvalidParameterError(username + ' is not a valid email')
 
         # Salts and hashes password. Writes result back to object.
         salt_and_hash = salt_hash(user.pwd)

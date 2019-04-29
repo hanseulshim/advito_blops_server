@@ -36,3 +36,12 @@ def salt_hash(password, salt=None):
 
     # Returns as tuple
     return (hashed_password, salt)
+
+
+def random_password():
+
+    """
+    Generates a random base64-encoded password
+    """
+    rand_bytes = secrets.token_bytes(16)
+    return base64.b64encode(rand_bytes).decode('UTF-8')
