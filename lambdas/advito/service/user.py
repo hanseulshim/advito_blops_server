@@ -343,7 +343,7 @@ class UserService:
             .update({"session_end" : datetime.now()}, synchronize_session=False)
 
 
-    def reset_password_start(self, email, session):
+    def reset_password_start(self, session_token, session):
 
         """
         Begins process of resetting the user's password
@@ -351,13 +351,14 @@ class UserService:
         :return: Access token that should be sent in email.
         """
 
-        # Gets user with email
+        # Gets user info
         user = session \
             .query(AdvitoUser) \
-            .filter(AdvitoUser.email == email) \
+            .join(AdvitoUserSession) \
+            .filter(AdvitoUserSession.session_token == session_token) \
             .first()
         if user is None:
-            raise NotFoundError("User with email '" + email + "' not found'")
+            raise NotFoundError("User/token not found.")
 
         # Gets existing access token associated with user. Normally, it won't exist
         old_access_token = session \
@@ -378,9 +379,9 @@ class UserService:
             token_expiration = expiration
         )
 
-        # Inserts into db and returns string
+        # Inserts into db and returns tuple of token and email.
         session.add(token)
-        return token_str
+        return (token_str, user.email)
 
 
     def reset_password_end(self, access_token, new_password, session):

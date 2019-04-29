@@ -483,17 +483,17 @@ def user_reset_password_start(event, context, session):
     Starts the process of resetting a users password
     """
 
-    # Gets recipient email and begins password reset process.
-    recipient = event["email"]
-    access_token = user_service.reset_password_start(recipient, session)
+    # Begins password reset process.    
+    session_token = event['sessionToken']
+    access_token, recipient = user_service.reset_password_start(session_token, session)
 
     # Sends email
     url = "http://fakeurl.com/" + access_token
     emailMessage = "Please visit the following URL to reset your password: " + url
-    response = send_email(recipient, emailMessage)
+    response = send_email(recipient, 'Password Reset', emailMessage)
 
     # Returns response
-    message = "Email with url " + url + " sent to email " + email
+    message = "Email with url " + url + " sent to email " + recipient
     return {
         "success": True,
         "apicode": "OK",
