@@ -1,11 +1,14 @@
 const { lambdaInvoke } = require('../helper');
 
 exports.clientResolvers = {
-  clientList: (_, payload, { sessionToken }) =>
-    lambdaInvoke('python-lambdas-dev-client_get_all', {
+  clientList: async (_, payload, { sessionToken }) => {
+    const result = await lambdaInvoke('python-lambdas-test-client_get_all', {
       ...payload,
       sessionToken,
-    }),
+    });
+    console.log(result);
+    return result;
+  }
 };
 
 exports.clientResolversMutation = {

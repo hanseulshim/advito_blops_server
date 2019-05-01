@@ -535,18 +535,21 @@ def client_get_all(event, context, session):
     """
 
     # Gets clients and deserializes them as json
-    print('Before get all')
     clients = client_service.get_all(session)
-    print('After get all')
-    clients = [serialize_client(client) for client in clients]
-    print('After deserialization')
+    clients_with_divisions = []
+    for client in clients:
+        divisions = client_service.get_divisions(client.id, session)
+        client_dict = serialize_client(client)
+        divisions_dict = [serialize_client_division(division) for division in divisions]
+        client_dict['divisions'] = divisions_dict
+        clients_with_divisions.append(client_dict)
 
     # Done
     return {
         "success": True,
         "apicode": "OK",
         "apimessage": "Clients successfully fetched",
-        "apidataset": clients
+        "apidataset": clients_with_divisions
     }
 
 
