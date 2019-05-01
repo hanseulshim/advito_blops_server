@@ -446,8 +446,9 @@ def user_access(event, context, session):
     :param session: Session used for database connectivity.
     """
 
-    # Gets users that belong to specified client
-    results = application_role_service.get_advito_user_access(session)
+    # Gets users that belong to specified client if client is specified
+    client_id = event.get('clientId')
+    results = application_role_service.get_advito_user_access(client_id, session)
 
     # Serializes each user/role pair as json objects
     serialized = []

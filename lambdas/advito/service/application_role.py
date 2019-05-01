@@ -81,19 +81,23 @@ class ApplicationRoleService:
 
 
 
-    def get_advito_user_access(self, session):
+    def get_advito_user_access(self, client_id, session):
 
         """
         Gets all ApplicationRoleServices for a given AdvitoUser
-        :param client_id: ID of client users belong underneath.
+        :param client_id: ID of client users belong underneath. Optional. If not supplied, will use client id of advito.
         :param session: SQLAlchemy session used for db operations.
         :return List of tuples of (AdvitoUser, AdvitoApplicationRole) that fall under the specified client.
         """
 
+        # Evaluates client id to use
+        if client_id is None:
+            client_id = self.advito_client_id
+        
         # Returns tuple of users and their roles
         return session \
             .query(AdvitoUser, AdvitoApplicationRole) \
             .join(AdvitoUserRoleLink) \
             .join(AdvitoApplicationRole) \
-            .filter(AdvitoUser.client_id == self.advito_client_id) \
+            .filter(AdvitoUser.client_id == client_id) \
             .all()
