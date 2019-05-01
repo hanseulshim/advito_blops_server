@@ -2,7 +2,7 @@ const { lambdaInvoke } = require('../helper');
 
 exports.clientResolvers = {
   clientList: async (_, payload, { sessionToken }) => {
-    const result = await lambdaInvoke('python-lambdas-test-client_get_all', {
+    const result = await lambdaInvoke('python-lambdas-dev-client_get_all', {
       ...payload,
       sessionToken,
     });
