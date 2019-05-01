@@ -36,7 +36,7 @@ exports.userDefs = `
 exports.userQuery = `
   userProfile: UserProfile @auth
   userProfileOverview: UserProfileOverview @auth
-  userList: [UserInfo] @auth
+  userList(clientId: Int): [UserInfo] @auth
 `;
 
 exports.userMutation = `

@@ -5,8 +5,9 @@ exports.userResolvers = {
     lambdaInvoke('python-lambdas-dev-user_get', {
       sessionToken,
     }),
-  userList: (_, __, { sessionToken }) =>
+  userList: (_, payload, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-user_access', {
+      ...payload,
       sessionToken,
     }),
   userProfileOverview: () => userProfileOverview,
