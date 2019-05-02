@@ -10,7 +10,8 @@ type Client {
   industry: String,
   defaultCurrencyCode: String,
   defaultDistanceUnits: String,
-  description: String
+  description: String,
+  divisions: [ClientDivision!]
 }
 `;
 
