@@ -79,7 +79,9 @@ def serialize_user(user):
         'profilePicturePath': user.profile_picture_path,
         'timezoneDefault': user.default_timezone,
         'languageDefault': user.default_language,
-        'dateFormatDefault': user.default_date_format
+        'dateFormatDefault': user.default_date_format,
+        'address': user.address,
+        'isEnabled': user.is_enabled
     }
 
 
@@ -123,6 +125,10 @@ class UserService:
 
         # Converts to AdvitoUser and saves it
         session.add(user)
+        session.flush()
+
+        # Returns user inserted
+        return user
 
 
     def update(self, user, session):

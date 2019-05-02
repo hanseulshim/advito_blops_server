@@ -70,5 +70,5 @@ exports.userMutation = `
     roleId: Int,
     pwd: String!,
     confirmPwd: String!,
-  ): String @auth
+  ): UserInfo @auth
 `;

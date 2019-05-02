@@ -228,8 +228,7 @@ def user_create(event, context, session):
     role = Role(roleId)
 
     # Creates user and assigns it a role
-    user_service.create(user, session)
-    session.flush()
+    new_user = user_service.create(user, session)
     application_role_service.create_for(user.id, role, session)
 
     # Sends confirmation email
@@ -239,12 +238,16 @@ def user_create(event, context, session):
         message = 'Welcome to Black Ops!' + optional_message
     )
 
+    serialized_user = serialize_user(user)
+    serialized_user['roleId'] = roleId
+    serialized_user['role'] = role.name
+
     # Creates response and returns it
     return {
         "success": True,
         "apicode": "OK",
         "apimessage": "User successfully created",
-        "apidataset": "User successfully created"
+        "apidataset": serialized_user
     }
 
 
@@ -263,10 +266,8 @@ def user_login(event, context, session):
     password = event['pwd']
 
     # Tries to login
-    print('Before')
     (user, role_ids, user_session) = user_service.login(username, password, session)
     session.commit()
-    print('After')
 
     # Creates response and returns it
     return {
