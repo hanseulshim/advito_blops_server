@@ -6,7 +6,8 @@ exports.clientResolvers = {
       ...payload,
       sessionToken,
     }),
-  }
+};
+
 exports.clientResolversMutation = {
   updateClient: (_, payload, { sessionToken }) =>
     lambdaInvoke('python-lambdas-dev-client_update', {
