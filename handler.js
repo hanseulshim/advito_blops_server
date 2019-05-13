@@ -10,15 +10,9 @@ const server = new ApolloServer({
   resolvers,
   context: async ({ event }) => {
     const sessionToken = event.headers.sessiontoken || '';
-    const user =
-      sessionToken === 'advitoValidToken'
-        ? {
-            name: 'test',
-            role: ['Admin'],
-          }
-        : await lambdaInvoke('python-lambdas-dev-user_authenticate', {
-            sessionToken,
-          });
+    const user = await lambdaInvoke('python-lambdas-dev-user_authenticate', {
+      sessionToken,
+    });
     return { sessionToken, user };
   },
   schemaDirectives: {

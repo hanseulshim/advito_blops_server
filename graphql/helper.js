@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 const lambda = new AWS.Lambda();
-const { ApolloError } = require('apollo-server-lambda');
+const { ApolloError, AuthenticationError } = require('apollo-server-lambda');
 
 exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const params = {
@@ -12,8 +12,13 @@ exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const responseBody = JSON.parse(response.Payload);
   responseBody.body = JSON.parse(responseBody.body);
   if (responseBody.statusCode !== 200) {
-    return new ApolloError(responseBody.body.apimessage, 400);
+    console.log(responseBody.body.apimessage);
+    if (responseBody.body.apimessage === 'No session found') {
+      throw new AuthenticationError('Your session is invalid');
+    }
+    throw new ApolloError(responseBody.body.apimessage, 400);
   }
+
   if (dataParam) {
     responseBody.body.apidataset = responseBody.body.apidataset[dataParam];
     if (title) {
