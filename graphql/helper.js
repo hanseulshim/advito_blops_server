@@ -12,11 +12,10 @@ exports.lambdaInvoke = async (functionName, payload, dataParam, title) => {
   const responseBody = JSON.parse(response.Payload);
   responseBody.body = JSON.parse(responseBody.body);
   if (responseBody.statusCode !== 200) {
-    console.log(responseBody.body.apimessage);
     if (responseBody.body.apimessage === 'No session found') {
-      throw new AuthenticationError('Your session is invalid');
+      return new AuthenticationError('Your session is invalid');
     }
-    throw new ApolloError(responseBody.body.apimessage, 400);
+    return new ApolloError(responseBody.body.apimessage, 400);
   }
 
   if (dataParam) {
